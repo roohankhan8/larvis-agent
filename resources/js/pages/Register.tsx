@@ -24,69 +24,67 @@ export default function Register() {
         <>
             <Head title="Sign up" />
             <AppLayout>
-                <div className="min-h-[calc(100vh-5rem)] bg-[radial-gradient(circle_at_top_right,_rgba(34,197,94,0.16),_transparent_24%),linear-gradient(180deg,_#052e2b_0%,_#020617_58%,_#020617_100%)] px-4 py-8 text-slate-100 sm:px-6 lg:px-8 lg:py-10">
-                    <div className="mx-auto grid w-full max-w-6xl gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)] lg:gap-10">
-                        <section className="space-y-6 rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_32px_120px_rgba(2,6,23,0.35)] backdrop-blur sm:p-8">
-                            <div className="space-y-4">
-                                <p className="text-sm font-medium tracking-[0.3em] text-emerald-200/80 uppercase">
-                                    Device-backed accounts
+                <div className="editorial-grid min-h-[calc(100vh-5rem)] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
+                    <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(360px,0.8fr)]">
+                        <section className="paper-sheet flex flex-col justify-between p-6 sm:p-8 dark:bg-[#141a17]">
+                            <div className="space-y-6">
+                                <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
+                                    Identity Workspace
                                 </p>
-                                <h1 className="max-w-xl text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                                    Create an account and keep the guest device record attached to your profile.
+                                <h1 className="font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl">
+                                    Create a device-backed <span className="italic font-normal">lab account</span>.
                                 </h1>
-                                <p className="max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-                                    When a visitor signs up, the device row collected while
-                                    they were anonymous is linked to the new user so the
-                                    browser history can follow the account over time.
+                                <p className="text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                    When an anonymous visitor creates an account, their device configuration, preferences, and transcript history are synced to the new profile, preserving state logs across visits.
                                 </p>
                             </div>
 
-                            <div className="grid gap-3 sm:grid-cols-3">
+                            <div className="my-8 grid gap-4 sm:grid-cols-3">
                                 {[
-                                    'Guest visit captured',
-                                    'Device linked on signup',
-                                    'Ready for lab usage',
+                                    'Session-aware guest sync',
+                                    'Linked profile registry',
+                                    'Full lab capability unlocked',
                                 ].map((item) => (
                                     <div
                                         key={item}
-                                        className="rounded-2xl border border-white/10 bg-slate-950/45 p-4 text-sm text-slate-300"
+                                        className="border border-[#d5dbd7] bg-[#f5e4da] p-4 font-mono text-xs text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]"
                                     >
                                         {item}
                                     </div>
                                 ))}
                             </div>
 
-                            <div className="flex flex-wrap gap-3">
+                            <div className="flex flex-wrap gap-4 border-t border-[#d5dbd7] pt-6 dark:border-[#222b27]">
                                 <Link
                                     href={loginRoute.url()}
                                     prefetch
-                                    className="inline-flex items-center justify-center rounded-full bg-emerald-300 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-200"
+                                    className="btn-editorial-primary px-6 py-2.5 font-mono text-xs uppercase tracking-wider"
                                 >
-                                    Sign in instead
+                                    Sign In Instead
                                 </Link>
                                 <Link
                                     href={home()}
                                     prefetch
-                                    className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-5 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/10"
+                                    className="btn-editorial-secondary px-6 py-2.5 font-mono text-xs uppercase tracking-wider"
                                 >
-                                    Back home
+                                    Cancel
                                 </Link>
                             </div>
                         </section>
 
-                        <section className="rounded-[2rem] border border-white/10 bg-slate-950/70 p-6 shadow-2xl shadow-emerald-950/20 backdrop-blur sm:p-8">
-                            <div className="space-y-2">
-                                <p className="text-xs font-semibold tracking-[0.3em] text-emerald-200/70 uppercase">
-                                    Start here
+                        <section className="paper-sheet p-6 sm:p-8 dark:bg-[#141a17] flex flex-col justify-center">
+                            <div className="space-y-2 border-b border-[#d5dbd7] pb-4 dark:border-[#222b27]">
+                                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
+                                    New Session
                                 </p>
-                                <h2 className="text-2xl font-semibold text-white">
-                                    Sign up
+                                <h2 className="font-serif text-2xl font-bold text-[#1a2620] dark:text-[#e5eae6]">
+                                    Sign Up
                                 </h2>
                             </div>
 
                             <form onSubmit={submit} className="mt-6 space-y-5">
                                 <label className="block">
-                                    <span className="text-sm font-medium text-slate-200">
+                                    <span className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
                                         Name
                                     </span>
                                     <input
@@ -95,19 +93,19 @@ export default function Register() {
                                         onChange={(event) =>
                                             form.setData('name', event.target.value)
                                         }
-                                        className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-emerald-300/50"
+                                        className="mt-2 w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                         placeholder="Your name"
                                         autoComplete="name"
                                     />
                                     {form.errors.name ? (
-                                        <p className="mt-2 text-sm text-rose-200">
+                                        <p className="mt-2 font-mono text-xs text-[#c2410c]">
                                             {form.errors.name}
                                         </p>
                                     ) : null}
                                 </label>
 
                                 <label className="block">
-                                    <span className="text-sm font-medium text-slate-200">
+                                    <span className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
                                         Email
                                     </span>
                                     <input
@@ -116,19 +114,19 @@ export default function Register() {
                                         onChange={(event) =>
                                             form.setData('email', event.target.value)
                                         }
-                                        className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-emerald-300/50"
-                                        placeholder="you@example.com"
+                                        className="mt-2 w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
+                                        placeholder="name@domain.com"
                                         autoComplete="email"
                                     />
                                     {form.errors.email ? (
-                                        <p className="mt-2 text-sm text-rose-200">
+                                        <p className="mt-2 font-mono text-xs text-[#c2410c]">
                                             {form.errors.email}
                                         </p>
                                     ) : null}
                                 </label>
 
                                 <label className="block">
-                                    <span className="text-sm font-medium text-slate-200">
+                                    <span className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
                                         Password
                                     </span>
                                     <input
@@ -137,19 +135,19 @@ export default function Register() {
                                         onChange={(event) =>
                                             form.setData('password', event.target.value)
                                         }
-                                        className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-emerald-300/50"
+                                        className="mt-2 w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                         placeholder="••••••••"
                                         autoComplete="new-password"
                                     />
                                     {form.errors.password ? (
-                                        <p className="mt-2 text-sm text-rose-200">
+                                        <p className="mt-2 font-mono text-xs text-[#c2410c]">
                                             {form.errors.password}
                                         </p>
                                     ) : null}
                                 </label>
 
                                 <label className="block">
-                                    <span className="text-sm font-medium text-slate-200">
+                                    <span className="block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
                                         Confirm password
                                     </span>
                                     <input
@@ -161,12 +159,12 @@ export default function Register() {
                                                 event.target.value,
                                             )
                                         }
-                                        className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-white outline-none placeholder:text-slate-500 focus:border-emerald-300/50"
+                                        className="mt-2 w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                         placeholder="••••••••"
                                         autoComplete="new-password"
                                     />
                                     {form.errors.password_confirmation ? (
-                                        <p className="mt-2 text-sm text-rose-200">
+                                        <p className="mt-2 font-mono text-xs text-[#c2410c]">
                                             {form.errors.password_confirmation}
                                         </p>
                                     ) : null}
@@ -175,18 +173,18 @@ export default function Register() {
                                 <button
                                     type="submit"
                                     disabled={form.processing}
-                                    className="inline-flex h-12 w-full items-center justify-center rounded-full bg-emerald-300 px-6 text-sm font-semibold text-slate-950 transition hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-70"
+                                    className="btn-editorial-primary w-full py-3 font-mono text-xs uppercase tracking-wider disabled:cursor-not-allowed disabled:opacity-50"
                                 >
-                                    {form.processing ? 'Creating account...' : 'Create account'}
+                                    {form.processing ? 'Registering...' : 'Create Account'}
                                 </button>
                             </form>
 
-                            <p className="mt-6 text-sm text-slate-400">
+                            <p className="mt-6 font-mono text-xs text-[#607267] dark:text-[#7fa08d]">
                                 Already have an account?{' '}
                                 <Link
                                     href={loginRoute.url()}
                                     prefetch
-                                    className="font-medium text-emerald-200 transition hover:text-emerald-100"
+                                    className="font-bold text-[#1a2620] dark:text-[#e5eae6] hover:underline"
                                 >
                                     Sign in
                                 </Link>

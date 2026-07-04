@@ -128,180 +128,151 @@ export default function ConversationLab({
             <Head title="Conversation Lab" />
 
             <AppLayout>
-                <div className="min-h-[calc(100vh-5rem)] bg-[radial-gradient(circle_at_top,_rgba(52,211,153,0.18),_transparent_18%),linear-gradient(180deg,_#052e2b_0%,_#0f172a_42%,_#020617_100%)] px-4 py-8 text-slate-100 sm:px-6 lg:px-8 lg:py-10">
+                <div className="editorial-grid min-h-[calc(100vh-5rem)] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
                     <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
-                        <header className="grid gap-5 rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_32px_120px_rgba(2,6,23,0.32)] backdrop-blur lg:grid-cols-[minmax(0,1.1fr)_minmax(280px,0.9fr)]">
-                            <div className="space-y-4">
-                                <p className="text-sm font-medium tracking-[0.3em] text-emerald-200/85 uppercase">
-                                    Groq conversation lab
-                                </p>
+                        <header className="border-b border-[#d5dbd7] pb-6 dark:border-[#222b27]">
+                            <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
                                 <div className="space-y-3">
-                                    <h1 className="max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                                    <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
+                                        Multi-turn Lab
+                                    </p>
+                                    <h1 className="font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl lg:text-5xl">
                                         Conversation Lab
                                     </h1>
-                                    <p className="max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-                                        Keep one conversation alive across follow-up
-                                        questions. The same conversation ID is
-                                        reused so the agent can remember the prior
-                                        turns and the database keeps the full trail.
+                                    <p className="max-w-2xl text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        Test conversation memory and state persistence. This page uses the Laravel AI SDK memory model, maintaining the message history in the database so the model can recall context across turns.
                                     </p>
                                 </div>
-                            </div>
 
-                            <div className="rounded-[1.75rem] border border-emerald-300/15 bg-slate-950/55 p-5">
-                                <p className="text-xs font-semibold tracking-[0.24em] text-emerald-200/80 uppercase">
-                                    Participant
-                                </p>
-                                <div className="mt-4 space-y-3 text-sm text-slate-300">
-                                    <p>
-                                        Current user:{' '}
-                                        <span className="text-white">
-                                            {participant.name}
-                                        </span>
-                                    </p>
-                                    <p>
-                                        Conversation ID:{' '}
-                                        <span className="break-all text-white">
-                                            {conversationId || 'New conversation'}
-                                        </span>
-                                    </p>
-                                    <p>
-                                        Turns in transcript:{' '}
-                                        <span className="text-white">
-                                            {transcriptLength}
-                                        </span>
-                                    </p>
+                                <div className="border border-[#d5dbd7] bg-[#f5e4da] p-5 dark:border-[#222b27] dark:bg-[#141a17]">
+                                    <h3 className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
+                                        Session Metadata
+                                    </h3>
+                                    <table className="mt-3 w-full font-mono text-xs text-[#607267] dark:text-[#7fa08d]">
+                                        <tbody>
+                                            <tr className="border-b border-[#d5dbd7]/60 dark:border-[#222b27]/60">
+                                                <td className="py-1 uppercase text-[#607267] dark:text-[#7fa08d]">User</td>
+                                                <td className="py-1 text-right text-[#1a2620] dark:text-[#e5eae6] font-semibold">{participant.name}</td>
+                                            </tr>
+                                            <tr className="border-b border-[#d5dbd7]/60 dark:border-[#222b27]/60">
+                                                <td className="py-1 uppercase text-[#607267] dark:text-[#7fa08d]">Lab ID</td>
+                                                <td className="py-1 text-right text-[#1a2620] dark:text-[#e5eae6] truncate max-w-[120px]" title={conversationId || 'New'}>
+                                                    {conversationId ? conversationId.slice(0, 8) + '...' : 'New Thread'}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="py-1 uppercase text-[#607267] dark:text-[#7fa08d]">Turns</td>
+                                                <td className="py-1 text-right text-[#1a2620] dark:text-[#e5eae6] font-semibold">{transcriptLength}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </header>
 
-                        <main className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
-                            <section className="rounded-[2rem] border border-white/10 bg-slate-950/65 p-6 shadow-2xl shadow-black/20 backdrop-blur">
-                                <div className="mb-6 flex items-center justify-between gap-3">
-                                    <div>
-                                        <p className="text-xs font-semibold tracking-[0.24em] text-emerald-200/80 uppercase">
-                                            Transcript
-                                        </p>
-                                        <h2 className="mt-1 text-lg font-semibold text-white">
-                                            Follow-up questions and replies
-                                        </h2>
-                                    </div>
-                                </div>
+                        <main className="grid gap-8 xl:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
+                            <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                <h2 className="border-b border-[#d5dbd7] pb-3 font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6] dark:border-[#222b27]">
+                                    Conversation Transcript
+                                </h2>
 
-                                <div className="space-y-4">
+                                <div className="mt-6 space-y-6">
                                     {messages.length > 0 ? (
                                         messages.map((entry, index) => (
                                             <div
                                                 key={`${entry.role}-${index}-${entry.content.slice(0, 24)}`}
-                                                className={`flex ${
-                                                    entry.role === 'user'
-                                                        ? 'justify-end'
-                                                        : 'justify-start'
-                                                }`}
+                                                className="border-b border-[#d5dbd7]/60 pb-6 last:border-b-0 dark:border-[#222b27]/60"
                                             >
-                                                <div
-                                                    className={`max-w-[85%] rounded-[1.5rem] px-4 py-3 text-sm leading-7 ${
-                                                        entry.role === 'user'
-                                                            ? 'bg-emerald-300 text-slate-950'
-                                                            : 'border border-white/10 bg-white/5 text-slate-100'
-                                                    }`}
-                                                >
-                                                    <p className="mb-1 text-[0.65rem] font-semibold tracking-[0.24em] uppercase opacity-80">
-                                                        {entry.role}
-                                                    </p>
-                                                    <p className="whitespace-pre-wrap">
-                                                        {entry.content}
-                                                    </p>
+                                                <div className="flex items-start gap-4">
+                                                    <span className={`w-20 shrink-0 font-mono text-[10px] font-bold uppercase tracking-wider ${
+                                                        entry.role === 'user' ? 'text-[#c2410c]' : 'text-[#15803d] dark:text-[#34d399]'
+                                                    }`}>
+                                                        [{entry.role}]
+                                                    </span>
+                                                    <div className="space-y-1">
+                                                        <p className="font-sans text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6] whitespace-pre-wrap">
+                                                            {entry.content}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
                                         ))
                                     ) : (
-                                        <div className="rounded-[1.5rem] border border-dashed border-white/15 bg-white/5 p-6 text-sm leading-7 text-slate-300">
-                                            Start a conversation and the lab will keep
-                                            the full history in the AI SDK tables.
+                                        <div className="border border-dashed border-[#d5dbd7] bg-[#f5e4da] p-6 text-center font-serif italic text-sm text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
+                                            Initiate a conversation thread to record transcript logs in the database.
                                         </div>
                                     )}
                                 </div>
 
-                                <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+                                <form onSubmit={handleSubmit} className="mt-8 border-t border-[#d5dbd7] pt-6 dark:border-[#222b27] space-y-4">
                                     <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-slate-200">
-                                            Your message
+                                        <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
+                                            Your response / question
                                         </span>
                                         <textarea
                                             value={message}
-                                            onChange={(event) =>
-                                                setMessage(event.target.value)
-                                            }
+                                            onChange={(event) => setMessage(event.target.value)}
                                             rows={5}
-                                            placeholder="Ask a follow-up question, refine the answer, or shift the topic while keeping the same thread..."
-                                            className="w-full rounded-[1.5rem] border border-white/10 bg-white/5 px-4 py-4 text-sm leading-6 text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-300/45 focus:bg-white/[0.07] focus:ring-4 focus:ring-emerald-300/10"
+                                            placeholder="Ask a follow-up, refine the summary, or shift topics..."
+                                            className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-4 text-sm leading-relaxed text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                         />
                                     </label>
 
                                     {errorMessage ? (
-                                        <div className="rounded-[1.5rem] border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
+                                        <div className="border border-[#c2410c]/20 bg-[#c2410c]/5 px-4 py-3 font-mono text-xs uppercase tracking-wider text-[#c2410c] dark:text-[#e95e26]">
                                             {errorMessage}
                                         </div>
                                     ) : null}
 
-                                    <div className="flex flex-col gap-4 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                                        <div className="flex flex-wrap gap-4 text-sm text-slate-400">
-                                            <span>{transcriptLength} messages</span>
-                                            <span>
-                                                Last reply:{' '}
-                                                {latestAssistantReply ? 'ready' : 'none yet'}
-                                            </span>
+                                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                                        <div className="flex flex-wrap gap-4 font-mono text-xs text-[#607267] dark:text-[#7fa08d]">
+                                            <span>{transcriptLength} messages logged</span>
+                                            <span>/</span>
+                                            <span>Status: {latestAssistantReply ? 'idle' : 'waiting'}</span>
                                         </div>
 
                                         <button
                                             type="submit"
                                             disabled={isSubmitting}
-                                            className="inline-flex h-12 items-center justify-center rounded-full bg-emerald-300 px-6 text-sm font-semibold text-slate-950 transition hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-70"
+                                            className="btn-editorial-primary px-6 py-2.5 font-mono text-xs uppercase tracking-wider disabled:cursor-not-allowed disabled:opacity-50"
                                         >
-                                            {isSubmitting
-                                                ? 'Sending...'
-                                                : 'Send message'}
+                                            {isSubmitting ? 'Sending...' : 'Send Turn'}
                                         </button>
                                     </div>
                                 </form>
                             </section>
 
                             <aside className="space-y-6">
-                                <section className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-emerald-300/10 via-white/5 to-teal-300/10 p-6">
-                                    <h2 className="text-lg font-semibold text-white">
-                                        Conversation state
+                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                    <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
+                                        State Persistence
                                     </h2>
-                                    <div className="mt-4 space-y-3 text-sm leading-7 text-slate-300">
+                                    <div className="mt-4 space-y-4 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                         <p>
-                                            This lab reuses the conversation ID on each
-                                            turn so the agent gets the previous
-                                            messages back from the database.
+                                            By utilizing unique session IDs, this workspace binds multi-turn prompts back to your thread automatically.
                                         </p>
                                         <p>
-                                            Refreshing the page loads the latest
-                                            conversation for the current user if one
-                                            exists.
+                                            Refreshing the page retrieves the saved history, preventing the loss of state context.
                                         </p>
                                     </div>
                                 </section>
 
-                                <section className="rounded-[2rem] border border-white/10 bg-slate-950/55 p-6">
-                                    <p className="text-xs font-semibold tracking-[0.24em] text-slate-300 uppercase">
-                                        Next steps
+                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                    <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
+                                        Switch workspace
                                     </p>
-                                    <div className="mt-4 grid gap-3">
+                                    <div className="mt-4 grid gap-3 font-mono text-xs">
                                         <Link
                                             href={conversationLab.url()}
-                                            className="rounded-[1.25rem] border border-emerald-300/20 bg-emerald-300/10 px-4 py-3 text-sm font-medium text-emerald-100 transition hover:bg-emerald-300/15"
+                                            className="border border-[#1a2620] bg-[#1a2620] px-4 py-3 text-center uppercase tracking-wider text-[#f4f6f3] dark:border-[#e5eae6] dark:bg-[#e5eae6] dark:text-[#101412]"
                                         >
-                                            Stay in the conversation lab
+                                            Reset lab session
                                         </Link>
                                         <Link
                                             href={promptPlayground.url()}
-                                            className="rounded-[1.25rem] border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200 transition hover:border-emerald-300/20 hover:bg-white/8"
+                                            className="border border-[#d5dbd7] px-4 py-3 text-center uppercase tracking-wider text-[#607267] hover:border-[#1a2620] dark:border-[#222b27] dark:text-[#7fa08d] dark:hover:border-[#e5eae6]"
                                         >
-                                            Switch to prompt playground
+                                            Prompt Playground
                                         </Link>
                                     </div>
                                 </section>

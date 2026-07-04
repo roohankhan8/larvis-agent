@@ -152,141 +152,120 @@ export default function PromptPlayground({
             <Head title="Prompt Playground" />
 
             <AppLayout>
-                <div className="min-h-[calc(100vh-5rem)] bg-[radial-gradient(circle_at_top,_rgba(251,191,36,0.18),_transparent_18%),linear-gradient(180deg,_#1c1917_0%,_#0f172a_45%,_#020617_100%)] px-4 py-8 text-slate-100 sm:px-6 lg:px-8 lg:py-10">
+                <div className="editorial-grid min-h-[calc(100vh-5rem)] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
                     <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
-                        <header className="grid gap-5 rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-[0_32px_120px_rgba(2,6,23,0.32)] backdrop-blur lg:grid-cols-[minmax(0,1.15fr)_minmax(280px,0.85fr)]">
-                            <div className="space-y-4">
-                                <p className="text-sm font-medium tracking-[0.3em] text-amber-200/85 uppercase">
-                                    Groq text lab
-                                </p>
+                        <header className="border-b border-[#d5dbd7] pb-6 dark:border-[#222b27]">
+                            <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
                                 <div className="space-y-3">
-                                    <h1 className="max-w-3xl text-3xl font-semibold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                                    <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
+                                        Tuning Console
+                                    </p>
+                                    <h1 className="font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl lg:text-5xl">
                                         Prompt Playground
                                     </h1>
-                                    <p className="max-w-2xl text-sm leading-7 text-slate-300 sm:text-base">
-                                        Try direct text generation with a Groq-backed
-                                        agent, then change tone, response length,
-                                        model profile, temperature, and top-p to see
-                                        how the answer shifts.
+                                    <p className="max-w-2xl text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        Execute raw text generation using the Laravel AI SDK. Adjust tone parameters, sampling controls, and model profile selection to examine output shifts.
                                     </p>
                                 </div>
-                            </div>
 
-                            <div className="rounded-[1.75rem] border border-amber-300/15 bg-slate-950/55 p-5">
-                                <p className="text-xs font-semibold tracking-[0.24em] text-amber-200/80 uppercase">
-                                    What this page teaches
-                                </p>
-                                <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
-                                    <li>`Promptable` for direct agent prompting</li>
-                                    <li>Groq-only provider selection</li>
-                                    <li>Model selection through Wayfinder-backed requests</li>
-                                    <li>Response tuning with temperature and top-p</li>
-                                </ul>
+                                <div className="border border-[#d5dbd7] bg-[#f5e4da] p-5 dark:border-[#222b27] dark:bg-[#141a17]">
+                                    <h3 className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
+                                        Playground Architecture
+                                    </h3>
+                                    <ul className="mt-3 space-y-2 font-mono text-[11px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        <li className="flex items-center gap-2">
+                                            <span className="h-1 w-1 bg-[#1a2620] dark:bg-[#e5eae6]" />
+                                            <span>SDK Promptable Interface</span>
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <span className="h-1 w-1 bg-[#1a2620] dark:bg-[#e5eae6]" />
+                                            <span>Dynamic Model Routing</span>
+                                        </li>
+                                        <li className="flex items-center gap-2">
+                                            <span className="h-1 w-1 bg-[#1a2620] dark:bg-[#e5eae6]" />
+                                            <span>Temperature & Top-p tuning</span>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </header>
 
-                        <main className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(320px,0.9fr)]">
-                            <section className="rounded-[2rem] border border-white/10 bg-slate-950/65 p-6 shadow-2xl shadow-black/20 backdrop-blur">
+                        <main className="grid gap-8 xl:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
+                            <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <label className="block">
-                                        <span className="mb-2 block text-sm font-medium text-slate-200">
-                                            Prompt
+                                        <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
+                                            Prompt Input
                                         </span>
                                         <textarea
                                             name="prompt"
                                             value={prompt}
-                                            onChange={(event) =>
-                                                setPrompt(event.target.value)
-                                            }
+                                            onChange={(event) => setPrompt(event.target.value)}
                                             rows={12}
-                                            placeholder="Ask for a launch tagline, a product description, a summary, or any other text-generation prompt..."
-                                            className="min-h-64 w-full rounded-[1.5rem] border border-white/10 bg-white/5 px-4 py-4 text-sm leading-6 text-white outline-none transition placeholder:text-slate-500 focus:border-amber-300/45 focus:bg-white/[0.07] focus:ring-4 focus:ring-amber-300/10"
+                                            placeholder="Enter generation prompts (minimum 10 characters)..."
+                                            className="min-h-64 w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-4 text-sm leading-relaxed text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                         />
                                     </label>
 
                                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                                        <label className="block rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-                                            <span className="text-xs font-semibold tracking-[0.22em] text-slate-300 uppercase">
-                                                Tone
+                                        <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
+                                            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
+                                                Tone Profile
                                             </span>
                                             <select
                                                 value={tone}
-                                                onChange={(event) =>
-                                                    setTone(
-                                                        event.target
-                                                            .value as ToneOption,
-                                                    )
-                                                }
-                                                className="mt-3 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-3 text-sm text-white outline-none focus:border-amber-300/45"
+                                                onChange={(event) => setTone(event.target.value as ToneOption)}
+                                                className="mt-3 w-full border border-[#d5dbd7] bg-[#eedcd2] px-2 py-2 font-mono text-xs text-[#1a2620] outline-none focus:border-[#5c7368] dark:border-[#222b27] dark:bg-[#141a17] dark:text-[#e5eae6]"
                                             >
                                                 {toneOptions.map((option) => (
-                                                    <option
-                                                        key={option.value}
-                                                        value={option.value}
-                                                    >
+                                                    <option key={option.value} value={option.value}>
                                                         {option.label}
                                                     </option>
                                                 ))}
                                             </select>
                                         </label>
 
-                                        <label className="block rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-                                            <span className="text-xs font-semibold tracking-[0.22em] text-slate-300 uppercase">
-                                                Length
+                                        <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
+                                            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
+                                                Length Constraint
                                             </span>
                                             <select
                                                 value={length}
-                                                onChange={(event) =>
-                                                    setLength(
-                                                        event.target
-                                                            .value as LengthOption,
-                                                    )
-                                                }
-                                                className="mt-3 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-3 text-sm text-white outline-none focus:border-amber-300/45"
+                                                onChange={(event) => setLength(event.target.value as LengthOption)}
+                                                className="mt-3 w-full border border-[#d5dbd7] bg-[#eedcd2] px-2 py-2 font-mono text-xs text-[#1a2620] outline-none focus:border-[#5c7368] dark:border-[#222b27] dark:bg-[#141a17] dark:text-[#e5eae6]"
                                             >
                                                 {lengthOptions.map((option) => (
-                                                    <option
-                                                        key={option.value}
-                                                        value={option.value}
-                                                    >
+                                                    <option key={option.value} value={option.value}>
                                                         {option.label}
                                                     </option>
                                                 ))}
                                             </select>
                                         </label>
 
-                                        <label className="block rounded-[1.5rem] border border-white/10 bg-white/5 p-4 md:col-span-2">
-                                            <span className="text-xs font-semibold tracking-[0.22em] text-slate-300 uppercase">
-                                                Model profile
+                                        <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 md:col-span-2 dark:border-[#222b27] dark:bg-[#151c19]">
+                                            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
+                                                Model Profile
                                             </span>
                                             <select
                                                 value={modelProfile}
-                                                onChange={(event) =>
-                                                    setModelProfile(
-                                                        event.target
-                                                            .value as ModelProfile,
-                                                    )
-                                                }
-                                                className="mt-3 w-full rounded-xl border border-white/10 bg-slate-950/70 px-3 py-3 text-sm text-white outline-none focus:border-amber-300/45"
+                                                onChange={(event) => setModelProfile(event.target.value as ModelProfile)}
+                                                className="mt-3 w-full border border-[#d5dbd7] bg-[#eedcd2] px-2 py-2 font-mono text-xs text-[#1a2620] outline-none focus:border-[#5c7368] dark:border-[#222b27] dark:bg-[#141a17] dark:text-[#e5eae6]"
                                             >
                                                 {modelOptions.map((option) => (
-                                                    <option
-                                                        key={option.value}
-                                                        value={option.value}
-                                                    >
+                                                    <option key={option.value} value={option.value}>
                                                         {option.label}
                                                     </option>
                                                 ))}
                                             </select>
-                                            <p className="mt-2 text-xs leading-5 text-slate-400">
+                                            <p className="mt-2 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                                 {selectedModel.description}
                                             </p>
                                         </label>
 
-                                        <label className="block rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-                                            <span className="flex items-center justify-between text-xs font-semibold tracking-[0.22em] text-slate-300 uppercase">
+                                        <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
+                                            <span className="flex items-center justify-between font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
                                                 <span>Temperature</span>
-                                                <span>{temperature.toFixed(2)}</span>
+                                                <span className="font-bold text-[#1a2620] dark:text-[#e5eae6]">{temperature.toFixed(2)}</span>
                                             </span>
                                             <input
                                                 type="range"
@@ -294,19 +273,15 @@ export default function PromptPlayground({
                                                 max="1"
                                                 step="0.05"
                                                 value={temperature}
-                                                onChange={(event) =>
-                                                    setTemperature(
-                                                        Number(event.target.value),
-                                                    )
-                                                }
-                                                className="mt-4 w-full accent-amber-300"
+                                                onChange={(event) => setTemperature(Number(event.target.value))}
+                                                className="mt-4 w-full accent-[#1a2620] dark:accent-[#e5eae6]"
                                             />
                                         </label>
 
-                                        <label className="block rounded-[1.5rem] border border-white/10 bg-white/5 p-4">
-                                            <span className="flex items-center justify-between text-xs font-semibold tracking-[0.22em] text-slate-300 uppercase">
+                                        <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
+                                            <span className="flex items-center justify-between font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
                                                 <span>Top-p</span>
-                                                <span>{topP.toFixed(2)}</span>
+                                                <span className="font-bold text-[#1a2620] dark:text-[#e5eae6]">{topP.toFixed(2)}</span>
                                             </span>
                                             <input
                                                 type="range"
@@ -314,126 +289,96 @@ export default function PromptPlayground({
                                                 max="1"
                                                 step="0.05"
                                                 value={topP}
-                                                onChange={(event) =>
-                                                    setTopP(
-                                                        Number(event.target.value),
-                                                    )
-                                                }
-                                                className="mt-4 w-full accent-amber-300"
+                                                onChange={(event) => setTopP(Number(event.target.value))}
+                                                className="mt-4 w-full accent-[#1a2620] dark:accent-[#e5eae6]"
                                             />
                                         </label>
                                     </div>
 
                                     {errorMessage ? (
-                                        <div className="rounded-[1.5rem] border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
+                                        <div className="border border-[#c2410c]/20 bg-[#c2410c]/5 px-4 py-3 font-mono text-xs uppercase tracking-wider text-[#c2410c] dark:text-[#e95e26]">
                                             {errorMessage}
                                         </div>
                                     ) : null}
 
-                                    <div className="flex flex-col gap-4 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
-                                        <div className="flex flex-wrap gap-4 text-sm text-slate-400">
+                                    <div className="flex flex-col gap-4 border-t border-[#d5dbd7] pt-4 sm:flex-row sm:items-center sm:justify-between dark:border-[#222b27]">
+                                        <div className="flex flex-wrap gap-4 font-mono text-xs text-[#607267] dark:text-[#7fa08d]">
                                             <span>{wordCount} words</span>
-                                            <span>{characterCount} characters</span>
+                                            <span>/</span>
+                                            <span>{characterCount} chars</span>
+                                            <span>/</span>
                                             <span>Provider: Groq</span>
                                         </div>
 
                                         <button
                                             type="submit"
                                             disabled={isSubmitting}
-                                            className="inline-flex h-12 items-center justify-center rounded-full bg-amber-300 px-6 text-sm font-semibold text-slate-950 transition hover:bg-amber-200 disabled:cursor-not-allowed disabled:opacity-70"
+                                            className="btn-editorial-primary px-6 py-2.5 font-mono text-xs uppercase tracking-wider"
                                         >
-                                            {isSubmitting
-                                                ? 'Generating...'
-                                                : 'Generate answer'}
+                                            {isSubmitting ? 'Generating...' : 'Generate answer'}
                                         </button>
                                     </div>
                                 </form>
                             </section>
 
                             <aside className="space-y-6">
-                                <section className="rounded-[2rem] border border-white/10 bg-gradient-to-br from-amber-300/10 via-white/5 to-orange-300/10 p-6">
-                                    <div className="flex items-center justify-between gap-3">
-                                        <h2 className="text-lg font-semibold text-white">
-                                            Raw answer
+                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                    <div className="flex items-center justify-between border-b border-[#d5dbd7] pb-3 dark:border-[#222b27]">
+                                        <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
+                                            Raw Response
                                         </h2>
-                                        <span className="rounded-full border border-amber-300/20 bg-amber-300/10 px-3 py-1 text-xs font-medium text-amber-100">
+                                        <span className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[9px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
                                             {result?.settings.provider ?? 'groq'}
                                         </span>
                                     </div>
 
                                     {result ? (
                                         <div className="mt-4 space-y-4">
-                                            <div className="rounded-[1.5rem] border border-white/10 bg-slate-950/55 p-4">
-                                                <p className="text-xs tracking-[0.24em] text-amber-200/80 uppercase">
+                                            <div className="border border-[#d5dbd7] bg-[#f5e4da]/50 p-4 dark:border-[#222b27] dark:bg-[#151c19]/50">
+                                                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                                     Answer
                                                 </p>
-                                                <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-slate-100">
+                                                <p className="mt-3 whitespace-pre-wrap font-sans text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
                                                     {result.answer}
                                                 </p>
                                             </div>
 
                                             <div className="grid gap-3 sm:grid-cols-2">
-                                                <div className="rounded-[1.25rem] border border-white/10 bg-slate-950/45 p-4 text-sm text-slate-300">
-                                                    <p className="text-xs tracking-[0.2em] text-amber-200/80 uppercase">
-                                                        Model
-                                                    </p>
-                                                    <p className="mt-2 break-all text-white">
-                                                        {result.settings.model}
-                                                    </p>
+                                                <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
+                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Model Route</p>
+                                                    <p className="mt-1 font-bold text-[#1a2620] dark:text-[#e5eae6] break-all">{result.settings.model}</p>
                                                 </div>
-                                                <div className="rounded-[1.25rem] border border-white/10 bg-slate-950/45 p-4 text-sm text-slate-300">
-                                                    <p className="text-xs tracking-[0.2em] text-amber-200/80 uppercase">
-                                                        Tuning
-                                                    </p>
-                                                    <p className="mt-2 text-white">
-                                                        Temp {result.settings.temperature.toFixed(2)}
-                                                        {' · '}
-                                                        Top-p {result.settings.top_p.toFixed(2)}
-                                                    </p>
+                                                <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
+                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Parameters</p>
+                                                    <p className="mt-1 text-[#1a2620] dark:text-[#e5eae6]">T {result.settings.temperature.toFixed(2)} / P {result.settings.top_p.toFixed(2)}</p>
                                                 </div>
-                                                <div className="rounded-[1.25rem] border border-white/10 bg-slate-950/45 p-4 text-sm text-slate-300">
-                                                    <p className="text-xs tracking-[0.2em] text-amber-200/80 uppercase">
-                                                        Tone
-                                                    </p>
-                                                    <p className="mt-2 capitalize text-white">
-                                                        {result.settings.tone}
-                                                    </p>
+                                                <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
+                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Tone Settings</p>
+                                                    <p className="mt-1 capitalize text-[#1a2620] dark:text-[#e5eae6]">{result.settings.tone}</p>
                                                 </div>
-                                                <div className="rounded-[1.25rem] border border-white/10 bg-slate-950/45 p-4 text-sm text-slate-300">
-                                                    <p className="text-xs tracking-[0.2em] text-amber-200/80 uppercase">
-                                                        Length
-                                                    </p>
-                                                    <p className="mt-2 capitalize text-white">
-                                                        {result.settings.length}
-                                                    </p>
+                                                <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
+                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Length Type</p>
+                                                    <p className="mt-1 capitalize text-[#1a2620] dark:text-[#e5eae6]">{result.settings.length}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     ) : (
-                                        <p className="mt-4 text-sm leading-7 text-slate-300">
-                                            Submit a prompt to see the direct response
-                                            and the exact Groq settings used for that
-                                            generation.
+                                        <p className="mt-4 font-serif italic text-sm text-[#607267] dark:text-[#7fa08d]">
+                                            Enter your prompt copy and click generate to process the response.
                                         </p>
                                     )}
                                 </section>
 
-                                <section className="rounded-[2rem] border border-white/10 bg-slate-950/55 p-6">
-                                    <p className="text-xs font-semibold tracking-[0.24em] text-slate-300 uppercase">
+                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                    <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                         Next steps
                                     </p>
-                                    <div className="mt-4 grid gap-3">
-                                        <Link
-                                            href={promptPlayground.url()}
-                                            className="rounded-[1.25rem] border border-amber-300/20 bg-amber-300/10 px-4 py-3 text-sm font-medium text-amber-100 transition hover:bg-amber-300/15"
-                                        >
-                                            Stay in the prompt lab
-                                        </Link>
+                                    <div className="mt-4 grid gap-3 font-mono text-xs">
                                         <Link
                                             href={analyzeContent.url()}
-                                            className="rounded-[1.25rem] border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-slate-200 transition hover:border-amber-300/20 hover:bg-white/8"
+                                            className="border border-[#dfdbd5] px-4 py-3 text-center uppercase tracking-wider text-[#656a70] hover:border-[#1c1e20] dark:border-[#2c2e30] dark:text-[#93989e] dark:hover:border-[#e3e4e6]"
                                         >
-                                            Compare with structured analysis
+                                            Structured Analyzer &rarr;
                                         </Link>
                                     </div>
                                 </section>

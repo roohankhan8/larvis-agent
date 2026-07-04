@@ -98,136 +98,122 @@ export default function AnalyzeContent() {
             <Head title="Analyze Content" />
 
             <AppLayout>
-                <div className="min-h-[calc(100vh-5rem)] bg-[radial-gradient(circle_at_top,_#1f2937_0%,_#0f172a_45%,_#020617_100%)] px-4 py-8 text-slate-100 sm:px-6 lg:px-8 lg:py-10">
+                <div className="editorial-grid min-h-[calc(100vh-5rem)] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
                     <div className="mx-auto flex w-full max-w-6xl flex-col justify-center gap-8">
-                    <header className="flex flex-col gap-4">
-                        <div className="flex items-center justify-between gap-4">
-                            <div>
-                                <p className="text-sm font-medium tracking-[0.28em] text-cyan-300/80 uppercase">
-                                    Content workspace
-                                </p>
-                                <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                                    Analyze content from a simple input page
-                                </h1>
-                            </div>
-                        </div>
+                        <header className="border-b border-[#d5dbd7] pb-6 dark:border-[#222b27]">
+                            <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
+                                Content Workspace
+                            </p>
+                            <h1 className="mt-3 font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl">
+                                Extract structured schema from <span className="italic font-normal">raw text</span>
+                            </h1>
+                            <p className="mt-2 max-w-2xl text-sm text-[#607267] dark:text-[#7fa08d]">
+                                Paste your draft, article copy, or raw notes below. The AI analyzer will extract a structured title, categorizations, summary, and keywords.
+                            </p>
+                        </header>
 
-                        <p className="max-w-2xl text-sm leading-6 text-slate-300">
-                            Paste your draft, notes, or article copy below.
-                        </p>
-                    </header>
+                        <main className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
+                            <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                <form onSubmit={handleSubmit} className="space-y-6">
+                                    <label className="block">
+                                        <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
+                                            Source copy
+                                        </span>
+                                        <textarea
+                                            name="content"
+                                            value={content}
+                                            onChange={(event) => setContent(event.target.value)}
+                                            placeholder="Paste your text copy here (minimum 20 characters)..."
+                                            rows={14}
+                                            className="min-h-64 w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-4 text-sm leading-relaxed text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
+                                        />
+                                    </label>
 
-                    <main className="grid gap-6 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)]">
-                        <section className="rounded-3xl border border-white/10 bg-slate-950/60 p-6 shadow-2xl shadow-black/20 backdrop-blur">
-                            <form
-                                onSubmit={handleSubmit}
-                                className="space-y-4"
-                            >
-                                <label className="block">
-                                    <span className="mb-2 block text-sm font-medium text-slate-200">
-                                        Content
-                                    </span>
-                                    <textarea
-                                        name="content"
-                                        value={content}
-                                        onChange={(event) =>
-                                            setContent(event.target.value)
-                                        }
-                                        placeholder="Paste content here..."
-                                        rows={14}
-                                        className="min-h-64 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-sm leading-6 text-white transition outline-none placeholder:text-slate-500 focus:border-cyan-400/50 focus:bg-white/7 focus:ring-4 focus:ring-cyan-400/10"
-                                    />
-                                </label>
+                                    {errorMessage ? (
+                                        <div className="border border-[#c2410c]/20 bg-[#c2410c]/5 px-4 py-3 font-mono text-xs uppercase tracking-wider text-[#c2410c] dark:text-[#e95e26]">
+                                            {errorMessage}
+                                        </div>
+                                    ) : null}
 
-                                {errorMessage ? (
-                                    <div className="rounded-2xl border border-rose-400/20 bg-rose-400/10 px-4 py-3 text-sm text-rose-100">
-                                        {errorMessage}
+                                    <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#d5dbd7] pt-4 dark:border-[#222b27]">
+                                        <div className="flex flex-wrap gap-4 font-mono text-xs text-[#607267] dark:text-[#7fa08d]">
+                                            <span>{wordCount} words</span>
+                                            <span>/</span>
+                                            <span>{characterCount} chars</span>
+                                            <span>/</span>
+                                            <span>{lineCount} lines</span>
+                                        </div>
+
+                                        <button
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                            className="btn-editorial-primary px-6 py-2.5 font-mono text-xs uppercase tracking-wider"
+                                        >
+                                            {isSubmitting ? 'Analyzing...' : 'Analyze content'}
+                                        </button>
                                     </div>
-                                ) : null}
+                                </form>
+                            </section>
 
-                                <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-slate-400">
-                                    <div className="flex flex-wrap gap-4">
-                                        <span>{wordCount} words</span>
-                                        <span>{characterCount} characters</span>
-                                        <span>{lineCount} lines</span>
-                                    </div>
+                            <aside className="space-y-6">
+                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                    <h2 className="border-b border-[#d5dbd7] pb-3 font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6] dark:border-[#222b27]">
+                                        Analysis schema
+                                    </h2>
 
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className="inline-flex h-11 items-center rounded-full bg-cyan-400 px-5 font-medium text-slate-950 transition hover:bg-cyan-300"
-                                    >
-                                        {isSubmitting
-                                            ? 'Analyzing...'
-                                            : 'Analyze content'}
-                                    </button>
-                                </div>
-                            </form>
-                        </section>
+                                    {analysisResult ? (
+                                        <div className="mt-4 space-y-5 text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
+                                            <div className="border-b border-[#d5dbd7] pb-4 last:border-b-0 dark:border-[#222b27]">
+                                                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
+                                                    Suggested Title
+                                                </p>
+                                                <p className="mt-2 font-serif text-xl font-bold leading-tight text-[#1a2620] dark:text-[#e5eae6]">
+                                                    {analysisResult.data.title}
+                                                </p>
+                                            </div>
 
-                        <aside className="space-y-6">
-                            <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-cyan-400/10 via-white/5 to-indigo-400/10 p-6">
-                                <h2 className="text-lg font-semibold text-white">
-                                    Analysis result
-                                </h2>
+                                            <div className="border-b border-[#d5dbd7] pb-4 last:border-b-0 dark:border-[#222b27]">
+                                                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
+                                                    Category
+                                                </p>
+                                                <p className="mt-2 font-mono text-xs uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
+                                                    {analysisResult.data.category}
+                                                </p>
+                                            </div>
 
-                                {analysisResult ? (
-                                    <div className="mt-4 space-y-4 text-sm leading-6 text-slate-200">
-                                        <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
-                                            <p className="text-xs tracking-[0.24em] text-cyan-200/80 uppercase">
-                                                Title
-                                            </p>
-                                            <p className="mt-2 text-base font-semibold text-white">
-                                                {analysisResult.data.title}
-                                            </p>
-                                        </div>
+                                            <div className="border-b border-[#d5dbd7] pb-4 last:border-b-0 dark:border-[#222b27]">
+                                                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
+                                                    Summary
+                                                </p>
+                                                <p className="mt-2 text-sm text-[#607267] dark:text-[#7fa08d]">
+                                                    {analysisResult.data.summary}
+                                                </p>
+                                            </div>
 
-                                        <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
-                                            <p className="text-xs tracking-[0.24em] text-cyan-200/80 uppercase">
-                                                Category
-                                            </p>
-                                            <p className="mt-2">
-                                                {analysisResult.data.category}
-                                            </p>
-                                        </div>
-
-                                        <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
-                                            <p className="text-xs tracking-[0.24em] text-cyan-200/80 uppercase">
-                                                Summary
-                                            </p>
-                                            <p className="mt-2">
-                                                {analysisResult.data.summary}
-                                            </p>
-                                        </div>
-
-                                        <div className="rounded-2xl border border-white/10 bg-slate-950/40 p-4">
-                                            <p className="text-xs tracking-[0.24em] text-cyan-200/80 uppercase">
-                                                Tags
-                                            </p>
-                                            <div className="mt-3 flex flex-wrap gap-2">
-                                                {analysisResult.data.tags.map(
-                                                    (tag) => (
+                                            <div className="pb-2 last:border-b-0">
+                                                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
+                                                    Tags
+                                                </p>
+                                                <div className="mt-3 flex flex-wrap gap-1.5">
+                                                    {analysisResult.data.tags.map((tag) => (
                                                         <span
                                                             key={tag}
-                                                            className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-xs text-cyan-100"
+                                                            className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[10px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]"
                                                         >
                                                             {tag}
                                                         </span>
-                                                    ),
-                                                )}
+                                                    ))}
+                                                </div>
                                             </div>
                                         </div>
-
-                                    </div>
-                                ) : (
-                                    <p className="mt-4 text-sm leading-6 text-slate-300">
-                                        Submit content to receive a structured
-                                        title, category, summary, and tags.
-                                    </p>
-                                )}
-                            </section>
-                        </aside>
-                    </main>
+                                    ) : (
+                                        <p className="mt-4 font-serif italic text-sm text-[#607267] dark:text-[#7fa08d]">
+                                            Submit text copy in the workspace to receive a structured analysis.
+                                        </p>
+                                    )}
+                                </section>
+                            </aside>
+                        </main>
                     </div>
                 </div>
             </AppLayout>

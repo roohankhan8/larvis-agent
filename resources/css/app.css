@@ -1,11 +1,173 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source '../views';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 
 @theme {
-    --font-sans:
-        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
+    --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Fraunces', Georgia, serif;
+    --font-mono: 'Space Mono', monospace;
+}
+
+@layer base {
+    body {
+        background-color: #f4f6f3;
+        color: #1a2620;
+        transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    .dark body {
+        background-color: #101412;
+        color: #e5eae6;
+    }
+
+    /* Clean input focus styling */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea,
+    select {
+        border-color: #d5dbd7;
+        background-color: #ffffff;
+        color: #1a2620;
+        transition: all 0.2s ease;
+    }
+
+    .dark input[type="text"],
+    .dark input[type="email"],
+    .dark input[type="password"],
+    .dark textarea,
+    .dark select {
+        border-color: #222b27;
+        background-color: #151c19;
+        color: #e5eae6;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        border-color: #5c7368 !important;
+        box-shadow: 0 0 0 3px rgba(92, 115, 104, 0.12) !important;
+        outline: none;
+    }
+
+    .dark input:focus,
+    .dark textarea:focus,
+    .dark select:focus {
+        border-color: #708a7d !important;
+        box-shadow: 0 0 0 3px rgba(112, 138, 125, 0.18) !important;
+    }
+}
+
+/* Editorial layout elements */
+.editorial-grid {
+    background-image: 
+        linear-gradient(to right, rgba(92, 115, 104, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(92, 115, 104, 0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+}
+
+.dark .editorial-grid {
+    background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+}
+
+.paper-sheet {
+    background-color: #ffffff;
+    border: 1px solid #d5dbd7;
+    box-shadow: 4px 4px 0px 0px #1a2620;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .paper-sheet {
+    background-color: #141a17;
+    border: 1px solid #222b27;
+    box-shadow: 4px 4px 0px 0px #e5eae6;
+}
+
+.paper-sheet:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 6px 6px 0px 0px #1a2620;
+}
+
+.dark .paper-sheet:hover {
+    box-shadow: 6px 6px 0px 0px #e5eae6;
+}
+
+/* Tactile buttons */
+.btn-editorial-primary {
+    background-color: #1a2620;
+    color: #f4f6f3;
+    border: 1px solid #1a2620;
+    font-weight: 500;
+    box-shadow: 2px 2px 0px 0px rgba(26, 38, 32, 0.2);
+    transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dark .btn-editorial-primary {
+    background-color: #e5eae6;
+    color: #101412;
+    border: 1px solid #e5eae6;
+    box-shadow: 2px 2px 0px 0px rgba(229, 234, 230, 0.2);
+}
+
+.btn-editorial-primary:hover {
+    background-color: #2f3e37;
+    transform: translate(-1px, -1px);
+    box-shadow: 4px 4px 0px 0px #1a2620;
+}
+
+.dark .btn-editorial-primary:hover {
+    background-color: #ffffff;
+    box-shadow: 4px 4px 0px 0px #e5eae6;
+}
+
+.btn-editorial-primary:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px 0px #1a2620;
+}
+
+.dark .btn-editorial-primary:active {
+    box-shadow: 1px 1px 0px 0px #e5eae6;
+}
+
+.btn-editorial-secondary {
+    background-color: transparent;
+    color: #1a2620;
+    border: 1px solid #d5dbd7;
+    transition: all 0.15s ease;
+}
+
+.dark .btn-editorial-secondary {
+    color: #e5eae6;
+    border: 1px solid #222b27;
+}
+
+.btn-editorial-secondary:hover {
+    background-color: rgba(26, 38, 32, 0.04);
+    border-color: #1a2620;
+}
+
+.dark .btn-editorial-secondary:hover {
+    background-color: rgba(229, 234, 230, 0.04);
+    border-color: #e5eae6;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: #d5dbd7;
+    border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb {
+    background: #222b27;
 }
