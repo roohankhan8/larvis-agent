@@ -4,6 +4,7 @@ use App\Http\Controllers\AnalyzeContentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConversationLabController;
 use App\Http\Controllers\PromptPlaygroundController;
+use App\Http\Controllers\StreamingLabController;
 use Illuminate\Support\Facades\Route;
 
 Route::inertia('/', 'welcome')->name('home');
@@ -25,3 +26,5 @@ Route::get('/prompt-playground', [PromptPlaygroundController::class, 'index'])->
 Route::post('/prompt-playground', [PromptPlaygroundController::class, 'generate']);
 Route::get('/conversation-lab', [ConversationLabController::class, 'index'])->name('conversation-lab');
 Route::post('/conversation-lab', [ConversationLabController::class, 'respond']);
+Route::get('/streaming-lab', [StreamingLabController::class, 'index'])->name('streaming-lab');
+Route::post('/streaming-lab', [StreamingLabController::class, 'stream']);

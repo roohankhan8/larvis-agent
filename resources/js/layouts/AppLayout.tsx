@@ -8,6 +8,7 @@ import {
     logout,
     promptPlayground,
     register,
+    streamingLab,
 } from '@/routes';
 
 export default function AppLayout({ children }: PropsWithChildren) {
@@ -61,6 +62,14 @@ export default function AppLayout({ children }: PropsWithChildren) {
                             className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
                         >
                             Conversation Lab
+                        </Link>
+                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span>
+                        <Link
+                            href={streamingLab.url()}
+                            prefetch
+                            className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
+                        >
+                            Streaming Lab
                         </Link>
                     </div>
 

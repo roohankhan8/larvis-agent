@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { analyzeContent, conversationLab, home, promptPlayground } from '@/routes';
+import { analyzeContent, conversationLab, home, promptPlayground, streamingLab } from '@/routes';
 import AppLayout from '@/layouts/AppLayout';
 
 const featureCards = [
@@ -23,6 +23,13 @@ const featureCards = [
             'Continue the same thread, reload the page, and keep the full message trail in the database.',
         path: conversationLab.url(),
         label: 'Open Conversation Lab',
+    },
+    {
+        title: 'Streaming output',
+        description:
+            'Watch Groq responses build chunk by chunk while the interface stays responsive.',
+        path: streamingLab.url(),
+        label: 'Open Streaming Lab',
     },
 ];
 
@@ -78,6 +85,13 @@ export default function Welcome() {
                                         className="btn-editorial-secondary inline-flex items-center justify-center px-6 py-3 font-mono text-xs uppercase tracking-wider"
                                     >
                                         Structured Analyzer
+                                    </Link>
+                                    <Link
+                                        href={streamingLab.url()}
+                                        prefetch
+                                        className="btn-editorial-secondary inline-flex items-center justify-center px-6 py-3 font-mono text-xs uppercase tracking-wider"
+                                    >
+                                        Streaming Lab
                                     </Link>
                                 </div>
                             </div>
@@ -162,6 +176,8 @@ export default function Welcome() {
                                 <Link href={promptPlayground.url()} className="hover:underline">Playground</Link>
                                 <span>/</span>
                                 <Link href={conversationLab.url()} className="hover:underline">Lab</Link>
+                                <span>/</span>
+                                <Link href={streamingLab.url()} className="hover:underline">Stream</Link>
                             </div>
                         </div>
                     </div>
