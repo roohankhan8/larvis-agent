@@ -1,8 +1,13 @@
 import { Head, Link } from '@inertiajs/react';
-import { analyzeContent } from '@/routes';
+import { analyzeContent, conversationLab, promptPlayground } from '@/routes';
 import AppLayout from '@/layouts/AppLayout';
 
 const featureCards = [
+    {
+        title: 'Prompt playground',
+        description:
+            'Generate raw Groq responses and tune tone, length, model profile, and sampling controls.',
+    },
     {
         title: 'Structured analysis',
         description:
@@ -12,6 +17,11 @@ const featureCards = [
         title: 'Browser-first flow',
         description:
             'Users can review the result in one place without opening a separate tool.',
+    },
+    {
+        title: 'Conversation memory',
+        description:
+            'Continue the same thread, reload the page, and keep the full message trail in the database.',
     },
     {
         title: 'Built for growth',
@@ -62,26 +72,43 @@ export default function Welcome() {
                                         content they can act on.
                                     </h2>
                                     <p className="max-w-2xl text-sm leading-7 text-slate-300 sm:text-base lg:text-lg">
-                                        This project gives users a clean landing
-                                        page and a dedicated analyzer. They can
-                                        paste content, get a title, category,
-                                        summary, and tags, then use the output
-                                        for browsing, sorting, or publishing.
+                                        This project is turning into a focused AI
+                                        lab. Start with raw prompt experiments in
+                                        the Groq playground, then compare the
+                                        output against the structured analyzer for
+                                        classification-style workflows.
                                     </p>
                                 </div>
                             </div>
 
                             <div className="flex flex-col gap-3 sm:flex-row">
+                                {/* <Link
+                                    href={promptPlayground.url()}
+                                    prefetch
+                                    className="inline-flex w-full items-center justify-center rounded-full bg-amber-300 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-200 sm:w-auto"
+                                >
+                                    Open prompt playground
+                                </Link>
                                 <Link
                                     href={analyzeContent.url()}
                                     prefetch
                                     className="inline-flex w-full items-center justify-center rounded-full bg-cyan-400 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300 sm:w-auto"
                                 >
-                                    Start analyzing content
+                                    Open structured analyzer
                                 </Link>
                                 <div className="inline-flex w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-3 text-sm text-slate-300 sm:w-auto sm:justify-start">
                                     Designed for mobile and desktop
-                                </div>
+                                </div> */}
+                            </div>
+
+                            <div className="flex flex-col gap-3 sm:flex-row">
+                                <Link
+                                    href={conversationLab.url()}
+                                    prefetch
+                                    className="inline-flex w-full items-center justify-center rounded-full bg-emerald-300 px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-emerald-200 sm:w-auto"
+                                >
+                                    Open conversation lab
+                                </Link>
                             </div>
 
                             <div className="grid gap-4 md:grid-cols-3">
@@ -134,11 +161,18 @@ export default function Welcome() {
                             content analysis, not a generic marketing splash.
                         </p>
                         <Link
-                            href={analyzeContent.url()}
+                            href={promptPlayground.url()}
                             prefetch
-                            className="inline-flex w-full items-center justify-center rounded-full border border-cyan-300/20 bg-cyan-300/10 px-4 py-2 font-medium text-cyan-100 transition hover:bg-cyan-300/15 sm:w-auto"
+                            className="inline-flex w-full items-center justify-center rounded-full border border-amber-300/20 bg-amber-300/10 px-4 py-2 font-medium text-amber-100 transition hover:bg-amber-300/15 sm:w-auto"
                         >
-                            Go to /analyze-content
+                            Go to /prompt-playground
+                        </Link>
+                        <Link
+                            href={conversationLab.url()}
+                            prefetch
+                            className="inline-flex w-full items-center justify-center rounded-full border border-emerald-300/20 bg-emerald-300/10 px-4 py-2 font-medium text-emerald-100 transition hover:bg-emerald-300/15 sm:w-auto"
+                        >
+                            Go to /conversation-lab
                         </Link>
                     </footer>
                 </div>

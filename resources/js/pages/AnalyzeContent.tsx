@@ -13,6 +13,11 @@ type AnalysisResult = {
     };
 };
 
+type ErrorPayload = {
+    message?: string;
+    errors?: Record<string, string[]>;
+};
+
 export default function AnalyzeContent() {
     const [content, setContent] = useState('');
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
@@ -59,18 +64,19 @@ export default function AnalyzeContent() {
                 }),
             });
 
-            const payload = (await response.json()) as
-                | AnalysisResult
-                | { message?: string; errors?: Record<string, string[]> };
+            const payload = (await response.json()) as AnalysisResult | ErrorPayload;
 
             if (!response.ok) {
-                const validationError = Array.isArray(payload.errors?.content)
-                    ? payload.errors.content[0]
+                const errorPayload = payload as ErrorPayload;
+                const validationError = Array.isArray(
+                    errorPayload.errors?.content,
+                )
+                    ? errorPayload.errors.content[0]
                     : null;
 
                 setErrorMessage(
                     validationError ??
-                        payload.message ??
+                        errorPayload.message ??
                         'Analysis failed. Please try again.',
                 );
 

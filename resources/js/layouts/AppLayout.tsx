@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import type { PropsWithChildren } from 'react';
-import { analyzeContent, home } from '@/routes';
+import { analyzeContent, conversationLab, home, promptPlayground } from '@/routes';
 
 export default function AppLayout({ children }: PropsWithChildren) {
     return (
@@ -16,12 +16,12 @@ export default function AppLayout({ children }: PropsWithChildren) {
                                 Laravel AI SDK
                             </p>
                             <p className="mt-1 truncate text-lg font-semibold tracking-tight text-white sm:text-xl">
-                                Content Analyzer
+                                AI Text Lab
                             </p>
                         </div>
                     </Link>
 
-                    <div className="flex flex-wrap items-center gap-2 lg:justify-center">
+                    {/* <div className="flex flex-wrap items-center gap-2 lg:justify-center">
                         <Link
                             href={home()}
                             className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300 transition hover:border-cyan-300/25 hover:bg-cyan-300/10 hover:text-white"
@@ -40,15 +40,38 @@ export default function AppLayout({ children }: PropsWithChildren) {
                         >
                             Workflow
                         </a>
-                    </div>
+                        <Link
+                            href={promptPlayground.url()}
+                            prefetch
+                            className="rounded-full border border-amber-300/20 bg-amber-300/10 px-4 py-2 text-sm text-amber-100 transition hover:border-amber-300/35 hover:bg-amber-300/15"
+                        >
+                            Prompt playground
+                        </Link>
+                    </div> */}
 
-                    <Link
-                        href={analyzeContent.url()}
-                        prefetch
-                        className="inline-flex shrink-0 items-center justify-center rounded-full bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
-                    >
-                        Analyze content
-                    </Link>
+                    <div className="flex shrink-0 flex-wrap items-center gap-2">
+                        <Link
+                            href={conversationLab.url()}
+                            prefetch
+                            className="inline-flex items-center justify-center rounded-full border border-emerald-300/20 bg-emerald-300/10 px-5 py-3 text-sm font-semibold text-emerald-100 transition hover:bg-emerald-300/15"
+                        >
+                            Conversation lab
+                        </Link>
+                        <Link
+                            href={promptPlayground.url()}
+                            prefetch
+                            className="inline-flex items-center justify-center rounded-full bg-amber-300 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-200"
+                        >
+                            Open prompt lab
+                        </Link>
+                        <Link
+                            href={analyzeContent.url()}
+                            prefetch
+                            className="inline-flex items-center justify-center rounded-full bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-cyan-300"
+                        >
+                            Analyze content
+                        </Link>
+                    </div>
                 </div>
             </div>
 
