@@ -2,17 +2,22 @@
 
 namespace App\Ai\Agents;
 
-use Illuminate\Contracts\JsonSchema\JsonSchema;
+use App\Ai\Tools\SavePostTool;
 use Laravel\Ai\Contracts\Agent;
-use Laravel\Ai\Contracts\HasStructuredOutput;
-use Laravel\Ai\Contracts\Tool;
-use Laravel\Ai\Messages\Message;
+use Laravel\Ai\Contracts\Conversational;
+use Laravel\Ai\Concerns\RemembersConversations;
 use Laravel\Ai\Promptable;
 use Stringable;
 
-class ContentAnalyzer implements Agent, HasStructuredOutput
+use Illuminate\Contracts\JsonSchema\JsonSchema;
+use Laravel\Ai\Contracts\HasStructuredOutput;
+use Laravel\Ai\Contracts\HasTools;
+use Laravel\Ai\Contracts\Tool;
+use Laravel\Ai\Messages\Message;
+
+class ContentAnalyzer implements Agent, HasStructuredOutput, HasTools, Conversational
 {
-    use Promptable;
+    use Promptable, RemembersConversations;
 
     /**
      * Get the instructions that the agent should follow.
@@ -39,7 +44,9 @@ class ContentAnalyzer implements Agent, HasStructuredOutput
      */
     public function tools(): iterable
     {
-        return [];
+        return [
+            new SavePostTool(),
+        ];
     }
 
     /**
