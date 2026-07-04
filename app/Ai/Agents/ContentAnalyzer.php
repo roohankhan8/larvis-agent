@@ -2,6 +2,7 @@
 
 namespace App\Ai\Agents;
 
+use App\Ai\Agents\Concerns\AnalyzesContent;
 use App\Ai\Tools\SavePostTool;
 use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\Conversational;
@@ -15,8 +16,9 @@ use Laravel\Ai\Contracts\HasTools;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Messages\Message;
 
-class ContentAnalyzer implements Agent, HasStructuredOutput, HasTools
+class ContentAnalyzer implements Agent, HasTools
 {
+    use AnalyzesContent;
     use Promptable;
 
     /**

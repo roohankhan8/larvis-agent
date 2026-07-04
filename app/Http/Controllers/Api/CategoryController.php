@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Ai\Agents\ContentAnalyzer;
+use App\Ai\Agents\StructuredContentAnalyzer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Laravel\Ai\Responses\StructuredAgentResponse;
 
 class CategoryController extends Controller
 {
@@ -15,10 +17,10 @@ class CategoryController extends Controller
             'content' => 'required|string|min:20',
         ]);
 
-        $agent = new ContentAnalyzer();
+        $agent = new StructuredContentAnalyzer;
         $response = $agent->prompt($request->input('content'));
 
-        $data = $response instanceof \Laravel\Ai\Responses\StructuredAgentResponse
+        $data = $response instanceof StructuredAgentResponse
             ? $response->toArray()
             : $agent->parseResponse($response->text);
 
@@ -39,14 +41,14 @@ class CategoryController extends Controller
         ]);
 
         // Instantiate and prompt the agent
-        $agent = new ContentAnalyzer();
+        $agent = new ContentAnalyzer;
 
         // The SDK automatically loops through tool requests until the agent finishes
         $response = $agent->prompt($request->input('content'));
 
         return response()->json([
             'status' => 'completed',
-            'agent_response' => $response
+            'agent_response' => $response,
         ]);
     }
     public function analyzeSaveRemember(Request $request)
@@ -56,14 +58,14 @@ class CategoryController extends Controller
         ]);
 
         // Instantiate and prompt the agent
-        $agent = new ContentAnalyzer();
+        $agent = new ContentAnalyzer;
 
         // The SDK automatically loops through tool requests until the agent finishes
         $response = $agent->prompt($request->input('content'));
 
         return response()->json([
             'status' => 'completed',
-            'agent_response' => $response
+            'agent_response' => $response,
         ]);
     }
     public function analyzeAsync(Request $request)
