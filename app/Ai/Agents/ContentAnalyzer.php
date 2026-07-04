@@ -15,9 +15,9 @@ use Laravel\Ai\Contracts\HasTools;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Messages\Message;
 
-class ContentAnalyzer implements Agent, HasStructuredOutput, HasTools, Conversational
+class ContentAnalyzer implements Agent, HasStructuredOutput, HasTools
 {
-    use Promptable, RemembersConversations;
+    use Promptable;
 
     /**
      * Get the instructions that the agent should follow.
