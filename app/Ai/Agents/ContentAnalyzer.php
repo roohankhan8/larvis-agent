@@ -3,6 +3,7 @@
 namespace App\Ai\Agents;
 
 use App\Ai\Agents\Concerns\AnalyzesContent;
+use App\Ai\Tools\SavePostImageTool;
 use App\Ai\Tools\SavePostTool;
 use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\Conversational;
@@ -48,6 +49,7 @@ class ContentAnalyzer implements Agent, HasTools
     {
         return [
             new SavePostTool(),
+            // new SavePostImageTool(),
         ];
     }
 

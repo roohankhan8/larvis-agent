@@ -24,25 +24,15 @@ class SavePostTool implements Tool
      */
     public function handle(Request $request): Stringable|string
     {
-        // // 1. Generate a contextual image using the SDK's image wrapper
-        // $generatedImage = Image::of("A professional minimalist digital art banner representing the concept of: {$request['title']}")
-        //     ->landscape()
-        //     ->quality('high')
-        //     ->generate();
-
-        // // 2. Store it to public storage disk instantly
-        // $imagePath = $generatedImage->store('blog-banners', 'public');
-
-        // 3. Persist the database record alongside our new image path
+        // Persist the database record alongside our new image path
         $post = CategorizedPost::create([
             'title'       => $request['title'],
             'category'    => $request['category'],
             'summary'     => $request['summary'],
             'tags'        => $request['tags'],
-            // 'banner_path' => $imagePath, // Add this column to your migration
         ]);
 
-        return "Saved post ID: {$post->id} with dynamic image at storage";
+        return "Saved post ID: {$post->id}";
     }
 
     /**
