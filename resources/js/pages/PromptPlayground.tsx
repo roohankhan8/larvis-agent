@@ -102,13 +102,19 @@ export default function PromptPlayground({
             const csrfToken = document
                 .querySelector('meta[name="csrf-token"]')
                 ?.getAttribute('content');
+            const xsrfToken = document.cookie
+                .split('; ')
+                .find((cookie) => cookie.startsWith('XSRF-TOKEN='))
+                ?.split('=')[1];
 
             const response = await fetch(route.url, {
                 method: route.method.toUpperCase(),
+                credentials: 'same-origin',
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
                     ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+                    ...(xsrfToken ? { 'X-XSRF-TOKEN': decodeURIComponent(xsrfToken) } : {}),
                 },
                 body: JSON.stringify({
                     prompt: trimmedPrompt,
