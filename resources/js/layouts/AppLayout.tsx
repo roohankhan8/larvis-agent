@@ -1,8 +1,18 @@
-import { Link } from '@inertiajs/react';
+import { Link, router, usePage } from '@inertiajs/react';
 import type { PropsWithChildren } from 'react';
-import { analyzeContent, conversationLab, home, promptPlayground } from '@/routes';
+import {
+    analyzeContent,
+    conversationLab,
+    home,
+    login,
+    logout,
+    promptPlayground,
+    register,
+} from '@/routes';
 
 export default function AppLayout({ children }: PropsWithChildren) {
+    const { auth } = usePage().props;
+
     return (
         <div className="min-h-screen bg-[#020617] text-slate-100">
             <div className="sticky top-0 z-30 border-b border-white/10 bg-slate-950/80 backdrop-blur">
@@ -50,6 +60,37 @@ export default function AppLayout({ children }: PropsWithChildren) {
                     </div> */}
 
                     <div className="flex shrink-0 flex-wrap items-center gap-2">
+                        {auth.user ? (
+                            <div className="flex flex-wrap items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2">
+                                <span className="text-sm font-medium text-slate-200">
+                                    {auth.user.name}
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={() => router.post(logout())}
+                                    className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-slate-300 transition hover:border-rose-300/25 hover:bg-rose-300/10 hover:text-white"
+                                >
+                                    Log out
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex flex-wrap items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-2">
+                                <Link
+                                    href={login()}
+                                    prefetch
+                                    className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-slate-300 transition hover:border-cyan-300/25 hover:bg-cyan-300/10 hover:text-white"
+                                >
+                                    Log in
+                                </Link>
+                                <Link
+                                    href={register()}
+                                    prefetch
+                                    className="rounded-full bg-cyan-400 px-3 py-2 text-xs font-semibold text-slate-950 transition hover:bg-cyan-300"
+                                >
+                                    Sign up
+                                </Link>
+                            </div>
+                        )}
                         <Link
                             href={conversationLab.url()}
                             prefetch
