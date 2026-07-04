@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
+import { analyzeAndSave as analyzeAndSaveAction } from '@/actions/App/Http/Controllers/AnalyzeContentController';
 import AppLayout from '@/layouts/AppLayout';
 
 type AnalysisResult = {
@@ -41,11 +42,17 @@ export default function AnalyzeContent() {
         setIsSubmitting(true);
 
         try {
-            const response = await fetch('/api/analyze-content', {
-                method: 'POST',
+            const analyzeContentRoute = analyzeAndSaveAction();
+            const csrfToken = document
+                .querySelector('meta[name="csrf-token"]')
+                ?.getAttribute('content');
+
+            const response = await fetch(analyzeContentRoute.url, {
+                method: analyzeContentRoute.method.toUpperCase(),
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
+                    ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
                 },
                 body: JSON.stringify({
                     content: trimmedContent,

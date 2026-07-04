@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Laravel\Ai\Responses\StructuredAgentResponse;
 
-class CategoryController extends Controller
+class AnalyzeContentController extends Controller
 {
     public function analyzeContent(Request $request)
     {
@@ -34,6 +34,7 @@ class CategoryController extends Controller
             ],
         ]);
     }
+
     public function analyzeAndSave(Request $request)
     {
         $request->validate([
@@ -51,6 +52,7 @@ class CategoryController extends Controller
             'agent_response' => $response,
         ]);
     }
+
     public function analyzeSaveRemember(Request $request)
     {
         $request->validate([
@@ -68,6 +70,7 @@ class CategoryController extends Controller
             'agent_response' => $response,
         ]);
     }
+
     public function analyzeAsync(Request $request)
     {
         $request->validate(['content' => 'required|string']);

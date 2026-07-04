@@ -3,6 +3,7 @@
 namespace App\Ai\Agents;
 
 use App\Ai\Agents\Concerns\AnalyzesContent;
+use App\Ai\Tools\SavePostTool;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\HasStructuredOutput;
@@ -22,6 +23,18 @@ class StructuredContentAnalyzer implements Agent, HasStructuredOutput
     public function messages(): iterable
     {
         return [];
+    }
+
+    /**
+     * Get the tools available to the agent.
+     *
+     * @return Tool[]
+     */
+    public function tools(): iterable
+    {
+        return [
+            new SavePostTool,
+        ];
     }
 
     /**
