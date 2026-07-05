@@ -1,15 +1,26 @@
 import AppLayout from '@/layouts/AppLayout';
 import { Head } from '@inertiajs/react';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import ProjectContextPanel from '@/components/ProjectContextPanel';
+import type { ContentProject } from '@/types/content-project';
 
 type StreamingChunk = {
     type?: string;
     delta?: string;
 };
 
-export default function StreamingLab() {
+type StreamingLabProps = {
+    project: ContentProject | null;
+    initialPrompt: string | null;
+};
+
+export default function StreamingLab({
+    project,
+    initialPrompt,
+}: StreamingLabProps) {
     const [prompt, setPrompt] = useState(
-        'Draft a concise launch announcement for a new analytics dashboard.',
+        initialPrompt ??
+            'Draft a concise launch announcement for a new analytics dashboard.',
     );
     const [response, setResponse] = useState('');
     const [error, setError] = useState('');
@@ -55,7 +66,10 @@ export default function StreamingLab() {
                     ...(xsrfToken ? { 'X-XSRF-TOKEN': xsrfToken } : {}),
                 },
                 credentials: 'same-origin',
-                body: JSON.stringify({ prompt }),
+                body: JSON.stringify({
+                    prompt,
+                    project_id: project?.id ?? null,
+                }),
                 signal: abortController.signal,
             });
 
@@ -162,6 +176,9 @@ export default function StreamingLab() {
 
                     <main className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
                         <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                            <div className="mb-6">
+                                <ProjectContextPanel project={project} currentPage="streaming" />
+                            </div>
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <label className="block">
                                     <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">

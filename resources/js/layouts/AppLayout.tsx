@@ -44,13 +44,14 @@ export default function AppLayout({ children }: PropsWithChildren) {
                     </Link>
 
                     <div className="flex flex-wrap items-center gap-3 lg:justify-center">
-                        {/* <Link
+                        <Link
                             href={home()}
-                            className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
+                            prefetch
+                            className={navLinkClass(home())}
                         >
-                            Overview
+                            Workspace
                         </Link>
-                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span> */}
+                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span>
                         <Link
                             href={promptPlayground.url()}
                             prefetch

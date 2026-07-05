@@ -1,8 +1,10 @@
 import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import { generate as generateToolLabAction } from '@/actions/App/Http/Controllers/ToolLabController';
+import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
 import { promptPlayground, streamingLab, toolLab } from '@/routes';
+import type { ContentProject } from '@/types/content-project';
 
 type AudienceOption = 'founders' | 'developers' | 'marketers';
 type GoalOption = 'signup' | 'demo' | 'launch';
@@ -23,6 +25,8 @@ type ToolResult = {
 };
 
 type ToolLabProps = {
+    project: ContentProject | null;
+    initialPrompt: string | null;
     defaults: {
         audience: AudienceOption;
         goal: GoalOption;
@@ -61,12 +65,15 @@ type ErrorPayload = {
 };
 
 export default function ToolLab({
+    project,
+    initialPrompt,
     defaults,
     audienceOptions,
     goalOptions,
 }: ToolLabProps) {
     const [prompt, setPrompt] = useState(
-        'Write a homepage hero paragraph for a developer-focused launch of an AI workflow dashboard, and make the close push readers toward trying it today.',
+        initialPrompt ??
+            'Write a homepage hero paragraph for a developer-focused launch of an AI workflow dashboard, and make the close push readers toward trying it today.',
     );
     const [audience, setAudience] = useState<AudienceOption>(defaults.audience);
     const [goal, setGoal] = useState<GoalOption>(defaults.goal);
@@ -120,6 +127,7 @@ export default function ToolLab({
                     prompt: trimmedPrompt,
                     audience,
                     goal,
+                    project_id: project?.id ?? null,
                 }),
             });
 
@@ -194,6 +202,9 @@ export default function ToolLab({
 
                         <main className="grid gap-8 xl:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
                             <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                <div className="mb-6">
+                                    <ProjectContextPanel project={project} currentPage="tool" />
+                                </div>
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <label className="block">
                                         <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
@@ -337,7 +348,7 @@ export default function ToolLab({
                                     )}
                                 </section>
 
-                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                {/* <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
                                         Tool Diagnostics
                                     </h2>
@@ -412,9 +423,9 @@ export default function ToolLab({
                                             Diagnostics stay empty until the agent executes one or more tools.
                                         </p>
                                     )}
-                                </section>
+                                </section> */}
 
-                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                {/* <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                         Switch workspace
                                     </p>
@@ -423,25 +434,25 @@ export default function ToolLab({
                                     </p>
                                     <div className="mt-4 grid gap-3 font-mono text-xs">
                                         <Link
-                                            href={toolLab.url()}
+                                            href={project ? `${toolLab.url()}?project=${project.id}` : toolLab.url()}
                                             className="border border-[#1a2620] bg-[#1a2620] px-4 py-3 text-center uppercase tracking-wider text-[#f4f6f3] dark:border-[#e5eae6] dark:bg-[#e5eae6] dark:text-[#101412]"
                                         >
                                             Reset Tool Lab
                                         </Link>
                                         <Link
-                                            href={promptPlayground.url()}
+                                            href={project ? `${promptPlayground.url()}?project=${project.id}` : promptPlayground.url()}
                                             className="border border-[#d5dbd7] px-4 py-3 text-center uppercase tracking-wider text-[#607267] hover:border-[#1a2620] dark:border-[#222b27] dark:text-[#7fa08d] dark:hover:border-[#e5eae6]"
                                         >
                                             Prompt Playground
                                         </Link>
                                         <Link
-                                            href={streamingLab.url()}
+                                            href={project ? `${streamingLab.url()}?project=${project.id}` : streamingLab.url()}
                                             className="border border-[#d5dbd7] px-4 py-3 text-center uppercase tracking-wider text-[#607267] hover:border-[#1a2620] dark:border-[#222b27] dark:text-[#7fa08d] dark:hover:border-[#e5eae6]"
                                         >
                                             Streaming Lab
                                         </Link>
                                     </div>
-                                </section>
+                                </section> */}
                             </aside>
                         </main>
                     </div>

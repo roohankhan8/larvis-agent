@@ -1,8 +1,10 @@
 import { Head, Link } from '@inertiajs/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { respond as respondConversationAction } from '@/actions/App/Http/Controllers/ConversationLabController';
+import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
 import { conversationLab, promptPlayground } from '@/routes';
+import type { ContentProject } from '@/types/content-project';
 
 type ConversationMessage = {
     role: 'user' | 'assistant';
@@ -16,6 +18,7 @@ type ConversationPayload = {
 };
 
 type ConversationLabProps = {
+    project: ContentProject | null;
     participant: {
         name: string;
     };
@@ -37,11 +40,14 @@ type ErrorPayload = {
 };
 
 export default function ConversationLab({
+    project,
     participant,
     conversation,
 }: ConversationLabProps) {
     const [message, setMessage] = useState(
-        'What is this lab demonstrating, and how should I test follow-up memory?',
+        project?.current_draft
+            ? `Revise this draft for clarity and stronger positioning:\n\n${project.current_draft}`
+            : 'What is this lab demonstrating, and how should I test follow-up memory?',
     );
     const [conversationId, setConversationId] = useState(
         conversation?.id ?? '',
@@ -107,6 +113,7 @@ export default function ConversationLab({
                 body: JSON.stringify({
                     message: trimmedMessage,
                     conversation_id: conversationId || null,
+                    project_id: project?.id ?? null,
                 }),
             });
 
@@ -194,6 +201,9 @@ export default function ConversationLab({
 
                         <main className="grid gap-8 xl:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
                             <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                <div className="mb-6">
+                                    <ProjectContextPanel project={project} currentPage="conversation" />
+                                </div>
                                 <h2 className="border-b border-[#d5dbd7] pb-3 font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6] dark:border-[#222b27]">
                                     Conversation Transcript
                                 </h2>
@@ -295,7 +305,7 @@ export default function ConversationLab({
                                     </div>
                                 </section> */}
 
-                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                {/* <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                         Switch workspace
                                     </p>
@@ -304,19 +314,19 @@ export default function ConversationLab({
                                     </p>
                                     <div className="mt-4 grid gap-3 font-mono text-xs">
                                         <Link
-                                            href={conversationLab.url()}
+                                            href={project ? `${conversationLab.url()}?project=${project.id}` : conversationLab.url()}
                                             className="border border-[#1a2620] bg-[#1a2620] px-4 py-3 text-center uppercase tracking-wider text-[#f4f6f3] dark:border-[#e5eae6] dark:bg-[#e5eae6] dark:text-[#101412]"
                                         >
                                             Reset lab session
                                         </Link>
                                         <Link
-                                            href={promptPlayground.url()}
+                                            href={project ? `${promptPlayground.url()}?project=${project.id}` : promptPlayground.url()}
                                             className="border border-[#d5dbd7] px-4 py-3 text-center uppercase tracking-wider text-[#607267] hover:border-[#1a2620] dark:border-[#222b27] dark:text-[#7fa08d] dark:hover:border-[#e5eae6]"
                                         >
                                             Prompt Playground
                                         </Link>
                                     </div>
-                                </section>
+                                </section> */}
                             </aside>
                         </main>
                     </div>

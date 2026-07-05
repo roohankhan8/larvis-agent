@@ -6,11 +6,13 @@ use App\Http\Controllers\ConversationLabController;
 use App\Http\Controllers\PromptPlaygroundController;
 use App\Http\Controllers\StreamingLabController;
 use App\Http\Controllers\ToolLabController;
+use App\Http\Controllers\WriterWorkspaceController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::get('/', [WriterWorkspaceController::class, 'index'])->name('home');
+Route::post('/projects', [WriterWorkspaceController::class, 'store'])->name('projects.store');
 
-Route::inertia('/analyze-content', 'AnalyzeContent')->name('analyze-content');
+Route::get('/analyze-content', [AnalyzeContentController::class, 'index'])->name('analyze-content');
 Route::post('/analyze-content', [AnalyzeContentController::class, 'analyzeContent']);
 Route::post('/analyze-and-save', [AnalyzeContentController::class, 'analyzeAndSave']);
 

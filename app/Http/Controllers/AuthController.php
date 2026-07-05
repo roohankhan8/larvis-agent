@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContentProject;
 use App\Models\Device;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -46,7 +47,13 @@ class AuthController extends Controller
         $user = Auth::user();
 
         if ($user instanceof User) {
-            Device::attachToUser($user, $request, $guestSessionId);
+            $device = Device::attachToUser($user, $request, $guestSessionId);
+
+            if ($device !== null) {
+                ContentProject::query()
+                    ->where('device_id', $device->id)
+                    ->update(['user_id' => $user->id]);
+            }
         }
 
         $request->session()->regenerate();
@@ -77,7 +84,13 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-        Device::attachToUser($user, $request, $guestSessionId);
+        $device = Device::attachToUser($user, $request, $guestSessionId);
+
+        if ($device !== null) {
+            ContentProject::query()
+                ->where('device_id', $device->id)
+                ->update(['user_id' => $user->id]);
+        }
         $request->session()->regenerate();
 
         return redirect()->intended(route('home'));

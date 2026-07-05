@@ -1,10 +1,14 @@
 import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 import { generate as generatePromptAction } from '@/actions/App/Http/Controllers/PromptPlaygroundController';
+import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
 import { analyzeContent, promptPlayground } from '@/routes';
+import type { ContentProject } from '@/types/content-project';
 
 type PromptPlaygroundProps = {
+    project: ContentProject | null;
+    initialPrompt: string | null;
     defaults: {
         tone: ToneOption;
         length: LengthOption;
@@ -60,11 +64,14 @@ const lengthOptions: Array<{ value: LengthOption; label: string }> = [
 ];
 
 export default function PromptPlayground({
+    project,
+    initialPrompt,
     defaults,
     modelOptions,
 }: PromptPlaygroundProps) {
     const [prompt, setPrompt] = useState(
-        'Write a sharp product announcement for a new AI content workflow that helps small teams ship polished copy faster.',
+        initialPrompt ??
+            'Write a sharp product announcement for a new AI content workflow that helps small teams ship polished copy faster.',
     );
     const [tone, setTone] = useState<ToneOption>(defaults.tone);
     const [length, setLength] = useState<LengthOption>(defaults.length);
@@ -125,6 +132,7 @@ export default function PromptPlayground({
                     temperature,
                     top_p: topP,
                     model_profile: modelProfile,
+                    project_id: project?.id ?? null,
                 }),
             });
 
@@ -200,6 +208,9 @@ export default function PromptPlayground({
 
                         <main className="grid gap-8 xl:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
                             <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                <div className="mb-6">
+                                    <ProjectContextPanel project={project} currentPage="prompt" />
+                                </div>
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <label className="block">
                                         <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
@@ -398,19 +409,19 @@ export default function PromptPlayground({
                                     )}
                                 </section>
 
-                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                {/* <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                         Next steps
                                     </p>
                                     <div className="mt-4 grid gap-3 font-mono text-xs">
                                         <Link
-                                            href={analyzeContent.url()}
+                                            href={project ? `${analyzeContent.url()}?project=${project.id}` : analyzeContent.url()}
                                             className="border border-[#dfdbd5] px-4 py-3 text-center uppercase tracking-wider text-[#656a70] hover:border-[#1c1e20] dark:border-[#2c2e30] dark:text-[#93989e] dark:hover:border-[#e3e4e6]"
                                         >
                                             Content Analyzer &rarr;
                                         </Link>
                                     </div>
-                                </section>
+                                </section> */}
                             </aside>
                         </main>
                     </div>

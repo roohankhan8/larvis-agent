@@ -1,7 +1,9 @@
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { analyzeAndSave as analyzeAndSaveAction } from '@/actions/App/Http/Controllers/AnalyzeContentController';
+import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
+import type { ContentProject } from '@/types/content-project';
 
 type AnalysisResult = {
     status: string;
@@ -18,9 +20,15 @@ type ErrorPayload = {
     errors?: Record<string, string[]>;
 };
 
-export default function AnalyzeContent() {
+type AnalyzeContentProps = {
+    project: ContentProject | null;
+};
+
+export default function AnalyzeContent({ project }: AnalyzeContentProps) {
     const [content, setContent] = useState(
-        'Laravel AI SDK gives product teams a clean way to build agent workflows without stitching together multiple provider APIs by hand. This draft explains how a small internal editorial tool can analyze raw campaign notes, extract structured fields, and save reusable content metadata for later publishing.',
+        project?.current_draft ??
+            project?.source_content ??
+            'Laravel AI SDK gives product teams a clean way to build agent workflows without stitching together multiple provider APIs by hand. This draft explains how a small internal editorial tool can analyze raw campaign notes, extract structured fields, and save reusable content metadata for later publishing.',
     );
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
         null,
@@ -63,6 +71,7 @@ export default function AnalyzeContent() {
                 },
                 body: JSON.stringify({
                     content: trimmedContent,
+                    project_id: project?.id ?? null,
                 }),
             });
 
@@ -116,6 +125,9 @@ export default function AnalyzeContent() {
 
                         <main className="grid gap-8 xl:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
                             <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                <div className="mb-6">
+                                    <ProjectContextPanel project={project} currentPage="analyze" />
+                                </div>
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <label className="block">
                                         <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
