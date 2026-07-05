@@ -5,10 +5,10 @@ import { storeRegister } from '@/actions/App/Http/Controllers/AuthController';
 
 export default function Register() {
     const form = useForm('RegisterForm', {
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+        name: 'Demo User',
+        email: 'demo@larvis.test',
+        password: 'password123',
+        password_confirmation: 'password123',
     }).dontRemember('password', 'password_confirmation');
 
     function submit(event: React.FormEvent<HTMLFormElement>) {

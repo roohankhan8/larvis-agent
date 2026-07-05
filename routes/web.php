@@ -5,11 +5,17 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ConversationLabController;
 use App\Http\Controllers\PromptPlaygroundController;
 use App\Http\Controllers\StreamingLabController;
+use App\Http\Controllers\ToolLabController;
+use App\Http\Controllers\WriterWorkspaceController;
 use Illuminate\Support\Facades\Route;
 
-Route::inertia('/', 'welcome')->name('home');
+Route::get('/', [WriterWorkspaceController::class, 'index'])->name('home');
+Route::post('/projects', [WriterWorkspaceController::class, 'store'])->name('projects.store');
+Route::get('/projects/{project}/drafts', [WriterWorkspaceController::class, 'drafts'])->name('projects.drafts');
+Route::delete('/projects/{project}/drafts/{draft}', [WriterWorkspaceController::class, 'destroyDraft'])->name('projects.drafts.destroy');
+Route::delete('/projects/{project}', [WriterWorkspaceController::class, 'destroy'])->name('projects.destroy');
 
-Route::inertia('/analyze-content', 'AnalyzeContent')->name('analyze-content');
+Route::get('/analyze-content', [AnalyzeContentController::class, 'index'])->name('analyze-content');
 Route::post('/analyze-content', [AnalyzeContentController::class, 'analyzeContent']);
 Route::post('/analyze-and-save', [AnalyzeContentController::class, 'analyzeAndSave']);
 
@@ -26,5 +32,7 @@ Route::get('/prompt-playground', [PromptPlaygroundController::class, 'index'])->
 Route::post('/prompt-playground', [PromptPlaygroundController::class, 'generate']);
 Route::get('/conversation-lab', [ConversationLabController::class, 'index'])->name('conversation-lab');
 Route::post('/conversation-lab', [ConversationLabController::class, 'respond']);
+Route::get('/tool-lab', [ToolLabController::class, 'index'])->name('tool-lab');
+Route::post('/tool-lab', [ToolLabController::class, 'generate']);
 Route::get('/streaming-lab', [StreamingLabController::class, 'index'])->name('streaming-lab');
 Route::post('/streaming-lab', [StreamingLabController::class, 'stream']);

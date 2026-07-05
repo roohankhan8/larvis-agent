@@ -64,11 +64,7 @@ class PromptPlaygroundAgent implements Agent
 
     public function maxTokens(): int
     {
-        return match ($this->length) {
-            'brief' => 160,
-            'detailed' => 640,
-            default => 320,
-        };
+        return 4096;
     }
 
     public function resolvedModel(): string

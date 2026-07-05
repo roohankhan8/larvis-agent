@@ -4,12 +4,12 @@ Keep the current content analyzer page and its save flow unchanged. Add separate
 
 ## Goal
 Turn this project into a small lab of focused AI demos that can:
-- generate text with Groq
-- show structured output
-- remember conversations
-- use tools
-- stream responses
-- queue long-running work
+- [x] generate text with Groq
+- [ ] show structured output
+- [x] remember conversations
+- [x] use tools
+- [x] stream responses
+- [ ] queue long-running work
 
 ## Current Baseline
 The app already has:
@@ -34,15 +34,15 @@ Treat `AnalyzeContent` as the baseline reference page, not as the place to add t
 
 ### 1. Prompt Playground
 Learn:
-- `Promptable`
-- provider/model selection
-- prompt shaping
-- temperature and response tuning
+- [x] `Promptable`
+- [x] provider/model selection
+- [x] prompt shaping
+- [x] temperature and response tuning
 
 Build:
-- create a simple text-generation page for Groq
-- let the user submit a prompt and see the raw answer
-- expose a few safe prompt controls like tone or length
+- [x] create a simple text-generation page for Groq
+- [x] let the user submit a prompt and see the raw answer
+- [x] expose a few safe prompt controls like tone or length
 - suggested route: `/prompt-playground`
 - suggested files:
   - `app/Http/Controllers/PromptPlaygroundController.php`
@@ -51,14 +51,14 @@ Build:
 
 ### 2. Structured Extractor
 Learn:
-- `HasStructuredOutput`
-- JSON schema design
-- parsing structured responses
+- [ ] `HasStructuredOutput`
+- [ ] JSON schema design
+- [ ] parsing structured responses
 
 Build:
-- create a page that extracts fields from text into JSON
-- render the structured result in the UI
-- keep the schema small and easy to understand
+- [ ] create a page that extracts fields from text into JSON
+- [ ] render the structured result in the UI
+- [ ] keep the schema small and easy to understand
 - suggested route: `/structured-extractor`
 - suggested files:
   - `app/Http/Controllers/StructuredExtractorController.php`
@@ -67,14 +67,14 @@ Build:
 
 ### 3. Conversation Lab
 Learn:
-- `Conversational`
-- `RemembersConversations`
-- conversation state and continuation
+- [x] `Conversational`
+- [x] `RemembersConversations`
+- [x] conversation state and continuation
 
 Build:
-- create a page for asking follow-up questions to the same agent
-- persist or reuse conversation identifiers
-- show how context changes the answer
+- [x] create a page for asking follow-up questions to the same agent
+- [x] persist or reuse conversation identifiers
+- [x] show how context changes the answer
 - suggested route: `/conversation-lab`
 - suggested files:
   - `app/Http/Controllers/ConversationLabController.php`
@@ -83,14 +83,14 @@ Build:
 
 ### 4. Tool Lab
 Learn:
-- `HasTools`
-- custom tool classes
-- tool outputs
+- [x] `HasTools`
+- [x] custom tool classes
+- [x] tool outputs
 
 Build:
-- create a page that demonstrates one or two text-only tools
-- keep the tools simple and deterministic
-- show tool calls affecting the final answer
+- [x] create a page that demonstrates one or two text-only tools
+- [x] keep the tools simple and deterministic
+- [x] show tool calls affecting the final answer
 - suggested route: `/tool-lab`
 - suggested files:
   - `app/Http/Controllers/ToolLabController.php`
@@ -100,13 +100,13 @@ Build:
 
 ### 5. Streaming Lab
 Learn:
-- streaming responses
-- progressive UI updates
+- [x] streaming responses
+- [x] progressive UI updates
 
 Build:
-- create a page that streams a Groq response token by token or chunk by chunk
-- show partial output while the response is still generating
-- keep the interface responsive during long generations
+- [x] create a page that streams a Groq response token by token or chunk by chunk
+- [x] show partial output while the response is still generating
+- [x] keep the interface responsive during long generations
 - suggested route: `/streaming-lab`
 - suggested files:
   - `app/Http/Controllers/StreamingLabController.php`
@@ -115,13 +115,13 @@ Build:
 
 ### 6. Queue Lab
 Learn:
-- `queue()`
-- background AI processing patterns
+- [ ] `queue()`
+- [ ] background AI processing patterns
 
 Build:
-- create a page that starts a queued generation job
-- show pending and completed states
-- surface job completion in the UI
+- [ ] create a page that starts a queued generation job
+- [ ] show pending and completed states
+- [ ] surface job completion in the UI
 - suggested route: `/queue-lab`
 - suggested files:
   - `app/Http/Controllers/QueueLabController.php`
@@ -131,12 +131,12 @@ Build:
 
 ## Testing Strategy
 Add tests as each feature lands:
-- prompt page validation and text generation success
-- structured output shape and schema validation
-- conversation continuation behavior
-- tool execution behavior
-- streaming and queue state handling
-- frontend request flow for each page
+- [x] prompt page validation and text generation success
+- [ ] structured output shape and schema validation
+- [x] conversation continuation behavior
+- [x] tool execution behavior
+- [ ] streaming and queue state handling
+- [x] frontend request flow for each implemented page
 - Suggested test files:
   - `tests/Feature/PromptPlaygroundTest.php`
   - `tests/Feature/StructuredExtractorTest.php`
