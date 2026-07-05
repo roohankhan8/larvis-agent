@@ -45,7 +45,9 @@ class PromptPlaygroundController extends Controller
 
         return Inertia::render('PromptPlayground', [
             'defaults' => [
-                'tone' => $project?->tone ?? 'neutral',
+                'tone' => in_array(strtolower($project?->tone ?? ''), ['neutral', 'concise', 'persuasive', 'playful'])
+                    ? strtolower($project->tone)
+                    : 'neutral',
                 'length' => 'standard',
                 'temperature' => (float) ($project?->model_settings['temperature'] ?? 0.7),
                 'top_p' => (float) ($project?->model_settings['top_p'] ?? 0.9),

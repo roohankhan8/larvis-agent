@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [WriterWorkspaceController::class, 'index'])->name('home');
 Route::post('/projects', [WriterWorkspaceController::class, 'store'])->name('projects.store');
 Route::get('/projects/{project}/drafts', [WriterWorkspaceController::class, 'drafts'])->name('projects.drafts');
+Route::delete('/projects/{project}/drafts/{draft}', [WriterWorkspaceController::class, 'destroyDraft'])->name('projects.drafts.destroy');
 Route::delete('/projects/{project}', [WriterWorkspaceController::class, 'destroy'])->name('projects.destroy');
 
 Route::get('/analyze-content', [AnalyzeContentController::class, 'index'])->name('analyze-content');

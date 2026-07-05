@@ -1,5 +1,5 @@
 import { Head, Link, router } from '@inertiajs/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { destroy as destroyProjectAction, drafts as projectDraftsAction, store as storeProjectAction } from '@/actions/App/Http/Controllers/WriterWorkspaceController';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
@@ -73,6 +73,25 @@ export default function Welcome({ project, projects }: WelcomeProps) {
     const [audience, setAudience] = useState('marketers');
     const [tone, setTone] = useState('persuasive');
     const [goal, setGoal] = useState('demo');
+    const [projectToDelete, setProjectToDelete] = useState<ContentProject | null>(null);
+
+    useEffect(() => {
+        if (!projectToDelete) {
+            return;
+        }
+
+        function handleKeyDown(event: KeyboardEvent) {
+            if (event.key === 'Escape') {
+                setProjectToDelete(null);
+            }
+        }
+
+        window.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [projectToDelete]);
 
     function handleCreateProject(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -255,15 +274,7 @@ export default function Welcome({ project, projects }: WelcomeProps) {
                                                         <button
                                                             type="button"
                                                             aria-label={`Delete ${item.title}`}
-                                                            onClick={() => {
-                                                                if (!window.confirm(`Delete "${item.title}"? This cannot be undone.`)) {
-                                                                    return;
-                                                                }
-
-                                                                router.delete(destroyProjectAction({ project: item.id }).url, {
-                                                                    preserveScroll: true,
-                                                                });
-                                                            }}
+                                                            onClick={() => setProjectToDelete(item)}
                                                             className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-[#d5dbd7] text-[#a8552a] transition hover:border-[#a8552a] hover:bg-[#fff1ea] dark:border-[#222b27] dark:text-[#f08a57] dark:hover:bg-[#2b1912]"
                                                         >
                                                             <span className="sr-only">Delete project</span>
@@ -323,6 +334,52 @@ export default function Welcome({ project, projects }: WelcomeProps) {
                         </div>
                     </div>
                 </footer>
+
+                {projectToDelete && (
+                    <div
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1a2620]/65 backdrop-blur-xs transition-opacity"
+                        onClick={() => setProjectToDelete(null)}
+                        role="dialog"
+                        aria-modal="true"
+                    >
+                        <div
+                            className="paper-sheet w-full max-w-md bg-[#f5e4da] p-6 dark:bg-[#141a17] relative transition-all"
+                            onClick={(event) => event.stopPropagation()}
+                        >
+                            <span className="inline-block font-mono text-[10px] font-semibold uppercase tracking-wider text-[#c2410c] dark:text-[#e8a382] mb-3">
+                                [Warning: Permanent Action]
+                            </span>
+                            <h3 className="font-serif text-2xl font-light text-[#1a2620] dark:text-[#e5eae6]">
+                                Delete Project?
+                            </h3>
+                            <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                Are you sure you want to permanently delete <strong className="text-[#1a2620] dark:text-[#e5eae6]">"{projectToDelete.title}"</strong>? This will remove all associated drafts and resources. This action cannot be undone.
+                            </p>
+                            <div className="mt-6 flex flex-wrap justify-end gap-3 border-t border-[#d5dbd7] pt-4 dark:border-[#222b27]">
+                                <button
+                                    type="button"
+                                    onClick={() => setProjectToDelete(null)}
+                                    className="btn-editorial-secondary px-5 py-2.5 font-mono text-xs uppercase tracking-wider cursor-pointer"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        router.delete(destroyProjectAction({ project: projectToDelete.id }).url, {
+                                            preserveScroll: true,
+                                            onSuccess: () => setProjectToDelete(null),
+                                            onFinish: () => setProjectToDelete(null),
+                                        });
+                                    }}
+                                    className="border border-[#c2410c] bg-[#c2410c] text-white px-5 py-2.5 font-mono text-xs uppercase tracking-wider transition hover:bg-[#a8552a] hover:border-[#a8552a] hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_0px_#1a2620] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[1px_1px_0px_0px_#1a2620] dark:border-[#e8a382] dark:bg-[#e8a382] dark:text-[#101412] dark:hover:bg-[#f08a57] dark:hover:border-[#f08a57] dark:hover:shadow-[4px_4px_0px_0px_#e5eae6] dark:active:shadow-[1px_1px_0px_0px_#e5eae6] cursor-pointer"
+                                >
+                                    Confirm Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </AppLayout>
         </>
     );

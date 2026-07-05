@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import FormattedContent from '@/components/FormattedContent';
 import { respond as respondConversationAction } from '@/actions/App/Http/Controllers/ConversationLabController';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
@@ -231,9 +232,9 @@ export default function ConversationLab({
                                                     >
                                                         {entry.role === 'user' ? 'You' : 'Assistant'}
                                                     </p>
-                                                    <p className="mt-2 whitespace-pre-wrap font-sans text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
-                                                        {entry.content}
-                                                    </p>
+                                                    <div className="mt-2">
+                                                        <FormattedContent text={entry.content} />
+                                                    </div>
                                                 </div>
                                             </div>
                                         ))

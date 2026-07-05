@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
+import FormattedContent from '@/components/FormattedContent';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
 import type { ContentProject } from '@/types/content-project';
@@ -20,7 +21,7 @@ export default function StreamingLab({
 }: StreamingLabProps) {
     const [prompt, setPrompt] = useState(
         initialPrompt ??
-            'Draft a concise launch announcement for a new analytics dashboard.',
+        'Draft a concise launch announcement for a new analytics dashboard.',
     );
     const [response, setResponse] = useState('');
     const [error, setError] = useState('');
@@ -174,11 +175,12 @@ export default function StreamingLab({
                         </div>
                     </header>
 
-                    <main className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
-                        <section className="paper-sheet p-6 dark:bg-[#141a17]">
-                            <div className="mb-6">
-                                <ProjectContextPanel project={project} currentPage="streaming" />
-                            </div>
+                    <main>
+                        <div className="mb-6">
+                            <ProjectContextPanel project={project} currentPage="streaming" />
+                        </div>
+
+                        <section className="paper-sheet p-6 dark:bg-[#141a17] mb-6">
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <label className="block">
                                     <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
@@ -229,39 +231,38 @@ export default function StreamingLab({
                             </form>
                         </section>
 
-                        <aside className="space-y-6">
-                            <section className="paper-sheet p-6 dark:bg-[#141a17]">
-                                <div className="flex items-center justify-between border-b border-[#d5dbd7] pb-3 dark:border-[#222b27]">
-                                    <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                        Live preview
-                                    </h2>
-                                    <span className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[9px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
+                        <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                            <div className="flex items-center justify-between border-b border-[#d5dbd7] pb-3 dark:border-[#222b27]">
+                                <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
+                                    Live preview
+                                </h2>
+                                {/* <span className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[9px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
                                         {isStreaming ? 'Active' : 'Idle'}
-                                    </span>
-                                </div>
-                                <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                    </span> */}
+                            </div>
+                            {/* <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                     This preview updates as the AI writes, so you can follow the final version as it is created.
+                                </p> */}
+
+                            <div className="mt-4 border border-[#d5dbd7] bg-[#f5e4da]/50 p-4 dark:border-[#222b27] dark:bg-[#151c19]/50">
+                                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
+                                    Final draft
                                 </p>
-
-                                <div className="mt-4 border border-[#d5dbd7] bg-[#f5e4da]/50 p-4 dark:border-[#222b27] dark:bg-[#151c19]/50">
-                                    <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
-                                        Final draft
-                                    </p>
-                                    <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                {/* <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                         The final version appears here as it is generated.
-                                    </p>
-                                    <pre className="mt-3 min-h-64 whitespace-pre-wrap break-words font-mono text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
-                                        {response.length > 0 ? (
-                                            response
-                                        ) : (
-                                            <span className="text-[#607267] dark:text-[#7fa08d] italic">
-                                                Your final version will appear here.
-                                            </span>
-                                        )}
-                                    </pre>
+                                    </p> */}
+                                <div className="mt-3 min-h-64">
+                                    {response.length > 0 ? (
+                                        <FormattedContent text={response} />
+                                    ) : (
+                                        <span className="text-sm text-[#607267] dark:text-[#7fa08d] italic">
+                                            Your final version will appear here.
+                                        </span>
+                                    )}
                                 </div>
+                            </div>
 
-                                <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                            {/* <div className="mt-4 grid gap-3 sm:grid-cols-2">
                                     <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
                                         <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Status</p>
                                         <p className="mt-2 text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
@@ -280,9 +281,8 @@ export default function StreamingLab({
                                             Saved to project
                                         </p>
                                     </div>
-                                </div>
-                            </section>
-                        </aside>
+                                </div> */}
+                        </section>
                     </main>
                 </div>
             </div>

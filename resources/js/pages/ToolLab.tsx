@@ -1,5 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { useState } from 'react';
+import FormattedContent from '@/components/FormattedContent';
 import { generate as generateToolLabAction } from '@/actions/App/Http/Controllers/ToolLabController';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
@@ -311,9 +312,9 @@ export default function ToolLab({
                                                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                                     Result
                                                 </p>
-                                                <p className="mt-3 whitespace-pre-wrap font-sans text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
-                                                    {result.answer}
-                                                </p>
+                                                <div className="mt-3">
+                                                    <FormattedContent text={result.answer} />
+                                                </div>
                                             </div>
 
                                             <div className="grid gap-3 sm:grid-cols-2">

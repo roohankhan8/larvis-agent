@@ -82,4 +82,19 @@ class WriterWorkspaceController extends Controller
                 ->all(),
         ]);
     }
+
+    public function destroyDraft(Request $request, ContentProject $project, string $draft): RedirectResponse
+    {
+        $this->assertProjectVisible($request, $project);
+
+        $drafts = collect($project->drafts ?? []);
+
+        $updatedDrafts = $drafts->filter(fn (array $d): bool => ($d['id'] ?? '') !== $draft)->values()->all();
+
+        $project->update([
+            'drafts' => $updatedDrafts,
+        ]);
+
+        return redirect()->back();
+    }
 }
