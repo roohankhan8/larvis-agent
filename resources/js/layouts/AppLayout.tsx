@@ -13,7 +13,17 @@ import {
 } from '@/routes';
 
 export default function AppLayout({ children }: PropsWithChildren) {
-    const { auth } = usePage().props;
+    const page = usePage();
+    const { auth } = page.props;
+    const currentPath = page.url.split('?')[0];
+
+    function navLinkClass(href: string): string {
+        const isActive = currentPath === href;
+
+        return isActive
+            ? 'border border-[#1a2620] bg-[#1a2620] px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-[#f4f6f3] dark:border-[#e5eae6] dark:bg-[#e5eae6] dark:text-[#101412] transition'
+            : 'font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition';
+    }
 
     return (
         <div className="min-h-screen bg-[#f4f6f3] text-[#1a2620] dark:bg-[#101412] dark:text-[#e5eae6] transition-colors duration-200">
@@ -24,9 +34,9 @@ export default function AppLayout({ children }: PropsWithChildren) {
                             L
                         </span>
                         <div className="min-w-0">
-                            <p className="font-mono text-[0.65rem] font-medium tracking-[0.25em] text-[#607267] uppercase">
+                            {/* <p className="font-mono text-[0.65rem] font-medium tracking-[0.25em] text-[#607267] uppercase">
                                 Laravel AI
-                            </p>
+                            </p> */}
                             <h2 className="font-serif text-lg font-bold tracking-tight text-[#1a2620] dark:text-[#e5eae6]">
                                 Editorial Lab
                             </h2>
@@ -44,7 +54,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
                         <Link
                             href={promptPlayground.url()}
                             prefetch
-                            className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
+                            className={navLinkClass(promptPlayground.url())}
                         >
                             Prompt Playground
                         </Link>
@@ -52,7 +62,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
                         <Link
                             href={analyzeContent.url()}
                             prefetch
-                            className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
+                            className={navLinkClass(analyzeContent.url())}
                         >
                             Content Analyzer
                         </Link>
@@ -60,7 +70,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
                         <Link
                             href={conversationLab.url()}
                             prefetch
-                            className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
+                            className={navLinkClass(conversationLab.url())}
                         >
                             Conversation Lab
                         </Link>
@@ -68,7 +78,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
                         <Link
                             href={toolLab.url()}
                             prefetch
-                            className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
+                            className={navLinkClass(toolLab.url())}
                         >
                             Tool Lab
                         </Link>
@@ -76,7 +86,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
                         <Link
                             href={streamingLab.url()}
                             prefetch
-                            className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
+                            className={navLinkClass(streamingLab.url())}
                         >
                             Streaming Lab
                         </Link>
@@ -109,7 +119,7 @@ export default function AppLayout({ children }: PropsWithChildren) {
                                 <Link
                                     href={register()}
                                     prefetch
-                                    className="font-mono text-xs uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6] hover:underline font-semibold"
+                                    className="btn-editorial-primary px-4 py-2 font-mono text-xs uppercase tracking-wider"
                                 >
                                     Sign up
                                 </Link>

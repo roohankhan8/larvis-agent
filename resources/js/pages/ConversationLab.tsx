@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { respond as respondConversationAction } from '@/actions/App/Http/Controllers/ConversationLabController';
 import AppLayout from '@/layouts/AppLayout';
 import { conversationLab, promptPlayground } from '@/routes';
@@ -40,7 +40,9 @@ export default function ConversationLab({
     participant,
     conversation,
 }: ConversationLabProps) {
-    const [message, setMessage] = useState('');
+    const [message, setMessage] = useState(
+        'What is this lab demonstrating, and how should I test follow-up memory?',
+    );
     const [conversationId, setConversationId] = useState(
         conversation?.id ?? '',
     );
@@ -49,6 +51,7 @@ export default function ConversationLab({
     );
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const transcriptViewportRef = useRef<HTMLDivElement | null>(null);
 
     const transcriptLength = messages.length;
     const latestAssistantReply = useMemo(
@@ -57,6 +60,16 @@ export default function ConversationLab({
                 ?.content ?? null,
         [messages],
     );
+
+    useEffect(() => {
+        const viewport = transcriptViewportRef.current;
+
+        if (!viewport) {
+            return;
+        }
+
+        viewport.scrollTop = viewport.scrollHeight;
+    }, [messages]);
 
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
@@ -150,10 +163,13 @@ export default function ConversationLab({
                                     </p>
                                 </div>
 
-                                <div className="border border-[#d5dbd7] bg-[#f5e4da] p-5 dark:border-[#222b27] dark:bg-[#141a17]">
+                                {/* <div className="border border-[#d5dbd7] bg-[#f5e4da] p-5 dark:border-[#222b27] dark:bg-[#141a17]">
                                     <h3 className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
                                         Session Metadata
                                     </h3>
+                                    <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        This card summarizes the active participant and the conversation thread currently bound to the page.
+                                    </p>
                                     <table className="mt-3 w-full font-mono text-xs text-[#607267] dark:text-[#7fa08d]">
                                         <tbody>
                                             <tr className="border-b border-[#d5dbd7]/60 dark:border-[#222b27]/60">
@@ -172,7 +188,7 @@ export default function ConversationLab({
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
+                                </div> */}
                             </div>
                         </header>
 
@@ -182,29 +198,42 @@ export default function ConversationLab({
                                     Conversation Transcript
                                 </h2>
 
-                                <div className="mt-6 space-y-6">
+                                <div
+                                    ref={transcriptViewportRef}
+                                    className="mt-6 flex max-h-[62vh] min-h-[24rem] flex-col gap-4 overflow-y-auto border border-[#d5dbd7] bg-[#f5e4da]/30 p-4 dark:border-[#222b27] dark:bg-[#151c19]/30"
+                                >
                                     {messages.length > 0 ? (
                                         messages.map((entry, index) => (
                                             <div
                                                 key={`${entry.role}-${index}-${entry.content.slice(0, 24)}`}
-                                                className="border-b border-[#d5dbd7]/60 pb-6 last:border-b-0 dark:border-[#222b27]/60"
+                                                className={`flex ${
+                                                    entry.role === 'user' ? 'justify-end' : 'justify-start'
+                                                }`}
                                             >
-                                                <div className="flex items-start gap-4">
-                                                    <span className={`w-20 shrink-0 font-mono text-[10px] font-bold uppercase tracking-wider ${
-                                                        entry.role === 'user' ? 'text-[#c2410c]' : 'text-[#15803d] dark:text-[#34d399]'
-                                                    }`}>
-                                                        [{entry.role}]
-                                                    </span>
-                                                    <div className="space-y-1">
-                                                        <p className="font-sans text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6] whitespace-pre-wrap">
-                                                            {entry.content}
-                                                        </p>
-                                                    </div>
+                                                <div
+                                                    className={`max-w-[85%] border px-4 py-3 ${
+                                                        entry.role === 'user'
+                                                            ? 'border-[#c2410c]/20 bg-[#f5d8c7] dark:border-[#c2410c]/30 dark:bg-[#2b1912]'
+                                                            : 'border-[#d5dbd7] bg-[#f4f6f3] dark:border-[#222b27] dark:bg-[#101412]'
+                                                    }`}
+                                                >
+                                                    <p
+                                                        className={`font-mono text-[10px] font-bold uppercase tracking-wider ${
+                                                            entry.role === 'user'
+                                                                ? 'text-[#c2410c] dark:text-[#f08a57]'
+                                                                : 'text-[#15803d] dark:text-[#34d399]'
+                                                        }`}
+                                                    >
+                                                        {entry.role === 'user' ? 'You' : 'Assistant'}
+                                                    </p>
+                                                    <p className="mt-2 whitespace-pre-wrap font-sans text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
+                                                        {entry.content}
+                                                    </p>
                                                 </div>
                                             </div>
                                         ))
                                     ) : (
-                                        <div className="border border-dashed border-[#d5dbd7] bg-[#f5e4da] p-6 text-center font-serif italic text-sm text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
+                                        <div className="flex min-h-full items-center justify-center border border-dashed border-[#d5dbd7] bg-[#f5e4da] p-6 text-center font-serif italic text-sm text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
                                             Initiate a conversation thread to record transcript logs in the database.
                                         </div>
                                     )}
@@ -249,10 +278,13 @@ export default function ConversationLab({
                             </section>
 
                             <aside className="space-y-6">
-                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                {/* <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
                                         State Persistence
                                     </h2>
+                                    <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        The memory layer keeps the thread stable across requests so follow-up prompts can build on earlier turns.
+                                    </p>
                                     <div className="mt-4 space-y-4 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                         <p>
                                             By utilizing unique session IDs, this workspace binds multi-turn prompts back to your thread automatically.
@@ -261,11 +293,14 @@ export default function ConversationLab({
                                             Refreshing the page retrieves the saved history, preventing the loss of state context.
                                         </p>
                                     </div>
-                                </section>
+                                </section> */}
 
                                 <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                         Switch workspace
+                                    </p>
+                                    <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        Use these actions to reset the current thread or move into another lab without guessing routes manually.
                                     </p>
                                     <div className="mt-4 grid gap-3 font-mono text-xs">
                                         <Link

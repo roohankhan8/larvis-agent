@@ -135,10 +135,13 @@ export default function StreamingLab() {
                                 </p>
                             </div>
 
-                            <div className="border border-[#d5dbd7] bg-[#f5e4da] p-5 dark:border-[#222b27] dark:bg-[#141a17]">
+                            {/* <div className="border border-[#d5dbd7] bg-[#f5e4da] p-5 dark:border-[#222b27] dark:bg-[#141a17]">
                                 <h3 className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
                                     Stream Specifications
                                 </h3>
+                                <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                    These notes explain how the response reaches the page and why text appears incrementally instead of all at once.
+                                </p>
                                 <ul className="mt-3 space-y-2 font-mono text-[11px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                     <li className="flex items-center gap-2">
                                         <span className="h-1 w-1 bg-[#1a2620] dark:bg-[#e5eae6]" />
@@ -153,7 +156,7 @@ export default function StreamingLab() {
                                         <span>Output: Incremental text deltas</span>
                                     </li>
                                 </ul>
-                            </div>
+                            </div> */}
                         </div>
                     </header>
 
@@ -180,11 +183,11 @@ export default function StreamingLab() {
                                 ) : null}
 
                                 <div className="flex flex-wrap items-center justify-between gap-4 border-t border-[#d5dbd7] pt-4 dark:border-[#222b27]">
-                                    <div className="flex flex-wrap gap-4 font-mono text-xs text-[#607267] dark:text-[#7fa08d]">
+                                    {/* <div className="flex flex-wrap gap-4 font-mono text-xs text-[#607267] dark:text-[#7fa08d]">
                                         <span>Transport: SSE</span>
                                         <span>/</span>
                                         <span>Format: JSON delta</span>
-                                    </div>
+                                    </div> */}
 
                                     <div className="flex gap-3">
                                         <button
@@ -219,10 +222,16 @@ export default function StreamingLab() {
                                         {isStreaming ? 'Active' : 'Idle'}
                                     </span>
                                 </div>
+                                <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                    This monitor updates as each streamed chunk arrives, making the generation process visible in real time.
+                                </p>
 
                                 <div className="mt-4 border border-[#d5dbd7] bg-[#f5e4da]/50 p-4 dark:border-[#222b27] dark:bg-[#151c19]/50">
                                     <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                         Streamed response
+                                    </p>
+                                    <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        The model appends text here as soon as each delta is parsed from the event stream.
                                     </p>
                                     <pre className="mt-3 min-h-64 whitespace-pre-wrap break-words font-mono text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
                                         {response.length > 0 ? (
@@ -238,12 +247,18 @@ export default function StreamingLab() {
                                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
                                     <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
                                         <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">State</p>
+                                        <p className="mt-2 text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                            Shows whether the browser is actively receiving stream chunks or waiting for a new run.
+                                        </p>
                                         <p className="mt-1 font-bold text-[#1a2620] dark:text-[#e5eae6]">
                                             {isStreaming ? 'Receiving chunks' : 'Ready'}
                                         </p>
                                     </div>
                                     <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
                                         <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Storage</p>
+                                        <p className="mt-2 text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                            Indicates that completed prompt and response pairs are persisted after the stream finishes.
+                                        </p>
                                         <p className="mt-1 text-[#1a2620] dark:text-[#e5eae6]">
                                             Logged in DB
                                         </p>

@@ -63,7 +63,9 @@ export default function PromptPlayground({
     defaults,
     modelOptions,
 }: PromptPlaygroundProps) {
-    const [prompt, setPrompt] = useState('');
+    const [prompt, setPrompt] = useState(
+        'Write a sharp product announcement for a new AI content workflow that helps small teams ship polished copy faster.',
+    );
     const [tone, setTone] = useState<ToneOption>(defaults.tone);
     const [length, setLength] = useState<LengthOption>(defaults.length);
     const [temperature, setTemperature] = useState(defaults.temperature);
@@ -354,9 +356,9 @@ export default function PromptPlayground({
                                         <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
                                             Raw Response
                                         </h2>
-                                        <span className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[9px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
+                                        {/* <span className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[9px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
                                             {result?.settings.provider ?? 'groq'}
-                                        </span>
+                                        </span> */}
                                     </div>
 
                                     {result ? (
@@ -405,7 +407,7 @@ export default function PromptPlayground({
                                             href={analyzeContent.url()}
                                             className="border border-[#dfdbd5] px-4 py-3 text-center uppercase tracking-wider text-[#656a70] hover:border-[#1c1e20] dark:border-[#2c2e30] dark:text-[#93989e] dark:hover:border-[#e3e4e6]"
                                         >
-                                            Structured Analyzer &rarr;
+                                            Content Analyzer &rarr;
                                         </Link>
                                     </div>
                                 </section>

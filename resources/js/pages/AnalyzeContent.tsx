@@ -19,7 +19,9 @@ type ErrorPayload = {
 };
 
 export default function AnalyzeContent() {
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(
+        'Laravel AI SDK gives product teams a clean way to build agent workflows without stitching together multiple provider APIs by hand. This draft explains how a small internal editorial tool can analyze raw campaign notes, extract structured fields, and save reusable content metadata for later publishing.',
+    );
     const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
         null,
     );
@@ -99,20 +101,20 @@ export default function AnalyzeContent() {
 
             <AppLayout>
                 <div className="editorial-grid min-h-[calc(100vh-5rem)] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-                    <div className="mx-auto flex w-full max-w-6xl flex-col justify-center gap-8">
+                    <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
                         <header className="border-b border-[#d5dbd7] pb-6 dark:border-[#222b27]">
                             <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
                                 Content Workspace
                             </p>
-                            <h1 className="mt-3 font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl">
+                            <h1 className="mt-3 font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl lg:text-5xl">
                                 Extract structured schema from <span className="italic font-normal">raw text</span>
                             </h1>
-                            <p className="mt-2 max-w-2xl text-sm text-[#607267] dark:text-[#7fa08d]">
+                            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                 Paste your draft, article copy, or raw notes below. The AI analyzer will extract a structured title, categorizations, summary, and keywords.
                             </p>
                         </header>
 
-                        <main className="grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
+                        <main className="grid gap-8 xl:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
                             <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <label className="block">
@@ -158,8 +160,11 @@ export default function AnalyzeContent() {
                             <aside className="space-y-6">
                                 <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <h2 className="border-b border-[#d5dbd7] pb-3 font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6] dark:border-[#222b27]">
-                                        Analysis schema
+                                        Output
                                     </h2>
+                                    {/* <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        This panel shows the structured fields extracted from the raw text so you can review the shape before reusing or saving it.
+                                    </p> */}
 
                                     {analysisResult ? (
                                         <div className="mt-4 space-y-5 text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
@@ -167,6 +172,9 @@ export default function AnalyzeContent() {
                                                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                                     Suggested Title
                                                 </p>
+                                                {/* <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                    A cleaned-up headline the model thinks best represents the source text.
+                                                </p> */}
                                                 <p className="mt-2 font-serif text-xl font-bold leading-tight text-[#1a2620] dark:text-[#e5eae6]">
                                                     {analysisResult.data.title}
                                                 </p>
@@ -176,6 +184,9 @@ export default function AnalyzeContent() {
                                                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                                     Category
                                                 </p>
+                                                {/* <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                    A single classification label used to group the content at a glance.
+                                                </p> */}
                                                 <p className="mt-2 font-mono text-xs uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
                                                     {analysisResult.data.category}
                                                 </p>
@@ -185,6 +196,9 @@ export default function AnalyzeContent() {
                                                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                                     Summary
                                                 </p>
+                                                {/* <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                    A compact explanation of the source text intended for previews or quick review.
+                                                </p> */}
                                                 <p className="mt-2 text-sm text-[#607267] dark:text-[#7fa08d]">
                                                     {analysisResult.data.summary}
                                                 </p>
@@ -194,6 +208,9 @@ export default function AnalyzeContent() {
                                                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                                     Tags
                                                 </p>
+                                                {/* <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                    Short keywords that help index the result and surface its main themes.
+                                                </p> */}
                                                 <div className="mt-3 flex flex-wrap gap-1.5">
                                                     {analysisResult.data.tags.map((tag) => (
                                                         <span

@@ -5,8 +5,8 @@ import { home, register as registerRoute } from '@/routes';
 
 export default function Login() {
     const form = useForm('LoginForm', {
-        email: '',
-        password: '',
+        email: 'demo@larvis.test',
+        password: 'password123',
         remember: false,
     }).dontRemember('password');
 

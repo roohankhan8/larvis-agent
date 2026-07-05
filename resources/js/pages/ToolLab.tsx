@@ -65,7 +65,9 @@ export default function ToolLab({
     audienceOptions,
     goalOptions,
 }: ToolLabProps) {
-    const [prompt, setPrompt] = useState('');
+    const [prompt, setPrompt] = useState(
+        'Write a homepage hero paragraph for a developer-focused launch of an AI workflow dashboard, and make the close push readers toward trying it today.',
+    );
     const [audience, setAudience] = useState<AudienceOption>(defaults.audience);
     const [goal, setGoal] = useState<GoalOption>(defaults.goal);
     const [result, setResult] = useState<ToolLabResponse['data'] | null>(null);
@@ -169,10 +171,13 @@ export default function ToolLab({
                                     </p>
                                 </div>
 
-                                <div className="border border-[#d5dbd7] bg-[#f5e4da] p-5 dark:border-[#222b27] dark:bg-[#141a17]">
+                                {/* <div className="border border-[#d5dbd7] bg-[#f5e4da] p-5 dark:border-[#222b27] dark:bg-[#141a17]">
                                     <h3 className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
                                         Available Tools
                                     </h3>
+                                    <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        These deterministic helpers give the model fixed guidance it can reuse while composing the final response.
+                                    </p>
                                     <ul className="mt-3 space-y-2 font-mono text-[11px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                         <li className="flex items-center gap-2">
                                             <span className="h-1 w-1 bg-[#1a2620] dark:bg-[#e5eae6]" />
@@ -183,7 +188,7 @@ export default function ToolLab({
                                             <span>`call_to_action` for deterministic conversion framing</span>
                                         </li>
                                     </ul>
-                                </div>
+                                </div> */}
                             </div>
                         </header>
 
@@ -286,6 +291,9 @@ export default function ToolLab({
                                             {result?.settings.provider ?? 'groq'}
                                         </span>
                                     </div>
+                                    {/* <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        This panel shows the polished response after the agent has finished using any relevant tools.
+                                    </p> */}
 
                                     {result ? (
                                         <div className="mt-4 space-y-4">
@@ -301,14 +309,23 @@ export default function ToolLab({
                                             <div className="grid gap-3 sm:grid-cols-2">
                                                 <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
                                                     <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Audience</p>
+                                                    {/* <p className="mt-2 text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                        The selected reader segment that shaped the tone and priorities of the answer.
+                                                    </p> */}
                                                     <p className="mt-1 capitalize text-[#1a2620] dark:text-[#e5eae6]">{result.settings.audience}</p>
                                                 </div>
                                                 <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
                                                     <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Goal</p>
+                                                    {/* <p className="mt-2 text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                        The conversion objective the final copy is trying to support.
+                                                    </p> */}
                                                     <p className="mt-1 capitalize text-[#1a2620] dark:text-[#e5eae6]">{result.settings.goal}</p>
                                                 </div>
                                                 <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27] sm:col-span-2">
                                                     <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Model Route</p>
+                                                    {/* <p className="mt-2 text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                        The exact Groq-routed model used for the current run.
+                                                    </p> */}
                                                     <p className="mt-1 break-all text-[#1a2620] dark:text-[#e5eae6]">{result.settings.model}</p>
                                                 </div>
                                             </div>
@@ -324,12 +341,18 @@ export default function ToolLab({
                                     <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
                                         Tool Diagnostics
                                     </h2>
+                                    <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        These records expose what the agent asked the tools to do and what each tool returned.
+                                    </p>
 
                                     {result ? (
                                         <div className="mt-4 space-y-4">
                                             <div>
                                                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                                     Calls
+                                                </p>
+                                                <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                    Input arguments passed by the model when it invoked a tool.
                                                 </p>
                                                 <div className="mt-2 space-y-2">
                                                     {result.tool_calls.length > 0 ? (
@@ -357,6 +380,9 @@ export default function ToolLab({
                                             <div>
                                                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                                     Results
+                                                </p>
+                                                <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                    Deterministic output returned by the tool and made available to the model.
                                                 </p>
                                                 <div className="mt-2 space-y-2">
                                                     {result.tool_results.length > 0 ? (
@@ -391,6 +417,9 @@ export default function ToolLab({
                                 <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                         Switch workspace
+                                    </p>
+                                    <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                        Use these shortcuts to rerun the tool demo cleanly or jump into adjacent labs.
                                     </p>
                                     <div className="mt-4 grid gap-3 font-mono text-xs">
                                         <Link
