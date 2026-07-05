@@ -174,7 +174,7 @@ export default function PromptPlayground({
                                     </p>
                                 </div>
 
-                                <div className="border border-[#d5dbd7] bg-[#f5e4da] p-5 dark:border-[#222b27] dark:bg-[#141a17]">
+                                {/* <div className="border border-[#d5dbd7] bg-[#f5e4da] p-5 dark:border-[#222b27] dark:bg-[#141a17]">
                                     <h3 className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
                                         Playground Architecture
                                     </h3>
@@ -192,7 +192,7 @@ export default function PromptPlayground({
                                             <span>Temperature & Top-p tuning</span>
                                         </li>
                                     </ul>
-                                </div>
+                                </div> */}
                             </div>
                         </header>
 
@@ -213,7 +213,7 @@ export default function PromptPlayground({
                                         />
                                     </label>
 
-                                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                                    <div className="grid grid-cols-3 gap-4">
                                         <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
                                             <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
                                                 Tone Profile
@@ -248,7 +248,7 @@ export default function PromptPlayground({
                                             </select>
                                         </label>
 
-                                        <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 md:col-span-2 dark:border-[#222b27] dark:bg-[#151c19]">
+                                        <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
                                             <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
                                                 Model Profile
                                             </span>
@@ -266,6 +266,9 @@ export default function PromptPlayground({
                                             <p className="mt-2 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                                 {selectedModel.description}
                                             </p>
+                                            <p className="mt-3 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                Model profile decides how heavy the selected Groq-routed model should be. Lighter profiles are faster for exploration, while deeper profiles are better for richer output.
+                                            </p>
                                         </label>
 
                                         <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
@@ -282,6 +285,9 @@ export default function PromptPlayground({
                                                 onChange={(event) => setTemperature(Number(event.target.value))}
                                                 className="mt-4 w-full accent-[#1a2620] dark:accent-[#e5eae6]"
                                             />
+                                            <p className="mt-3 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                Lower temperature keeps responses tighter and more predictable. Higher temperature allows more variation and creative phrasing.
+                                            </p>
                                         </label>
 
                                         <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
@@ -298,7 +304,22 @@ export default function PromptPlayground({
                                                 onChange={(event) => setTopP(Number(event.target.value))}
                                                 className="mt-4 w-full accent-[#1a2620] dark:accent-[#e5eae6]"
                                             />
+                                            <p className="mt-3 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                Top-p limits the pool of likely next words. Lower values make the model stay closer to the safest choices, while higher values allow broader exploration.
+                                            </p>
                                         </label>
+
+                                        <div className="border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
+                                            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
+                                                Provider Route
+                                            </span>
+                                            <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
+                                                Groq Only
+                                            </p>
+                                            <p className="mt-3 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                This lab stays on one provider so changes in tone, model profile, temperature, and top-p are easier to compare.
+                                            </p>
+                                        </div>
                                     </div>
 
                                     {errorMessage ? (

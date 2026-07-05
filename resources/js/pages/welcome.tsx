@@ -1,5 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
-import { analyzeContent, conversationLab, home, promptPlayground, streamingLab } from '@/routes';
+import {
+    analyzeContent,
+    conversationLab,
+    home,
+    promptPlayground,
+    streamingLab,
+    toolLab,
+} from '@/routes';
 import AppLayout from '@/layouts/AppLayout';
 
 const featureCards = [
@@ -23,6 +30,13 @@ const featureCards = [
             'Continue the same thread, reload the page, and keep the full message trail in the database.',
         path: conversationLab.url(),
         label: 'Open Conversation Lab',
+    },
+    {
+        title: 'Tool orchestration',
+        description:
+            'Let the model call deterministic Laravel AI tools and inspect how tool outputs shape the final copy.',
+        path: toolLab.url(),
+        label: 'Open Tool Lab',
     },
     {
         title: 'Streaming output',
@@ -92,6 +106,13 @@ export default function Welcome() {
                                         className="btn-editorial-secondary inline-flex items-center justify-center px-6 py-3 font-mono text-xs uppercase tracking-wider"
                                     >
                                         Streaming Lab
+                                    </Link>
+                                    <Link
+                                        href={toolLab.url()}
+                                        prefetch
+                                        className="btn-editorial-secondary inline-flex items-center justify-center px-6 py-3 font-mono text-xs uppercase tracking-wider"
+                                    >
+                                        Tool Lab
                                     </Link>
                                 </div>
                             </div>
@@ -176,6 +197,8 @@ export default function Welcome() {
                                 <Link href={promptPlayground.url()} className="hover:underline">Playground</Link>
                                 <span>/</span>
                                 <Link href={conversationLab.url()} className="hover:underline">Lab</Link>
+                                <span>/</span>
+                                <Link href={toolLab.url()} className="hover:underline">Tools</Link>
                                 <span>/</span>
                                 <Link href={streamingLab.url()} className="hover:underline">Stream</Link>
                             </div>

@@ -9,6 +9,7 @@ import {
     promptPlayground,
     register,
     streamingLab,
+    toolLab,
 } from '@/routes';
 
 export default function AppLayout({ children }: PropsWithChildren) {
@@ -33,13 +34,13 @@ export default function AppLayout({ children }: PropsWithChildren) {
                     </Link>
 
                     <div className="flex flex-wrap items-center gap-3 lg:justify-center">
-                        <Link
+                        {/* <Link
                             href={home()}
                             className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
                         >
                             Overview
                         </Link>
-                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span>
+                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span> */}
                         <Link
                             href={promptPlayground.url()}
                             prefetch
@@ -62,6 +63,14 @@ export default function AppLayout({ children }: PropsWithChildren) {
                             className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
                         >
                             Conversation Lab
+                        </Link>
+                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span>
+                        <Link
+                            href={toolLab.url()}
+                            prefetch
+                            className="font-mono text-xs uppercase tracking-wider text-[#607267] dark:text-[#7fa08d] hover:text-[#1a2620] dark:hover:text-[#e5eae6] transition"
+                        >
+                            Tool Lab
                         </Link>
                         <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span>
                         <Link

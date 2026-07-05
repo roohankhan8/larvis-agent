@@ -18,7 +18,7 @@ class PromptPlaygroundController extends Controller
         [
             'value' => 'default',
             'label' => 'Default',
-            'description' => 'Use the Groq provider default configured for this app.',
+            // 'description' => 'Use the Groq provider default configured for this app.',
             'model' => null,
         ],
         [
