@@ -20,6 +20,25 @@ trait InteractsWithContentProjects
             ->find($projectId);
     }
 
+    protected function resolveProjectOrFail(Request $request): ContentProject
+    {
+        $project = $this->resolveProject($request);
+
+        abort_if($project === null, 404);
+
+        return $project;
+    }
+
+    protected function assertProjectVisible(Request $request, ContentProject $project): void
+    {
+        $isVisible = ContentProject::query()
+            ->visibleTo($request)
+            ->whereKey($project->id)
+            ->exists();
+
+        abort_unless($isVisible, 404);
+    }
+
     /**
      * @return array<string, mixed>|null
      */

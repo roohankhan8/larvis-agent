@@ -1,6 +1,6 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
-import { store as storeProjectAction } from '@/actions/App/Http/Controllers/WriterWorkspaceController';
+import { destroy as destroyProjectAction, drafts as projectDraftsAction, store as storeProjectAction } from '@/actions/App/Http/Controllers/WriterWorkspaceController';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
 import {
@@ -181,13 +181,13 @@ export default function Welcome({ project, projects }: WelcomeProps) {
                                         </form>
                                     </section>
                                 )}
+                                {project && (
+                                    <div className="pt-12 lg:pt-16">
+                                        <ProjectContextPanel project={project} currentPage="workspace" />
+                                    </div>
+                                )}
                             </div>
                         </div>
-                        {project && (
-                            <div className="pt-12 lg:pt-16">
-                                <ProjectContextPanel project={project} currentPage="workspace" />
-                            </div>
-                        )}
                         <div className="grid gap-12 pt-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] lg:gap-16 lg:pt-16">
                             <div className="space-y-8">
                                 <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
@@ -232,21 +232,64 @@ export default function Welcome({ project, projects }: WelcomeProps) {
                                     <div className="space-y-4">
                                         {projects.length > 0 ? (
                                             projects.map((item) => (
-                                                <Link
+                                                <div
                                                     key={item.id}
-                                                    href={home.url({ query: { project: item.id } })}
-                                                    className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]"
+                                                    className="border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]"
                                                 >
-                                                    <p className="font-serif text-xl text-[#1a2620] dark:text-[#e5eae6]">
-                                                        {item.title}
-                                                    </p>
-                                                    <p className="mt-2 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                                        {item.source_content?.slice(0, 140) ?? 'No source content'}...
-                                                    </p>
-                                                    <p className="mt-3 font-mono text-[10px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
-                                                        {item.status} / {item.drafts.length} drafts
-                                                    </p>
-                                                </Link>
+                                                    <div className="flex items-start justify-between gap-4">
+                                                        <Link
+                                                            href={home.url({ query: { project: item.id } })}
+                                                            className="min-w-0 flex-1"
+                                                        >
+                                                            <p className="font-serif text-xl text-[#1a2620] dark:text-[#e5eae6]">
+                                                                {item.title}
+                                                            </p>
+                                                            <p className="mt-2 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                                                {item.source_content?.slice(0, 140) ?? 'No source content'}...
+                                                            </p>
+                                                            <p className="mt-3 font-mono text-[10px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
+                                                                {item.status} / {item.drafts.length} drafts
+                                                            </p>
+                                                        </Link>
+
+                                                        <button
+                                                            type="button"
+                                                            aria-label={`Delete ${item.title}`}
+                                                            onClick={() => {
+                                                                if (!window.confirm(`Delete "${item.title}"? This cannot be undone.`)) {
+                                                                    return;
+                                                                }
+
+                                                                router.delete(destroyProjectAction({ project: item.id }).url, {
+                                                                    preserveScroll: true,
+                                                                });
+                                                            }}
+                                                            className="inline-flex h-9 w-9 shrink-0 items-center justify-center border border-[#d5dbd7] text-[#a8552a] transition hover:border-[#a8552a] hover:bg-[#fff1ea] dark:border-[#222b27] dark:text-[#f08a57] dark:hover:bg-[#2b1912]"
+                                                        >
+                                                            <span className="sr-only">Delete project</span>
+                                                            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className="h-4 w-4">
+                                                                <path d="M7 4h6m-8 2h10m-8 0 .6 8.2A1 1 0 0 0 8.6 15h2.8a1 1 0 0 0 1-.8L13 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                                                                <path d="M9 8v4m2-4v4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                                                                <path d="M6 6l.4 8.7A1.5 1.5 0 0 0 7.9 16h4.2a1.5 1.5 0 0 0 1.5-1.3L14 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity=".2" />
+                                                            </svg>
+                                                        </button>
+                                                    </div>
+
+                                                    <div className="mt-4 flex flex-wrap gap-3">
+                                                        <Link
+                                                            href={projectDraftsAction({ project: item.id }).url}
+                                                            className="font-mono text-xs uppercase tracking-wider text-[#1a2620] underline-offset-4 hover:underline dark:text-[#e5eae6]"
+                                                        >
+                                                            View drafts
+                                                        </Link>
+                                                        <Link
+                                                            href={home.url({ query: { project: item.id } })}
+                                                            className="font-mono text-xs uppercase tracking-wider text-[#607267] underline-offset-4 hover:underline dark:text-[#7fa08d]"
+                                                        >
+                                                            Open project
+                                                        </Link>
+                                                    </div>
+                                                </div>
                                             ))
                                         ) : (
                                             <div className="border border-dashed border-[#d5dbd7] p-5 text-sm italic text-[#607267] dark:border-[#222b27] dark:text-[#7fa08d]">

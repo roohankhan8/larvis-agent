@@ -1,4 +1,5 @@
 import { Link } from '@inertiajs/react';
+import { drafts as projectDraftsAction } from '@/actions/App/Http/Controllers/WriterWorkspaceController';
 import {
     analyzeContent,
     conversationLab,
@@ -44,6 +45,11 @@ export default function ProjectContextPanel({
         { id: 'workspace', label: 'Workspace', href: projectHref(home.url(), project) },
         { id: 'analyze', label: 'Analyze this draft', href: projectHref(analyzeContent.url(), project) },
         { id: 'prompt', label: 'Write a draft', href: projectHref(promptPlayground.url(), project) },
+        {
+            id: 'drafts',
+            label: 'View drafts',
+            href: project !== null ? projectDraftsAction({ project: project.id }).url : home.url(),
+        },
         { id: 'tool', label: 'Polish the draft', href: projectHref(toolLab.url(), project) },
         { id: 'conversation', label: 'Revise in chat', href: projectHref(conversationLab.url(), project) },
         { id: 'streaming', label: 'Create final version', href: projectHref(streamingLab.url(), project) },

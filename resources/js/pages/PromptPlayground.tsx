@@ -374,9 +374,9 @@ export default function PromptPlayground({
                                     {result ? (
                                         <div className="mt-4 space-y-4">
                                             <div className="border border-[#d5dbd7] bg-[#f5e4da]/50 p-4 dark:border-[#222b27] dark:bg-[#151c19]/50">
-                                                <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
+                                                {/* <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
                                                     Generated draft
-                                                </p>
+                                                </p> */}
                                                 <p className="mt-3 whitespace-pre-wrap font-sans text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
                                                     {result.answer}
                                                 </p>

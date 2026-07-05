@@ -50,4 +50,36 @@ class WriterWorkspaceController extends Controller
 
         return redirect()->route('home', ['project' => $project->id]);
     }
+
+    public function destroy(Request $request, ContentProject $project): RedirectResponse
+    {
+        $this->assertProjectVisible($request, $project);
+
+        $project->delete();
+
+        return redirect()->route('home');
+    }
+
+    public function drafts(Request $request, ContentProject $project): Response
+    {
+        $this->assertProjectVisible($request, $project);
+
+        return Inertia::render('ProjectDrafts', [
+            'project' => $this->projectPayload($project),
+            'drafts' => collect($project->drafts ?? [])
+                ->map(static function (array $draft): array {
+                    return [
+                        'id' => $draft['id'] ?? null,
+                        'label' => $draft['label'] ?? 'Draft',
+                        'content' => $draft['content'] ?? '',
+                        'source' => $draft['source'] ?? 'unknown',
+                        'created_at' => $draft['created_at'] ?? null,
+                        'metadata' => $draft['metadata'] ?? [],
+                    ];
+                })
+                ->filter(fn (array $draft): bool => is_string($draft['id']))
+                ->values()
+                ->all(),
+        ]);
+    }
 }
