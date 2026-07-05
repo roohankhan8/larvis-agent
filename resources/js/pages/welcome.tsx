@@ -2,6 +2,7 @@ import { Head, Link, router } from '@inertiajs/react';
 import { useState } from 'react';
 import { store as storeProjectAction } from '@/actions/App/Http/Controllers/WriterWorkspaceController';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
+import AppLayout from '@/layouts/AppLayout';
 import {
     analyzeContent,
     conversationLab,
@@ -10,7 +11,6 @@ import {
     streamingLab,
     toolLab,
 } from '@/routes';
-import AppLayout from '@/layouts/AppLayout';
 import type { ContentProject } from '@/types/content-project';
 
 type WelcomeProps = {
@@ -22,37 +22,37 @@ const workflowCards = [
     {
         title: 'Analyze source',
         description:
-            'Extract a structured title, category, summary, and tags from the current brief or draft.',
+            'Turn your brief or draft into a clear title, summary, category, and set of tags.',
         path: analyzeContent.url(),
-        label: 'Run analysis',
+        label: 'Analyze content',
     },
     {
         title: 'Generate draft',
         description:
-            'Create a fresh version from the project brief using prompt controls and model settings.',
+            'Generate a new version from your brief and adjust the writing style to match your needs.',
         path: promptPlayground.url(),
-        label: 'Open draft lab',
+        label: 'Write a draft',
     },
     {
         title: 'Tool polish',
         description:
-            'Apply audience and CTA helpers to turn a rough version into conversion-oriented copy.',
+            'Use built-in helpers to sharpen messaging for a specific audience and goal.',
         path: toolLab.url(),
-        label: 'Polish current draft',
+        label: 'Polish this draft',
     },
     {
         title: 'Conversation revise',
         description:
-            'Use the active draft as chat context and iterate on structure, tone, or messaging.',
+            'Work with the AI in chat to improve structure, clarity, tone, or positioning.',
         path: conversationLab.url(),
         label: 'Open revision chat',
     },
     {
         title: 'Streaming final pass',
         description:
-            'Run a long final pass and save the streamed output back into the project history.',
+            'Generate a full final version in real time and save it back to the project.',
         path: streamingLab.url(),
-        label: 'Finalize output',
+        label: 'Create final version',
     },
 ];
 
@@ -99,13 +99,13 @@ export default function Welcome({ project, projects }: WelcomeProps) {
                             <div className="grid gap-8 lg:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.75fr)]">
                                 <div className="max-w-4xl space-y-6">
                                     <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
-                                        Connected writer workflow
+                                        AI writing workspace
                                     </p>
                                     <h1 className="font-serif text-4xl font-light leading-[1.1] text-[#1a2620] dark:text-[#e5eae6] sm:text-5xl lg:text-6xl">
-                                        Turn a brief into <span className="italic font-normal">a saved project</span>, then move through analysis, drafting, polish, revision, and final output.
+                                        Turn a brief into <span className="italic font-normal">a saved project</span>, then move smoothly from first idea to final copy.
                                     </h1>
                                     <p className="max-w-2xl font-sans text-base leading-relaxed text-[#607267] dark:text-[#7fa08d] sm:text-lg">
-                                        This workspace connects the existing labs into one content-writing flow. Each step reads from the same project and writes its output back into shared state.
+                                        This workspace keeps your writing process in one place. Each step uses the same project, so your brief, drafts, and revisions stay connected.
                                     </p>
                                     <div className="flex flex-wrap gap-4 pt-4">
                                         <Link
@@ -113,84 +113,85 @@ export default function Welcome({ project, projects }: WelcomeProps) {
                                             prefetch
                                             className="btn-editorial-primary inline-flex items-center justify-center px-6 py-3 font-mono text-xs uppercase tracking-wider"
                                         >
-                                            {project ? 'Continue current project' : 'Open analyzer'}
+                                            {project ? 'Continue current project' : 'Start with analysis'}
                                         </Link>
                                         <Link
                                             href={projectHref(promptPlayground.url(), project)}
                                             prefetch
                                             className="btn-editorial-secondary inline-flex items-center justify-center px-6 py-3 font-mono text-xs uppercase tracking-wider"
                                         >
-                                            Prompt Playground
+                                            Write a draft
                                         </Link>
                                     </div>
                                 </div>
-
-                                <section className="paper-sheet p-6 dark:bg-[#141a17]">
-                                    <h2 className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#1a2620] dark:text-[#e5eae6]">
-                                        Create project
-                                    </h2>
-                                    <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                        Start with a working brief or source draft. The app will reuse this across every specialist page.
-                                    </p>
-                                    <form onSubmit={handleCreateProject} className="mt-5 space-y-4">
-                                        <input
-                                            value={title}
-                                            onChange={(event) => setTitle(event.target.value)}
-                                            placeholder="Project title"
-                                            className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
-                                        />
-                                        <textarea
-                                            value={sourceContent}
-                                            onChange={(event) => setSourceContent(event.target.value)}
-                                            rows={7}
-                                            placeholder="Paste the brief or source material"
-                                            className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm leading-relaxed text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
-                                        />
-                                        <div className="grid gap-3 sm:grid-cols-2">
+                                {!project && (
+                                    <section className="paper-sheet p-6 dark:bg-[#141a17]">
+                                        <h2 className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[#1a2620] dark:text-[#e5eae6]">
+                                            Start a project
+                                        </h2>
+                                        <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
+                                            Start with a brief, rough draft, or notes. The app will reuse this information across every writing step.
+                                        </p>
+                                        <form onSubmit={handleCreateProject} className="mt-5 space-y-4">
                                             <input
-                                                value={contentType}
-                                                onChange={(event) => setContentType(event.target.value)}
-                                                placeholder="Content type"
+                                                value={title}
+                                                onChange={(event) => setTitle(event.target.value)}
+                                                placeholder="Project title"
                                                 className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                             />
-                                            <input
-                                                value={audience}
-                                                onChange={(event) => setAudience(event.target.value)}
-                                                placeholder="Audience"
-                                                className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
+                                            <textarea
+                                                value={sourceContent}
+                                                onChange={(event) => setSourceContent(event.target.value)}
+                                                rows={7}
+                                                placeholder="Paste the brief or source material"
+                                                className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm leading-relaxed text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                             />
-                                            <input
-                                                value={tone}
-                                                onChange={(event) => setTone(event.target.value)}
-                                                placeholder="Tone"
-                                                className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
-                                            />
-                                            <input
-                                                value={goal}
-                                                onChange={(event) => setGoal(event.target.value)}
-                                                placeholder="Goal"
-                                                className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
-                                            />
-                                        </div>
-                                        <button
-                                            type="submit"
-                                            className="btn-editorial-primary w-full px-6 py-3 font-mono text-xs uppercase tracking-wider"
-                                        >
-                                            Create writer project
-                                        </button>
-                                    </form>
-                                </section>
+                                            <div className="grid gap-3 sm:grid-cols-2">
+                                                <input
+                                                    value={contentType}
+                                                    onChange={(event) => setContentType(event.target.value)}
+                                                    placeholder="Content type"
+                                                    className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
+                                                />
+                                                <input
+                                                    value={audience}
+                                                    onChange={(event) => setAudience(event.target.value)}
+                                                    placeholder="Audience"
+                                                    className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
+                                                />
+                                                <input
+                                                    value={tone}
+                                                    onChange={(event) => setTone(event.target.value)}
+                                                    placeholder="Tone"
+                                                    className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
+                                                />
+                                                <input
+                                                    value={goal}
+                                                    onChange={(event) => setGoal(event.target.value)}
+                                                    placeholder="Goal"
+                                                    className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-3 text-sm text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
+                                                />
+                                            </div>
+                                            <button
+                                                type="submit"
+                                                className="btn-editorial-primary w-full px-6 py-3 font-mono text-xs uppercase tracking-wider"
+                                            >
+                                                Create project
+                                            </button>
+                                        </form>
+                                    </section>
+                                )}
                             </div>
                         </div>
-
-                        <div className="pt-12 lg:pt-16">
-                            <ProjectContextPanel project={project} currentPage="workspace" />
-                        </div>
-
+                        {project && (
+                            <div className="pt-12 lg:pt-16">
+                                <ProjectContextPanel project={project} currentPage="workspace" />
+                            </div>
+                        )}
                         <div className="grid gap-12 pt-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] lg:gap-16 lg:pt-16">
                             <div className="space-y-8">
                                 <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
-                                    Workflow stages
+                                    Writing steps
                                 </p>
                                 <div className="grid gap-6 md:grid-cols-2">
                                     {workflowCards.map((item) => (
@@ -226,14 +227,14 @@ export default function Welcome({ project, projects }: WelcomeProps) {
                                         Recent projects
                                     </h2>
                                     <p className="text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                        Return to a saved project and continue from the last completed stage instead of restarting a lab from scratch.
+                                        Reopen a saved project and continue where you left off instead of starting over.
                                     </p>
                                     <div className="space-y-4">
                                         {projects.length > 0 ? (
                                             projects.map((item) => (
                                                 <Link
                                                     key={item.id}
-                                                    href={`${home()}?project=${item.id}`}
+                                                    href={home.url({ query: { project: item.id } })}
                                                     className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]"
                                                 >
                                                     <p className="font-serif text-xl text-[#1a2620] dark:text-[#e5eae6]">
@@ -263,18 +264,18 @@ export default function Welcome({ project, projects }: WelcomeProps) {
                     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
                             <p className="max-w-xl font-mono uppercase tracking-wider">
-                                A connected workspace for analysis, drafting, revision, tool-guided polish, and final output storage.
+                                One place to analyze, write, revise, and save better content.
                             </p>
                             <div className="flex items-center gap-4 font-mono">
                                 <Link href={home()} className="hover:underline">Workspace</Link>
                                 <span>/</span>
-                                <Link href={promptPlayground.url()} className="hover:underline">Playground</Link>
+                                <Link href={promptPlayground.url()} className="hover:underline">Draft Writer</Link>
                                 <span>/</span>
-                                <Link href={conversationLab.url()} className="hover:underline">Lab</Link>
+                                <Link href={conversationLab.url()} className="hover:underline">Revision Chat</Link>
                                 <span>/</span>
-                                <Link href={toolLab.url()} className="hover:underline">Tools</Link>
+                                <Link href={toolLab.url()} className="hover:underline">Content Tools</Link>
                                 <span>/</span>
-                                <Link href={streamingLab.url()} className="hover:underline">Stream</Link>
+                                <Link href={streamingLab.url()} className="hover:underline">Final Pass</Link>
                             </div>
                         </div>
                     </div>

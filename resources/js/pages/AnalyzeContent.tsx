@@ -113,13 +113,13 @@ export default function AnalyzeContent({ project }: AnalyzeContentProps) {
                     <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
                         <header className="border-b border-[#d5dbd7] pb-6 dark:border-[#222b27]">
                             <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
-                                Content Workspace
+                                Understand your content
                             </p>
                             <h1 className="mt-3 font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl lg:text-5xl">
-                                Extract structured schema from <span className="italic font-normal">raw text</span>
+                                Turn <span className="italic font-normal">raw text</span> into a clear starting point
                             </h1>
                             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                Paste your draft, article copy, or raw notes below. The AI analyzer will extract a structured title, categorizations, summary, and keywords.
+                                Paste your draft, article, or notes below. The AI will suggest a title, summary, category, and tags you can use in the next step.
                             </p>
                         </header>
 
@@ -131,13 +131,13 @@ export default function AnalyzeContent({ project }: AnalyzeContentProps) {
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <label className="block">
                                         <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                            Source copy
+                                            Your content
                                         </span>
                                         <textarea
                                             name="content"
                                             value={content}
                                             onChange={(event) => setContent(event.target.value)}
-                                            placeholder="Paste your text copy here (minimum 20 characters)..."
+                                            placeholder="Paste your brief, draft, or notes here..."
                                             rows={14}
                                             className="min-h-64 w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-4 text-sm leading-relaxed text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                         />
@@ -163,7 +163,7 @@ export default function AnalyzeContent({ project }: AnalyzeContentProps) {
                                             disabled={isSubmitting}
                                             className="btn-editorial-primary px-6 py-2.5 font-mono text-xs uppercase tracking-wider"
                                         >
-                                            {isSubmitting ? 'Analyzing...' : 'Analyze content'}
+                                            {isSubmitting ? 'Analyzing...' : 'Analyze'}
                                         </button>
                                     </div>
                                 </form>
@@ -172,7 +172,7 @@ export default function AnalyzeContent({ project }: AnalyzeContentProps) {
                             <aside className="space-y-6">
                                 <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <h2 className="border-b border-[#d5dbd7] pb-3 font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6] dark:border-[#222b27]">
-                                        Output
+                                        Suggested structure
                                     </h2>
                                     {/* <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                         This panel shows the structured fields extracted from the raw text so you can review the shape before reusing or saving it.
@@ -182,7 +182,7 @@ export default function AnalyzeContent({ project }: AnalyzeContentProps) {
                                         <div className="mt-4 space-y-5 text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
                                             <div className="border-b border-[#d5dbd7] pb-4 last:border-b-0 dark:border-[#222b27]">
                                                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
-                                                    Suggested Title
+                                                    Suggested title
                                                 </p>
                                                 {/* <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                                     A cleaned-up headline the model thinks best represents the source text.
@@ -237,7 +237,7 @@ export default function AnalyzeContent({ project }: AnalyzeContentProps) {
                                         </div>
                                     ) : (
                                         <p className="mt-4 font-serif italic text-sm text-[#607267] dark:text-[#7fa08d]">
-                                            Submit text copy in the workspace to receive a structured analysis.
+                                            Add some content and click analyze to get a clearer starting point.
                                         </p>
                                     )}
                                 </section>

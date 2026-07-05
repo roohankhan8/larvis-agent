@@ -1,7 +1,7 @@
-import AppLayout from '@/layouts/AppLayout';
 import { Head } from '@inertiajs/react';
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
+import AppLayout from '@/layouts/AppLayout';
 import type { ContentProject } from '@/types/content-project';
 
 type StreamingChunk = {
@@ -131,7 +131,7 @@ export default function StreamingLab({
 
     return (
         <AppLayout>
-            <Head title="Streaming Lab" />
+            <Head title="Final Pass" />
 
             <div className="editorial-grid min-h-[calc(100vh-5rem)] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
                 <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
@@ -139,13 +139,13 @@ export default function StreamingLab({
                         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
                             <div className="space-y-3">
                                 <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
-                                    Real-time Console
+                                    Final version
                                 </p>
                                 <h1 className="font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl lg:text-5xl">
-                                    Streaming Lab
+                                    Final Pass
                                 </h1>
                                 <p className="max-w-2xl text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                    Send a prompt and inspect the stream as the model emits each token. This page utilizes the same editorial console design as the other laboratory views.
+                                    Generate a polished final version and watch it appear in real time as the AI writes.
                                 </p>
                             </div>
 
@@ -182,12 +182,12 @@ export default function StreamingLab({
                             <form onSubmit={handleSubmit} className="space-y-6">
                                 <label className="block">
                                     <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                        Prompt
+                                        Final version request
                                     </span>
                                     <textarea
                                         value={prompt}
                                         onChange={(event) => setPrompt(event.target.value)}
-                                        placeholder="Describe what you want the model to stream..."
+                                        placeholder="Describe the final version you want to create..."
                                         rows={8}
                                         className="min-h-44 w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-4 text-sm leading-relaxed text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                     />
@@ -212,7 +212,7 @@ export default function StreamingLab({
                                             disabled={isStreaming}
                                             className="btn-editorial-primary px-6 py-2.5 font-mono text-xs uppercase tracking-wider disabled:cursor-not-allowed disabled:opacity-50"
                                         >
-                                            {isStreaming ? 'Streaming...' : 'Start stream'}
+                                            {isStreaming ? 'Writing...' : 'Generate final version'}
                                         </button>
                                         <button
                                             type="button"
@@ -222,7 +222,7 @@ export default function StreamingLab({
                                             disabled={!isStreaming}
                                             className="btn-editorial-secondary px-6 py-2.5 font-mono text-xs uppercase tracking-wider disabled:cursor-not-allowed disabled:opacity-50"
                                         >
-                                            Stop stream
+                                            Stop
                                         </button>
                                     </div>
                                 </div>
@@ -233,29 +233,29 @@ export default function StreamingLab({
                             <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                 <div className="flex items-center justify-between border-b border-[#d5dbd7] pb-3 dark:border-[#222b27]">
                                     <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                        Live Output
+                                        Live preview
                                     </h2>
                                     <span className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[9px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
                                         {isStreaming ? 'Active' : 'Idle'}
                                     </span>
                                 </div>
                                 <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                    This monitor updates as each streamed chunk arrives, making the generation process visible in real time.
+                                    This preview updates as the AI writes, so you can follow the final version as it is created.
                                 </p>
 
                                 <div className="mt-4 border border-[#d5dbd7] bg-[#f5e4da]/50 p-4 dark:border-[#222b27] dark:bg-[#151c19]/50">
                                     <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
-                                        Streamed response
+                                        Final draft
                                     </p>
                                     <p className="mt-2 text-xs leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                        The model appends text here as soon as each delta is parsed from the event stream.
+                                        The final version appears here as it is generated.
                                     </p>
                                     <pre className="mt-3 min-h-64 whitespace-pre-wrap break-words font-mono text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
                                         {response.length > 0 ? (
                                             response
                                         ) : (
                                             <span className="text-[#607267] dark:text-[#7fa08d] italic">
-                                                The streamed text will appear here.
+                                                Your final version will appear here.
                                             </span>
                                         )}
                                     </pre>
@@ -263,21 +263,21 @@ export default function StreamingLab({
 
                                 <div className="mt-4 grid gap-3 sm:grid-cols-2">
                                     <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
-                                        <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">State</p>
+                                        <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Status</p>
                                         <p className="mt-2 text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                            Shows whether the browser is actively receiving stream chunks or waiting for a new run.
+                                            Shows whether the final version is still being written or is ready.
                                         </p>
                                         <p className="mt-1 font-bold text-[#1a2620] dark:text-[#e5eae6]">
-                                            {isStreaming ? 'Receiving chunks' : 'Ready'}
+                                            {isStreaming ? 'Writing now' : 'Ready'}
                                         </p>
                                     </div>
                                     <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
-                                        <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Storage</p>
+                                        <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Saving</p>
                                         <p className="mt-2 text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                            Indicates that completed prompt and response pairs are persisted after the stream finishes.
+                                            When the response finishes, it is saved back into your project history.
                                         </p>
                                         <p className="mt-1 text-[#1a2620] dark:text-[#e5eae6]">
-                                            Logged in DB
+                                            Saved to project
                                         </p>
                                     </div>
                                 </div>

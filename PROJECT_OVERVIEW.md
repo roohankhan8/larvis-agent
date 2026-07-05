@@ -1,8 +1,10 @@
 # Larvis Agent Project Overview
 
-## What This Project Is
+## Product Summary
 
-Larvis Agent is a Laravel 13 application that uses Inertia.js v3 with React 19 for the frontend and the Laravel AI SDK for AI-powered workflows. The project is structured as a single web application with several interactive AI labs, basic authentication, and persistent storage for generated results and conversations.
+Larvis Agent is a writer-focused web application built with Laravel 13, Inertia.js v3, React 19, and the Laravel AI SDK. It helps content teams move from a rough brief or draft to a polished final version inside one connected workflow.
+
+The product is centered on a shared `ContentProject`. Each project can carry the source brief, analysis, draft history, conversation context, model settings, and final output across multiple writing steps.
 
 Local development URL:
 
@@ -14,46 +16,72 @@ Local development URL:
 - Frontend: Inertia.js v3, React 19, TypeScript, Vite
 - Styling: Tailwind CSS v4
 - AI layer: `laravel/ai`
+- Routing helpers: Laravel Wayfinder
 - Testing: Pest v4, PHPUnit 12
 - Quality tools: Laravel Pint, ESLint, Prettier, Larastan
 - Database: MySQL
 
-## Main User-Facing Features
+## Main User Journey
 
-The route layer shows four primary product areas:
+The live product is structured around a connected writing flow rather than isolated experiments.
 
-### 1. Analyze Content
+### 1. Writer Workspace
+
+- `GET /`
+- `POST /projects`
+
+The home page acts as the main workspace. Users can:
+
+- create a new content project from a brief or draft
+- reopen recent projects
+- move through each writing step without losing context
+
+### 2. Analyze Content
 
 - `GET /analyze-content`
 - `POST /analyze-content`
 - `POST /analyze-and-save`
 
-This area appears to let users submit content for AI analysis and optionally save the analyzed result.
+This step helps users turn raw writing into a structured starting point by extracting:
 
-### 2. Prompt Playground
+- a suggested title
+- a category or content type
+- a summary
+- tags or key themes
+
+When a project is active, the analysis is saved back into that project.
+
+### 3. Prompt Playground
 
 - `GET /prompt-playground`
 - `POST /prompt-playground`
 
-This feature is intended for experimenting with prompts and saving prompt/response runs.
+This step is used for draft creation and refinement. Users can adjust tone, output length, temperature, top-p, and model profile, then save the generated result back into the project as a draft version.
 
-### 3. Conversation Lab
+### 4. Conversation Lab
 
 - `GET /conversation-lab`
 - `POST /conversation-lab`
 
-This area supports multi-message AI conversations backed by stored conversation data.
+This step supports revision through chat. It keeps the conversation history in the database and can attach the thread to the active project so users can keep refining the same piece of content over time.
 
-### 4. Streaming Lab
+### 5. Tool Lab
+
+- `GET /tool-lab`
+- `POST /tool-lab`
+
+This step adds structured help for specific writing goals. It uses deterministic tools to shape content around audience and conversion goals, then saves the result back into the project.
+
+### 6. Streaming Lab
 
 - `GET /streaming-lab`
 - `POST /streaming-lab`
 
-This lab is designed for streamed AI responses and keeps a history of prompt/response entries.
+This step is used for longer or more visible generation runs. Users can watch the final copy arrive in real time and save the finished version back into the project.
 
-## Authentication
+## Authentication And Guest Access
 
-The application includes standard guest-only authentication flows:
+The application includes standard authentication flows:
 
 - `GET /login`
 - `POST /login`
@@ -61,59 +89,67 @@ The application includes standard guest-only authentication flows:
 - `POST /register`
 - `POST /logout`
 
-Authenticated and guest device behavior is also tracked through a custom middleware layer and a `devices` table.
+The product is also guest-friendly. Anonymous usage is tracked through the `devices` table and guest device middleware. When a guest later signs up or logs in, project ownership can be linked back to the user account.
 
 ## Frontend Structure
 
 The frontend is an Inertia React app. Important directories include:
 
 - `resources/js/pages`
+  - `welcome.tsx`
   - `AnalyzeContent.tsx`
   - `PromptPlayground.tsx`
   - `ConversationLab.tsx`
+  - `ToolLab.tsx`
   - `StreamingLab.tsx`
   - `Login.tsx`
   - `Register.tsx`
-  - `welcome.tsx`
+- `resources/js/components`
+  - shared UI such as the project context panel
 - `resources/js/layouts`
 - `resources/js/types`
 - `resources/css`
 
-Laravel routes return Inertia pages instead of Blade-rendered screens for the main application UI.
+Laravel routes return Inertia pages for the main application interface.
 
 ## Backend Structure
 
 Important backend areas include:
 
 - `app/Http/Controllers`
-  - Web controllers for each AI workflow
-  - Authentication controller
+  - workflow controllers for analysis, drafting, chat, tool-assisted writing, streaming, and the writer workspace
+  - authentication controller
   - API controller for content analysis
+- `app/Http/Controllers/Concerns`
+  - shared project resolution logic for connected pages
 - `app/Ai/Agents`
   - `ContentAnalyzer`
   - `StructuredContentAnalyzer`
   - `PromptPlaygroundAgent`
   - `ConversationLabAgent`
+  - `ToolLabAgent`
   - `StreamingLabAgent`
 - `app/Ai/Tools`
-  - Custom AI tools for saving posts and post images
+  - custom helper tools such as audience and call-to-action guidance
+- `app/Support`
+  - shared workflow logic for saving project updates
 - `app/Models`
   - `User`
   - `Device`
+  - `ContentProject`
   - `CategorizedPost`
   - `PromptPlaygroundEntry`
   - `StreamingLabEntry`
 
-This layout suggests a clear separation between HTTP controllers, AI agents, AI tools, and persisted domain models.
-
 ## Database Overview
 
-The current schema shows the application stores both user/account data and AI workflow data.
+The schema stores both account data and writing workflow data.
 
-Main tables:
+Main product tables:
 
 - `users`
 - `devices`
+- `content_projects`
 - `categorized_posts`
 - `prompt_playground_entries`
 - `streaming_lab_entries`
@@ -131,32 +167,34 @@ Supporting framework tables:
 - `password_reset_tokens`
 - `migrations`
 
-### Stored AI Data
+### Stored Writing Data
 
+- `content_projects` stores the shared project record, including title, source content, audience, tone, goal, analysis, draft history, conversation reference, and final output
 - `prompt_playground_entries` stores prompt runs with provider, model, tone, length, temperature, and `top_p`
-- `streaming_lab_entries` stores streamed prompt/response pairs
-- `agent_conversations` and `agent_conversation_messages` store conversation threads and message history
-- `categorized_posts` stores analyzed or generated content metadata such as title, category, tags, summary, and banner path
+- `streaming_lab_entries` stores streamed prompt and response pairs
+- `agent_conversations` and `agent_conversation_messages` store chat threads and message history
+- `categorized_posts` stores structured content metadata such as title, category, summary, tags, and banner path
 
 ## Testing
 
-The test suite uses Pest and currently includes feature coverage for:
+The test suite uses Pest and includes feature coverage for:
 
 - authentication flow
 - content analysis
-- conversation lab
-- prompt playground
-- streaming lab
-
-There is also a base unit example test and standard Pest bootstrap files.
+- prompt generation
+- conversation persistence
+- streaming responses
+- tool-assisted writing
+- connected writer workflow and project persistence
 
 ## Development Notes
 
-- The app follows standard Laravel directory conventions with Inertia React pages under `resources/js/pages`
+- The app follows standard Laravel conventions with Inertia React pages under `resources/js/pages`
 - Vite is used for frontend development and production builds
 - Formatting and linting are handled with Pint, ESLint, and Prettier
-- The repository includes a `DESIGN_SYSTEM.md`, which indicates the UI is expected to follow project-specific design rules
+- The repository includes `DESIGN_SYSTEM.md`, which defines the visual language the UI should follow
+- Route helpers are generated through Wayfinder for frontend usage
 
 ## Summary
 
-Larvis Agent is a Laravel + Inertia + React AI application focused on interactive experimentation. Its main capabilities are content analysis, prompt testing, conversational AI, and streaming responses, with persistence for saved outputs, conversations, and user/device context.
+Larvis Agent is a connected writing workspace that helps users analyze source material, generate drafts, refine copy, and save progress inside a single project-based workflow.

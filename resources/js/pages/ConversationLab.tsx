@@ -1,9 +1,8 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { respond as respondConversationAction } from '@/actions/App/Http/Controllers/ConversationLabController';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
-import { conversationLab, promptPlayground } from '@/routes';
 import type { ContentProject } from '@/types/content-project';
 
 type ConversationMessage = {
@@ -19,9 +18,6 @@ type ConversationPayload = {
 
 type ConversationLabProps = {
     project: ContentProject | null;
-    participant: {
-        name: string;
-    };
     conversation: ConversationPayload | null;
 };
 
@@ -41,13 +37,12 @@ type ErrorPayload = {
 
 export default function ConversationLab({
     project,
-    participant,
     conversation,
 }: ConversationLabProps) {
     const [message, setMessage] = useState(
         project?.current_draft
             ? `Revise this draft for clarity and stronger positioning:\n\n${project.current_draft}`
-            : 'What is this lab demonstrating, and how should I test follow-up memory?',
+            : 'Please improve this copy for clarity, flow, and stronger messaging.',
     );
     const [conversationId, setConversationId] = useState(
         conversation?.id ?? '',
@@ -151,7 +146,7 @@ export default function ConversationLab({
 
     return (
         <>
-            <Head title="Conversation Lab" />
+            <Head title="Revision Chat" />
 
             <AppLayout>
                 <div className="editorial-grid min-h-[calc(100vh-5rem)] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
@@ -160,13 +155,13 @@ export default function ConversationLab({
                             <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
                                 <div className="space-y-3">
                                     <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
-                                        Multi-turn Lab
+                                        Revision support
                                     </p>
                                     <h1 className="font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl lg:text-5xl">
-                                        Conversation Lab
+                                        Revision Chat
                                     </h1>
                                     <p className="max-w-2xl text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                        Test conversation memory and state persistence. This page uses the Laravel AI SDK memory model, maintaining the message history in the database so the model can recall context across turns.
+                                        Work with the AI like an editor. Ask follow-up questions, request rewrites, and keep the full revision conversation attached to your project.
                                     </p>
                                 </div>
 
@@ -205,7 +200,7 @@ export default function ConversationLab({
                                     <ProjectContextPanel project={project} currentPage="conversation" />
                                 </div>
                                 <h2 className="border-b border-[#d5dbd7] pb-3 font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6] dark:border-[#222b27]">
-                                    Conversation Transcript
+                                    Conversation
                                 </h2>
 
                                 <div
@@ -244,7 +239,7 @@ export default function ConversationLab({
                                         ))
                                     ) : (
                                         <div className="flex min-h-full items-center justify-center border border-dashed border-[#d5dbd7] bg-[#f5e4da] p-6 text-center font-serif italic text-sm text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
-                                            Initiate a conversation thread to record transcript logs in the database.
+                                            Start the conversation to begin revising this piece step by step.
                                         </div>
                                     )}
                                 </div>
@@ -252,13 +247,13 @@ export default function ConversationLab({
                                 <form onSubmit={handleSubmit} className="mt-8 border-t border-[#d5dbd7] pt-6 dark:border-[#222b27] space-y-4">
                                     <label className="block">
                                         <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                            Your response / question
+                                            Your message
                                         </span>
                                         <textarea
                                             value={message}
                                             onChange={(event) => setMessage(event.target.value)}
                                             rows={5}
-                                            placeholder="Ask a follow-up, refine the summary, or shift topics..."
+                                            placeholder="Ask for a rewrite, a shorter version, a stronger opening, or a clearer structure..."
                                             className="w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-4 text-sm leading-relaxed text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                         />
                                     </label>
@@ -271,9 +266,9 @@ export default function ConversationLab({
 
                                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                                         <div className="flex flex-wrap gap-4 font-mono text-xs text-[#607267] dark:text-[#7fa08d]">
-                                            <span>{transcriptLength} messages logged</span>
+                                            <span>{transcriptLength} messages</span>
                                             <span>/</span>
-                                            <span>Status: {latestAssistantReply ? 'idle' : 'waiting'}</span>
+                                            <span>Status: {latestAssistantReply ? 'ready' : 'waiting'}</span>
                                         </div>
 
                                         <button
@@ -281,7 +276,7 @@ export default function ConversationLab({
                                             disabled={isSubmitting}
                                             className="btn-editorial-primary px-6 py-2.5 font-mono text-xs uppercase tracking-wider disabled:cursor-not-allowed disabled:opacity-50"
                                         >
-                                            {isSubmitting ? 'Sending...' : 'Send Turn'}
+                                            {isSubmitting ? 'Sending...' : 'Send message'}
                                         </button>
                                     </div>
                                 </form>

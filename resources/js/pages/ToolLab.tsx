@@ -1,9 +1,8 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { generate as generateToolLabAction } from '@/actions/App/Http/Controllers/ToolLabController';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
-import { promptPlayground, streamingLab, toolLab } from '@/routes';
 import type { ContentProject } from '@/types/content-project';
 
 type AudienceOption = 'founders' | 'developers' | 'marketers';
@@ -95,7 +94,7 @@ export default function ToolLab({
         setResult(null);
 
         if (trimmedPrompt.length < 10) {
-            setErrorMessage('Enter at least 10 characters before running the lab.');
+            setErrorMessage('Enter at least 10 characters before generating.');
 
             return;
         }
@@ -160,7 +159,7 @@ export default function ToolLab({
 
     return (
         <>
-            <Head title="Tool Lab" />
+            <Head title="Content Tools" />
 
             <AppLayout>
                 <div className="editorial-grid min-h-[calc(100vh-5rem)] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
@@ -169,13 +168,13 @@ export default function ToolLab({
                             <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
                                 <div className="space-y-3">
                                     <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
-                                        Tool Execution
+                                        Guided polish
                                     </p>
                                     <h1 className="font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl lg:text-5xl">
-                                        Tool Lab
+                                        Content Tools
                                     </h1>
                                     <p className="max-w-2xl text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                        Run a Groq-backed agent with deterministic Laravel AI tools. Tailor the audience, pick the conversion goal, and inspect the tool calls that shaped the final answer.
+                                        Improve a draft for a specific audience and goal. This step helps shape the message into clearer, more effective copy.
                                     </p>
                                 </div>
 
@@ -208,14 +207,14 @@ export default function ToolLab({
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <label className="block">
                                         <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                            Copy Request
+                                            Draft to improve
                                         </span>
                                         <textarea
                                             name="prompt"
                                             value={prompt}
                                             onChange={(event) => setPrompt(event.target.value)}
                                             rows={10}
-                                            placeholder="Write a homepage blurb for a developer-focused launch..."
+                                            placeholder="Paste the draft you want to improve..."
                                             className="min-h-56 w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-4 text-sm leading-relaxed text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                         />
                                     </label>
@@ -223,7 +222,7 @@ export default function ToolLab({
                                     <div className="grid gap-4 md:grid-cols-2">
                                         <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
                                             <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
-                                                Audience Lens
+                                                Audience
                                             </span>
                                             <select
                                                 value={audience}
@@ -245,7 +244,7 @@ export default function ToolLab({
 
                                         <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
                                             <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
-                                                Conversion Goal
+                                                Goal
                                             </span>
                                             <select
                                                 value={goal}
@@ -278,7 +277,7 @@ export default function ToolLab({
                                             <span>/</span>
                                             <span>Provider: Groq</span>
                                             <span>/</span>
-                                            <span>Mode: tools</span>
+                                            <span>Mode: guided</span>
                                         </div>
 
                                         <button
@@ -286,7 +285,7 @@ export default function ToolLab({
                                             disabled={isSubmitting}
                                             className="btn-editorial-primary px-6 py-2.5 font-mono text-xs uppercase tracking-wider disabled:cursor-not-allowed disabled:opacity-50"
                                         >
-                                            {isSubmitting ? 'Running tools...' : 'Run Tool Lab'}
+                                            {isSubmitting ? 'Improving...' : 'Improve draft'}
                                         </button>
                                     </div>
                                 </form>
@@ -296,7 +295,7 @@ export default function ToolLab({
                                 <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <div className="flex items-center justify-between border-b border-[#d5dbd7] pb-3 dark:border-[#222b27]">
                                         <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                            Final Answer
+                                            Improved draft
                                         </h2>
                                         <span className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[9px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
                                             {result?.settings.provider ?? 'groq'}
@@ -310,7 +309,7 @@ export default function ToolLab({
                                         <div className="mt-4 space-y-4">
                                             <div className="border border-[#d5dbd7] bg-[#f5e4da]/50 p-4 dark:border-[#222b27] dark:bg-[#151c19]/50">
                                                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
-                                                    Response
+                                                    Result
                                                 </p>
                                                 <p className="mt-3 whitespace-pre-wrap font-sans text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
                                                     {result.answer}
@@ -333,7 +332,7 @@ export default function ToolLab({
                                                     <p className="mt-1 capitalize text-[#1a2620] dark:text-[#e5eae6]">{result.settings.goal}</p>
                                                 </div>
                                                 <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27] sm:col-span-2">
-                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Model Route</p>
+                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Model</p>
                                                     {/* <p className="mt-2 text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                                         The exact Groq-routed model used for the current run.
                                                     </p> */}
@@ -343,7 +342,7 @@ export default function ToolLab({
                                         </div>
                                     ) : (
                                         <p className="mt-4 font-serif italic text-sm text-[#607267] dark:text-[#7fa08d]">
-                                            Submit a copy request to inspect the tool-assisted answer and diagnostics.
+                                            Paste a draft and choose your audience and goal to generate a stronger version.
                                         </p>
                                     )}
                                 </section>

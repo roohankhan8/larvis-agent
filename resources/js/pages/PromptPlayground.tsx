@@ -1,9 +1,8 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { useState } from 'react';
 import { generate as generatePromptAction } from '@/actions/App/Http/Controllers/PromptPlaygroundController';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
-import { analyzeContent, promptPlayground } from '@/routes';
 import type { ContentProject } from '@/types/content-project';
 
 type PromptPlaygroundProps = {
@@ -165,7 +164,7 @@ export default function PromptPlayground({
 
     return (
         <>
-            <Head title="Prompt Playground" />
+            <Head title="Draft Writer" />
 
             <AppLayout>
                 <div className="editorial-grid min-h-[calc(100vh-5rem)] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
@@ -174,13 +173,13 @@ export default function PromptPlayground({
                             <div className="grid gap-6 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
                                 <div className="space-y-3">
                                     <p className="font-mono text-xs font-semibold uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
-                                        Tuning Console
+                                        Draft writing
                                     </p>
                                     <h1 className="font-serif text-3xl font-light text-[#1a2620] dark:text-[#e5eae6] sm:text-4xl lg:text-5xl">
-                                        Prompt Playground
+                                        Draft Writer
                                     </h1>
                                     <p className="max-w-2xl text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                        Execute raw text generation using the Laravel AI SDK. Adjust tone parameters, sampling controls, and model profile selection to examine output shifts.
+                                        Generate fresh copy from your project brief. Adjust tone, length, and creativity settings to get a version that fits your goal.
                                     </p>
                                 </div>
 
@@ -214,14 +213,14 @@ export default function PromptPlayground({
                                 <form onSubmit={handleSubmit} className="space-y-6">
                                     <label className="block">
                                         <span className="mb-2 block font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                            Prompt Input
+                                            What should the AI write?
                                         </span>
                                         <textarea
                                             name="prompt"
                                             value={prompt}
                                             onChange={(event) => setPrompt(event.target.value)}
                                             rows={12}
-                                            placeholder="Enter generation prompts (minimum 10 characters)..."
+                                            placeholder="Describe the draft you want to create..."
                                             className="min-h-64 w-full border border-[#d5dbd7] bg-[#eedcd2] px-4 py-4 text-sm leading-relaxed text-[#1a2620] outline-none dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#e5eae6]"
                                         />
                                     </label>
@@ -229,7 +228,7 @@ export default function PromptPlayground({
                                     <div className="grid grid-cols-3 gap-4">
                                         <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
                                             <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
-                                                Tone Profile
+                                                Tone
                                             </span>
                                             <select
                                                 value={tone}
@@ -246,7 +245,7 @@ export default function PromptPlayground({
 
                                         <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
                                             <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
-                                                Length Constraint
+                                                Length
                                             </span>
                                             <select
                                                 value={length}
@@ -263,7 +262,7 @@ export default function PromptPlayground({
 
                                         <label className="block border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
                                             <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
-                                                Model Profile
+                                                Model profile
                                             </span>
                                             <select
                                                 value={modelProfile}
@@ -280,7 +279,7 @@ export default function PromptPlayground({
                                                 {selectedModel.description}
                                             </p>
                                             <p className="mt-3 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                                Model profile decides how heavy the selected Groq-routed model should be. Lighter profiles are faster for exploration, while deeper profiles are better for richer output.
+                                                Choose a faster model for quick ideas or a stronger model for richer writing.
                                             </p>
                                         </label>
 
@@ -299,7 +298,7 @@ export default function PromptPlayground({
                                                 className="mt-4 w-full accent-[#1a2620] dark:accent-[#e5eae6]"
                                             />
                                             <p className="mt-3 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                                Lower temperature keeps responses tighter and more predictable. Higher temperature allows more variation and creative phrasing.
+                                                Lower temperature gives steadier, more predictable writing. Higher temperature gives more variety and creativity.
                                             </p>
                                         </label>
 
@@ -318,19 +317,19 @@ export default function PromptPlayground({
                                                 className="mt-4 w-full accent-[#1a2620] dark:accent-[#e5eae6]"
                                             />
                                             <p className="mt-3 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                                Top-p limits the pool of likely next words. Lower values make the model stay closer to the safest choices, while higher values allow broader exploration.
+                                                Top-p controls how adventurous word choice can be. Lower values stay safer, while higher values allow more variety.
                                             </p>
                                         </label>
 
                                         <div className="border border-[#d5dbd7] bg-[#f5e4da] p-4 dark:border-[#222b27] dark:bg-[#151c19]">
                                             <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">
-                                                Provider Route
+                                                AI provider
                                             </span>
                                             <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                                Groq Only
+                                                Groq
                                             </p>
                                             <p className="mt-3 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                                This lab stays on one provider so changes in tone, model profile, temperature, and top-p are easier to compare.
+                                                This page uses one provider so it is easier to compare changes in tone, creativity, and model strength.
                                             </p>
                                         </div>
                                     </div>
@@ -355,7 +354,7 @@ export default function PromptPlayground({
                                             disabled={isSubmitting}
                                             className="btn-editorial-primary px-6 py-2.5 font-mono text-xs uppercase tracking-wider"
                                         >
-                                            {isSubmitting ? 'Generating...' : 'Generate answer'}
+                                            {isSubmitting ? 'Writing...' : 'Generate draft'}
                                         </button>
                                     </div>
                                 </form>
@@ -365,7 +364,7 @@ export default function PromptPlayground({
                                 <section className="paper-sheet p-6 dark:bg-[#141a17]">
                                     <div className="flex items-center justify-between border-b border-[#d5dbd7] pb-3 dark:border-[#222b27]">
                                         <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                            Raw Response
+                                            Draft result
                                         </h2>
                                         {/* <span className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[9px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
                                             {result?.settings.provider ?? 'groq'}
@@ -376,7 +375,7 @@ export default function PromptPlayground({
                                         <div className="mt-4 space-y-4">
                                             <div className="border border-[#d5dbd7] bg-[#f5e4da]/50 p-4 dark:border-[#222b27] dark:bg-[#151c19]/50">
                                                 <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.2em] text-[#607267] dark:text-[#7fa08d]">
-                                                    Answer
+                                                    Generated draft
                                                 </p>
                                                 <p className="mt-3 whitespace-pre-wrap font-sans text-sm leading-relaxed text-[#1a2620] dark:text-[#e5eae6]">
                                                     {result.answer}
@@ -385,26 +384,26 @@ export default function PromptPlayground({
 
                                             <div className="grid gap-3 sm:grid-cols-2">
                                                 <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
-                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Model Route</p>
+                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Model</p>
                                                     <p className="mt-1 font-bold text-[#1a2620] dark:text-[#e5eae6] break-all">{result.settings.model}</p>
                                                 </div>
                                                 <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
-                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Parameters</p>
+                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Settings</p>
                                                     <p className="mt-1 text-[#1a2620] dark:text-[#e5eae6]">T {result.settings.temperature.toFixed(2)} / P {result.settings.top_p.toFixed(2)}</p>
                                                 </div>
                                                 <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
-                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Tone Settings</p>
+                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Tone</p>
                                                     <p className="mt-1 capitalize text-[#1a2620] dark:text-[#e5eae6]">{result.settings.tone}</p>
                                                 </div>
                                                 <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27]">
-                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Length Type</p>
+                                                    <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Length</p>
                                                     <p className="mt-1 capitalize text-[#1a2620] dark:text-[#e5eae6]">{result.settings.length}</p>
                                                 </div>
                                             </div>
                                         </div>
                                     ) : (
                                         <p className="mt-4 font-serif italic text-sm text-[#607267] dark:text-[#7fa08d]">
-                                            Enter your prompt copy and click generate to process the response.
+                                            Describe what you want to write, then generate a draft here.
                                         </p>
                                     )}
                                 </section>

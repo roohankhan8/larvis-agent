@@ -16,6 +16,36 @@ export default function AppLayout({ children }: PropsWithChildren) {
     const page = usePage();
     const { auth } = page.props;
     const currentPath = page.url.split('?')[0];
+    const project = page.props.project as { id: number } | null | undefined;
+
+    type WorkflowStep = {
+        key: 'workspace' | 'analyze' | 'prompt' | 'tool' | 'conversation' | 'streaming';
+        label: string;
+        href: string;
+    };
+
+    const workflowSteps: WorkflowStep[] = [
+        { key: 'workspace', label: 'Workspace', href: home.url() },
+        { key: 'analyze', label: 'Analyze Content', href: analyzeContent.url() },
+        { key: 'prompt', label: 'Draft Writer', href: promptPlayground.url() },
+        { key: 'tool', label: 'Content Tools', href: toolLab.url() },
+        { key: 'conversation', label: 'Revision Chat', href: conversationLab.url() },
+        { key: 'streaming', label: 'Final Pass', href: streamingLab.url() },
+    ];
+
+    const activeStepIndex = workflowSteps.findIndex((step) => step.href === currentPath);
+    const visibleWorkflowSteps =
+        activeStepIndex === -1
+            ? workflowSteps.slice(0, 3)
+            : workflowSteps.slice(0, Math.min(activeStepIndex + 2, workflowSteps.length));
+
+    function withProject(url: string): string {
+        if (project === undefined || project === null) {
+            return url;
+        }
+
+        return `${url}?project=${project.id}`;
+    }
 
     function navLinkClass(href: string): string {
         const isActive = currentPath === href;
@@ -38,59 +68,26 @@ export default function AppLayout({ children }: PropsWithChildren) {
                                 Laravel AI
                             </p> */}
                             <h2 className="font-serif text-lg font-bold tracking-tight text-[#1a2620] dark:text-[#e5eae6]">
-                                Editorial Lab
+                                Larvis Writer
                             </h2>
                         </div>
                     </Link>
 
                     <div className="flex flex-wrap items-center gap-3 lg:justify-center">
-                        <Link
-                            href={home()}
-                            prefetch
-                            className={navLinkClass(home())}
-                        >
-                            Workspace
-                        </Link>
-                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span>
-                        <Link
-                            href={promptPlayground.url()}
-                            prefetch
-                            className={navLinkClass(promptPlayground.url())}
-                        >
-                            Prompt Playground
-                        </Link>
-                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span>
-                        <Link
-                            href={analyzeContent.url()}
-                            prefetch
-                            className={navLinkClass(analyzeContent.url())}
-                        >
-                            Content Analyzer
-                        </Link>
-                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span>
-                        <Link
-                            href={conversationLab.url()}
-                            prefetch
-                            className={navLinkClass(conversationLab.url())}
-                        >
-                            Conversation Lab
-                        </Link>
-                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span>
-                        <Link
-                            href={toolLab.url()}
-                            prefetch
-                            className={navLinkClass(toolLab.url())}
-                        >
-                            Tool Lab
-                        </Link>
-                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span>
-                        <Link
-                            href={streamingLab.url()}
-                            prefetch
-                            className={navLinkClass(streamingLab.url())}
-                        >
-                            Streaming Lab
-                        </Link>
+                        {/* <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-[#607267] dark:text-[#7fa08d]">
+                            Writing flow
+                        </span>
+                        <span className="text-[#d5dbd7] dark:text-[#222b27]">/</span> */}
+                        {visibleWorkflowSteps.map((step) => (
+                            <Link
+                                key={step.key}
+                                href={withProject(step.href)}
+                                prefetch
+                                className={navLinkClass(step.href)}
+                            >
+                                {step.label}
+                            </Link>
+                        ))}
                     </div>
 
                     <div className="flex shrink-0 items-center gap-4">
