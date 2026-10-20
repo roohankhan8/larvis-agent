@@ -1,0 +1,1041 @@
+﻿<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <meta
+            name="description"
+            content="A detailed guide to the Larvis Agent codebase"
+        />
+        <title>Larvis Agent — Codebase Guide</title>
+        <style>
+            :root {
+                --ink: #1a2620;
+                --muted: #607267;
+                --paper: #f4f6f3;
+                --panel: #fff;
+                --line: #d5dbd7;
+                --green: #315b45;
+                --soft: #e8eee9;
+                --code: #17211b;
+            }
+            * {
+                box-sizing: border-box;
+            }
+            html {
+                scroll-behavior: smooth;
+                scroll-padding-top: 25px;
+            }
+            body {
+                margin: 0;
+                background: var(--paper);
+                color: var(--ink);
+                font:
+                    16px/1.65 system-ui,
+                    'Segoe UI',
+                    sans-serif;
+            }
+            .shell {
+                max-width: 1160px;
+                margin: auto;
+                padding: 0 24px;
+            }
+            .hero {
+                padding: 60px 0 40px;
+                background: var(--ink);
+                color: #e5eae6;
+                border-bottom: 5px solid #7fa08d;
+            }
+            .eyebrow,
+            .label {
+                font:
+                    700 12px ui-monospace,
+                    monospace;
+                text-transform: uppercase;
+                letter-spacing: 0.13em;
+                color: #7fa08d;
+            }
+            .hero h1 {
+                font:
+                    500 clamp(38px, 6vw, 64px)/1.05 Georgia,
+                    serif;
+                margin: 15px 0;
+            }
+            .hero p {
+                max-width: 780px;
+                color: #bdc9c1;
+                font-size: 18px;
+            }
+            .chips {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            .chip {
+                border: 1px solid #536258;
+                border-radius: 30px;
+                padding: 5px 11px;
+                font:
+                    12px ui-monospace,
+                    monospace;
+            }
+            .layout {
+                display: grid;
+                grid-template-columns: 215px minmax(0, 1fr);
+                gap: 36px;
+                padding-top: 32px;
+                padding-bottom: 80px;
+            }
+            .toc {
+                position: sticky;
+                top: 18px;
+                align-self: start;
+                border-left: 2px solid var(--line);
+                padding-left: 14px;
+            }
+            .toc a {
+                display: block;
+                padding: 4px 0;
+                color: var(--muted);
+                text-decoration: none;
+                font-size: 13px;
+            }
+            .toc a:hover {
+                color: var(--ink);
+            }
+            main {
+                min-width: 0;
+            }
+            section {
+                margin: 0 0 46px;
+                scroll-margin-top: 24px;
+            }
+            h2 {
+                font:
+                    500 31px/1.2 Georgia,
+                    serif;
+                margin: 7px 0 12px;
+            }
+            h3 {
+                font-size: 19px;
+                margin: 24px 0 7px;
+            }
+            p {
+                margin: 9px 0;
+            }
+            .lede {
+                font-size: 18px;
+                color: #425249;
+            }
+            .grid,
+            .flow {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 12px;
+                margin: 16px 0;
+            }
+            .card {
+                background: var(--panel);
+                border: 1px solid var(--line);
+                border-radius: 8px;
+                padding: 15px;
+            }
+            .card h3 {
+                font-size: 16px;
+                margin: 0 0 5px;
+            }
+            .card p {
+                font-size: 14px;
+                color: #526258;
+                margin: 0;
+            }
+            .path {
+                font:
+                    12px ui-monospace,
+                    monospace;
+                color: var(--green);
+                overflow-wrap: anywhere;
+            }
+            .step {
+                background: var(--soft);
+                padding: 12px;
+                border-radius: 7px;
+                font-size: 14px;
+            }
+            .code {
+                overflow: auto;
+                background: var(--code);
+                color: #e5eae6;
+                border-radius: 8px;
+                padding: 15px;
+                font:
+                    13px/1.6 ui-monospace,
+                    Consolas,
+                    monospace;
+                white-space: pre;
+            }
+            .note {
+                border-left: 4px solid #7fa08d;
+                background: var(--soft);
+                padding: 12px 14px;
+                border-radius: 0 7px 7px 0;
+                margin: 15px 0;
+            }
+            .caution {
+                border-color: #c68a38;
+                background: #f4ecdf;
+            }
+            .tablewrap {
+                overflow: auto;
+                border: 1px solid var(--line);
+                border-radius: 8px;
+                background: white;
+            }
+            table {
+                border-collapse: collapse;
+                width: 100%;
+                min-width: 560px;
+            }
+            th,
+            td {
+                text-align: left;
+                padding: 10px 12px;
+                border-bottom: 1px solid var(--line);
+                vertical-align: top;
+                font-size: 14px;
+            }
+            th {
+                font:
+                    700 11px ui-monospace,
+                    monospace;
+                text-transform: uppercase;
+                color: var(--muted);
+                background: #edf1ed;
+            }
+            td:first-child {
+                font:
+                    12px ui-monospace,
+                    monospace;
+                color: var(--green);
+            }
+            tr:last-child td {
+                border: 0;
+            }
+            .small {
+                font-size: 13px;
+                color: var(--muted);
+            }
+            footer {
+                background: var(--soft);
+                padding: 22px 0;
+                color: var(--muted);
+                font-size: 13px;
+            }
+            @media (max-width: 760px) {
+                .layout {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+                .toc {
+                    position: static;
+                    display: grid;
+                    grid-template-columns: repeat(2, 1fr);
+                }
+                .shell {
+                    padding-inline: 16px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header class="hero">
+            <div class="shell">
+                <div class="eyebrow">Repository field guide</div>
+                <h1>Larvis Agent</h1>
+                <p>
+                    A code-backed walkthrough of the Laravel app behind
+                    Editorial Lab: how requests reach React pages, how AI agents
+                    and tools work, and where workflow data is stored.
+                </p>
+                <div class="chips">
+                    <span class="chip">Laravel 13 · PHP 8.3</span
+                    ><span class="chip">Inertia v3 · React 19</span
+                    ><span class="chip">Laravel AI SDK</span
+                    ><span class="chip">Tailwind 4 · Vite</span
+                    ><span class="chip">Pest 4</span>
+                </div>
+            </div>
+        </header>
+        <div class="shell layout">
+            <nav class="toc" aria-label="Contents">
+                <a href="#overview">Overview</a><a href="#map">Repository map</a
+                ><a href="#lifecycle">Request lifecycle</a
+                ><a href="#routes">Routes</a
+                ><a href="#workflows">AI workflows</a
+                ><a href="#agents">Agents and tools</a
+                ><a href="#data">Persistence</a><a href="#identity">Identity</a
+                ><a href="#frontend">Frontend</a
+                ><a href="#config">Configuration</a><a href="#tests">Tests</a
+                ><a href="#reading">Reading order</a>
+            </nav>
+            <main>
+                <section id="overview">
+                    <div class="label">01 / System shape</div>
+                    <h2>One Laravel app, several AI labs</h2>
+                    <p class="lede">
+                        Larvis Agent is a single web application with a Laravel
+                        backend and an Inertia-powered React frontend. Laravel
+                        owns routes, validation, AI calls, persistence, and
+                        authentication. React renders each page and submits user
+                        actions back to Laravel.
+                    </p>
+                    <p>
+                        The product surface is called <b>Editorial Lab</b>. It
+                        demonstrates content analysis, prompt experimentation,
+                        multi-turn chat, tool calling, and streamed responses.
+                        The “lab” framing is useful: these are feature
+                        demonstrations inside one app, not separate services.
+                    </p>
+                    <div class="flow">
+                        <div class="step">Browser requests a route</div>
+                        <div class="step">
+                            Laravel renders an Inertia page or invokes a
+                            controller
+                        </div>
+                        <div class="step">
+                            Controller validates input and calls an agent
+                        </div>
+                        <div class="step">
+                            Agent calls a configured model and optional tools
+                        </div>
+                        <div class="step">
+                            Laravel returns JSON, a stream, or page props
+                        </div>
+                        <div class="step">
+                            React displays the result; selected workflows save
+                            it
+                        </div>
+                    </div>
+                    <div class="note">
+                        <b>Key boundary:</b> controllers coordinate HTTP and
+                        storage; agents define model behavior; tools perform
+                        structured actions; React pages own interaction and
+                        presentation.
+                    </div>
+                </section>
+                <section id="map">
+                    <div class="label">02 / Find the code</div>
+                    <h2>Repository map</h2>
+                    <div class="tablewrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Path</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>routes/web.php</td>
+                                    <td>
+                                        Browser page and form routes for the
+                                        labs and authentication.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>routes/api.php</td>
+                                    <td>
+                                        JSON API routes, including analyzer
+                                        experiments.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>app/Http/Controllers</td>
+                                    <td>
+                                        Validation, agent invocation,
+                                        persistence, response shaping.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>app/Ai/Agents</td>
+                                    <td>
+                                        Instructions, provider/model choices,
+                                        structured output, tools, streaming and
+                                        conversations.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>app/Ai/Tools</td>
+                                    <td>
+                                        Functions agents may call, including
+                                        content saving and deterministic copy
+                                        guidance.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>app/Models</td>
+                                    <td>
+                                        Eloquent models for users, devices,
+                                        analyzed content and saved runs.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>database/migrations</td>
+                                    <td>
+                                        Schema history for application and AI
+                                        SDK conversation data.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>resources/js/pages</td>
+                                    <td>
+                                        Inertia React screens for each workflow.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>resources/js/layouts</td>
+                                    <td>Shared page shell and navigation.</td>
+                                </tr>
+                                <tr>
+                                    <td>resources/js/app.tsx</td>
+                                    <td>
+                                        Inertia client entry and page
+                                        resolution.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>resources/views/app.blade.php</td>
+                                    <td>
+                                        Initial HTML shell that mounts the app.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        resources/js/routes,
+                                        resources/js/actions
+                                    </td>
+                                    <td>
+                                        Wayfinder-generated typed route/action
+                                        helpers.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>tests/Feature</td>
+                                    <td>
+                                        HTTP-level coverage for auth, labs, and
+                                        content analysis.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>config/ai.php</td>
+                                    <td>
+                                        AI provider and conversation
+                                        configuration.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <section id="lifecycle">
+                    <div class="label">03 / Browser to backend</div>
+                    <h2>Request lifecycle</h2>
+                    <ol>
+                        <li>
+                            <b>Routing:</b>
+                            <code>bootstrap/app.php</code> registers web and API
+                            route files, console commands, and <code>/up</code>.
+                        </li>
+                        <li>
+                            <b>Middleware:</b> web requests append
+                            <code>TrackGuestDevice</code>,
+                            <code>HandleInertiaRequests</code>, and asset
+                            preload handling. The first records guest device
+                            context; the second shares app name and current
+                            authenticated user with Inertia.
+                        </li>
+                        <li>
+                            <b>Page response:</b> routes use
+                            <code>Route::inertia</code> or a controller's
+                            <code>Inertia::render</code>. Laravel returns the
+                            root Blade shell on the first visit.
+                        </li>
+                        <li>
+                            <b>React boot:</b>
+                            <code>resources/js/app.tsx</code> resolves the page
+                            from <code>resources/js/pages</code>;
+                            <code>AppLayout</code> supplies navigation and auth
+                            UI.
+                        </li>
+                        <li>
+                            <b>Action request:</b> the page posts data, Laravel
+                            validates it, calls an agent, and returns JSON or a
+                            stream. The page renders the result.
+                        </li>
+                    </ol>
+                    <pre class="code">
+routes/web.php → controller → Agent::prompt() / Agent::stream() → provider
+                                      ↓
+                           JSON / Inertia / stream
+                                      ↓
+                                React page</pre>
+                </section>
+                <section id="routes">
+                    <div class="label">04 / Public surface</div>
+                    <h2>Current route map</h2>
+                    <p>
+                        These paths are read from the current route files. Web
+                        POST actions generally return JSON even when called from
+                        the browser UI.
+                    </p>
+                    <div class="tablewrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Method + path</th>
+                                    <th>Handler</th>
+                                    <th>Behavior</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>GET /</td>
+                                    <td>Inertia: welcome</td>
+                                    <td>Landing page.</td>
+                                </tr>
+                                <tr>
+                                    <td>GET /analyze-content</td>
+                                    <td>Inertia: AnalyzeContent</td>
+                                    <td>Analyzer screen.</td>
+                                </tr>
+                                <tr>
+                                    <td>POST /analyze-content</td>
+                                    <td>
+                                        AnalyzeContentController::analyzeContent
+                                    </td>
+                                    <td>Returns structured metadata.</td>
+                                </tr>
+                                <tr>
+                                    <td>POST /analyze-and-save</td>
+                                    <td>
+                                        AnalyzeContentController::analyzeAndSave
+                                    </td>
+                                    <td>
+                                        Analyzes and saves a CategorizedPost.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>GET/POST /prompt-playground</td>
+                                    <td>PromptPlaygroundController</td>
+                                    <td>
+                                        Page defaults, then configurable
+                                        generation and saved run.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>GET/POST /conversation-lab</td>
+                                    <td>ConversationLabController</td>
+                                    <td>
+                                        Loads history, then starts or continues
+                                        a conversation.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>GET/POST /tool-lab</td>
+                                    <td>ToolLabController</td>
+                                    <td>
+                                        Generates copy and returns tool
+                                        call/result diagnostics.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>GET/POST /streaming-lab</td>
+                                    <td>StreamingLabController</td>
+                                    <td>
+                                        Streams output and saves the completed
+                                        response.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>GET/POST /login, /register</td>
+                                    <td>AuthController</td>
+                                    <td>Guest-only login and registration.</td>
+                                </tr>
+                                <tr>
+                                    <td>POST /logout</td>
+                                    <td>AuthController::destroy</td>
+                                    <td>
+                                        Authenticated logout and session
+                                        invalidation.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>POST /api/analyze-content</td>
+                                    <td>API AnalyzeContentController</td>
+                                    <td>Structured analysis JSON.</td>
+                                </tr>
+                                <tr>
+                                    <td>POST /api/analyze-and-save</td>
+                                    <td>API AnalyzeContentController</td>
+                                    <td>Runs tool-enabled ContentAnalyzer.</td>
+                                </tr>
+                                <tr>
+                                    <td>POST /api/analyze-save-remember</td>
+                                    <td>API AnalyzeContentController</td>
+                                    <td>
+                                        Currently invokes the same
+                                        ContentAnalyzer flow.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>POST /api/analyze-async</td>
+                                    <td>API AnalyzeContentController</td>
+                                    <td>Queues work and logs completion.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="note caution">
+                        <b>Two analyzer paths:</b> the web analyzer uses
+                        <code>StructuredContentAnalyzer</code>. API routes
+                        expose additional tool-enabled and queued experiments.
+                        The web <code>/analyze-and-save</code> writes the post
+                        directly; the API endpoint of that name returns the
+                        agent response.
+                    </div>
+                </section>
+                <section id="workflows">
+                    <div class="label">05 / Feature walkthrough</div>
+                    <h2>Five AI workflows</h2>
+                    <h3>Content Analyzer</h3>
+                    <p class="path">
+                        AnalyzeContentController → StructuredContentAnalyzer →
+                        CategorizedPost (optional)
+                    </p>
+                    <p>
+                        Requires at least 20 characters. The agent asks for a
+                        title, category, one-sentence summary, and tags. The
+                        controller turns the structured result into JSON. The
+                        web save action writes it to
+                        <code>categorized_posts</code>. API variants also
+                        demonstrate the tool-enabled
+                        <code>ContentAnalyzer</code> and queued processing.
+                    </p>
+                    <h3>Prompt Playground</h3>
+                    <p class="path">
+                        PromptPlaygroundController → PromptPlaygroundAgent →
+                        PromptPlaygroundEntry
+                    </p>
+                    <p>
+                        The page receives default settings and model choices.
+                        POST validates prompt, tone, length, temperature, top-p,
+                        and model profile. The agent uses Groq; tone and length
+                        affect instructions, length also selects a token cap,
+                        and a model profile can override the default. Each run
+                        stores prompt, response, provider, resolved model, and
+                        settings.
+                    </p>
+                    <h3>Conversation Lab</h3>
+                    <p class="path">
+                        ConversationLabController → ConversationLabAgent →
+                        Laravel AI conversations
+                    </p>
+                    <p>
+                        The page loads the latest thread for its participant. A
+                        POST accepts a message and optional UUID. An ID
+                        continues an existing conversation; otherwise a new one
+                        is created for the user. Logged-in requests use the
+                        authenticated user. Guests currently share a fallback
+                        user with email
+                        <code>conversation-lab@example.com</code>, so guest
+                        histories are not isolated by browser. The SDK
+                        conversation tables persist messages.
+                    </p>
+                    <h3>Tool Lab</h3>
+                    <p class="path">
+                        ToolLabController → ToolLabAgent → AudienceSnapshotTool
+                        + CallToActionTool
+                    </p>
+                    <p>
+                        Validates prompt, audience, and goal. Instructions ask
+                        the model to retrieve audience guidance and use CTA
+                        guidance when relevant. Response includes the final copy
+                        and tool call/result diagnostics. This workflow does not
+                        persist its generated answer.
+                    </p>
+                    <h3>Streaming Lab</h3>
+                    <p class="path">
+                        StreamingLabController → StreamingLabAgent →
+                        StreamingLabEntry
+                    </p>
+                    <p>
+                        Validates a prompt and streams model output. A
+                        completion callback saves the full text plus provider
+                        and model. This returns a stream instead of waiting to
+                        send one completed JSON response.
+                    </p>
+                </section>
+                <section id="agents">
+                    <div class="label">06 / AI SDK design</div>
+                    <h2>Agents and tools</h2>
+                    <p>
+                        Agent classes use Laravel AI SDK contracts and
+                        <code>Promptable</code>, keeping model instructions and
+                        capabilities outside HTTP controllers.
+                    </p>
+                    <div class="grid">
+                        <article class="card">
+                            <h3>ContentAnalyzer</h3>
+                            <p>
+                                Tool-enabled editorial analyzer with
+                                SavePostTool. Its structured schema is declared,
+                                but current analyzer endpoints use the separate
+                                StructuredContentAnalyzer.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <h3>StructuredContentAnalyzer</h3>
+                            <p>
+                                Declares required
+                                title/category/summary/string-tags fields and
+                                shares editorial parsing instructions.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <h3>PromptPlaygroundAgent</h3>
+                            <p>
+                                Configurable tone, length, temperature, top-p,
+                                model and token limit. Uses Groq.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <h3>ConversationLabAgent</h3>
+                            <p>
+                                Groq conversational agent using SDK conversation
+                                memory.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <h3>ToolLabAgent</h3>
+                            <p>
+                                Groq agent with a four-step tool limit and two
+                                deterministic tools.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <h3>StreamingLabAgent</h3>
+                            <p>
+                                Groq agent with fixed generation settings and
+                                explicit model.
+                            </p>
+                        </article>
+                    </div>
+                    <h3>Tool behavior</h3>
+                    <ul>
+                        <li>
+                            <code>SavePostTool</code> creates a categorized post
+                            from structured fields.
+                        </li>
+                        <li>
+                            <code>SavePostImageTool</code> generates and stores
+                            a banner, then records its path; it is currently
+                            commented out of ContentAnalyzer's active tools.
+                        </li>
+                        <li>
+                            <code>AudienceSnapshotTool</code> returns fixed
+                            messaging guidance for founders, developers, or
+                            marketers.
+                        </li>
+                        <li>
+                            <code>CallToActionTool</code> returns fixed signup,
+                            demo, or launch direction.
+                        </li>
+                    </ul>
+                    <p>
+                        <code>AnalyzesContent</code> carries editorial
+                        instructions and a fallback parser for JSON or labeled
+                        text. Where the SDK returns structured output,
+                        controllers convert it directly to an array.
+                    </p>
+                    <div class="note caution">
+                        <b>Provider configuration:</b> prompt, conversation,
+                        tool, and streaming agents explicitly select Groq.
+                        StructuredContentAnalyzer does not specify
+                        provider/model in its class, so Laravel AI defaults
+                        determine them. Check <code>config/ai.php</code> and
+                        environment configuration for actual runtime values.
+                    </div>
+                </section>
+                <section id="data">
+                    <div class="label">07 / Stored state</div>
+                    <h2>Persistence map</h2>
+                    <div class="tablewrap">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Table</th>
+                                    <th>Owner</th>
+                                    <th>Purpose</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>users</td>
+                                    <td>App\Models\User</td>
+                                    <td>
+                                        Account identity. Password is hashed and
+                                        hidden from serialization.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>devices</td>
+                                    <td>App\Models\Device</td>
+                                    <td>
+                                        Guest/session and browser metadata; can
+                                        be attached to a user at login.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>categorized_posts</td>
+                                    <td>App\Models\CategorizedPost</td>
+                                    <td>
+                                        Analysis metadata, JSON tags and
+                                        optional banner path.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>prompt_playground_entries</td>
+                                    <td>App\Models\PromptPlaygroundEntry</td>
+                                    <td>
+                                        Prompt, answer, provider/model and
+                                        generation settings.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>streaming_lab_entries</td>
+                                    <td>App\Models\StreamingLabEntry</td>
+                                    <td>
+                                        Prompt, completed answer,
+                                        provider/model.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        agent_conversations,
+                                        agent_conversation_messages
+                                    </td>
+                                    <td>Laravel AI SDK</td>
+                                    <td>
+                                        Conversation threads, messages, tool
+                                        calls/results and metadata. User uses
+                                        HasConversations.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>cache, jobs, sessions, failed_jobs…</td>
+                                    <td>Laravel</td>
+                                    <td>
+                                        Framework infrastructure based on
+                                        configured backends.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>
+                        Application columns live in
+                        <code>database/migrations</code>. AI conversation tables
+                        are created with the SDK's <code>AiMigration</code>.
+                        Eloquent casts expose tags and metadata as arrays and
+                        generation parameters as decimal values.
+                    </p>
+                </section>
+                <section id="identity">
+                    <div class="label">08 / Identity</div>
+                    <h2>Authentication and guest devices</h2>
+                    <p>
+                        <code>AuthController</code> handles guest-only login and
+                        registration. Registration validates unique email and
+                        confirmed password; the User model hashes passwords.
+                        After login or registration, the controller associates a
+                        matching guest device if possible and regenerates the
+                        session. Logout invalidates the session and rotates the
+                        CSRF token.
+                    </p>
+                    <p>
+                        <code>TrackGuestDevice</code> records unauthenticated
+                        web visits through
+                        <code>Device::recordGuestVisit</code>, keyed by session
+                        ID, then sets a one-year
+                        <code>guest_device</code> cookie when missing. Stored
+                        context includes IP, user agent, last-seen time, and
+                        current request path/method.
+                        <code>Device::attachToUser</code> matches guest UUID or
+                        old session ID when the visitor signs in.
+                    </p>
+                    <p class="small">
+                        Device tracking and AI conversation ownership are
+                        separate mechanisms. The current guest conversation
+                        fallback is one shared application user.
+                    </p>
+                </section>
+                <section id="frontend">
+                    <div class="label">09 / React</div>
+                    <h2>Pages and shared UI</h2>
+                    <p>
+                        <code>resources/js/app.tsx</code> starts Inertia and
+                        maps server page names to components.
+                        <code>AppLayout</code> renders the Editorial Lab header,
+                        nav, and auth state from shared page props. Pages handle
+                        their own form state and output display.
+                        Wayfinder-generated helpers are imported from
+                        <code>@/routes</code> or <code>@/actions</code>; use
+                        them rather than composing URLs by hand.
+                    </p>
+                    <div class="grid">
+                        <article class="card">
+                            <h3>Pages</h3>
+                            <p>
+                                AnalyzeContent, PromptPlayground,
+                                ConversationLab, ToolLab, StreamingLab, Login,
+                                Register and welcome.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <h3>Root view</h3>
+                            <p>
+                                <code>resources/views/app.blade.php</code>
+                                mounts the app and Vite assets.
+                            </p>
+                        </article>
+                        <article class="card">
+                            <h3>Shared props</h3>
+                            <p>
+                                HandleInertiaRequests shares the app name and
+                                authenticated user.
+                            </p>
+                        </article>
+                    </div>
+                    <p>
+                        Tailwind CSS styles the UI using the project editorial
+                        palette. <code>resources/js/lib/utils.ts</code> contains
+                        small shared class utilities.
+                    </p>
+                </section>
+                <section id="config">
+                    <div class="label">10 / Runtime</div>
+                    <h2>Configuration and local work</h2>
+                    <ul>
+                        <li>
+                            <code>config/ai.php</code> plus environment
+                            variables select provider credentials/defaults. Keep
+                            real keys in local environment configuration.
+                        </li>
+                        <li>
+                            <code>config/database.php</code>,
+                            <code>config/queue.php</code>, and
+                            <code>config/session.php</code> govern storage and
+                            background work.
+                        </li>
+                        <li>
+                            <code>vite.config.ts</code> wires Laravel, React,
+                            Tailwind, and Wayfinder build support.
+                        </li>
+                        <li>
+                            <code>composer.json</code> and
+                            <code>package.json</code> define dependencies and
+                            common scripts.
+                        </li>
+                        <li>
+                            The project overview names a Herd URL of
+                            <code>http://larvis-agent.test</code>; local setup
+                            determines if it is available.
+                        </li>
+                    </ul>
+                    <pre class="code">
+composer run dev        # app, queue worker, Vite together
+npm run dev             # Vite only
+npm run build           # production frontend assets
+php artisan route:list  # registered routes
+php artisan test        # Pest / PHPUnit suite</pre>
+                    <p class="small">
+                        Live AI calls need valid provider configuration. Tests
+                        should fake agents instead of contacting providers.
+                    </p>
+                </section>
+                <section id="tests">
+                    <div class="label">11 / Expected behavior</div>
+                    <h2>How tests give confidence</h2>
+                    <p>
+                        Feature tests in <code>tests/Feature</code> exercise
+                        routes and use Laravel AI fakes to check validation,
+                        response shape, model/provider selection, tool calls,
+                        and whether an agent was invoked. Current feature
+                        coverage includes auth, content analysis, conversation,
+                        prompt, streaming, and tool labs.
+                    </p>
+                    <p>
+                        The analysis test fakes
+                        <code>StructuredContentAnalyzer</code> and asserts the
+                        tool-enabled <code>ContentAnalyzer</code> is never
+                        prompted. Tool Lab tests show how a tool call and result
+                        appear in the HTTP response. This guide is based on
+                        source reading; it does not claim that the suite was
+                        run.
+                    </p>
+                </section>
+                <section id="reading">
+                    <div class="label">12 / Explore a feature</div>
+                    <h2>A good reading order</h2>
+                    <ol>
+                        <li>
+                            Read <code>routes/web.php</code> and
+                            <code>routes/api.php</code> to see the public
+                            surface.
+                        </li>
+                        <li>
+                            Choose a page such as
+                            <code>resources/js/pages/ToolLab.tsx</code>; follow
+                            its submit action to the controller.
+                        </li>
+                        <li>
+                            Read the agent to understand instructions,
+                            provider/model, and capabilities.
+                        </li>
+                        <li>
+                            Read tool classes to see side effects and
+                            deterministic behavior.
+                        </li>
+                        <li>
+                            Check the model and migration for persisted fields.
+                        </li>
+                        <li>
+                            Read the feature test to see the expected HTTP
+                            contract without a live provider.
+                        </li>
+                    </ol>
+                    <pre class="code">
+Tool Lab example
+routes/web.php
+  → app/Http/Controllers/ToolLabController.php
+  → app/Ai/Agents/ToolLabAgent.php
+  → app/Ai/Tools/AudienceSnapshotTool.php
+    app/Ai/Tools/CallToActionTool.php
+  → resources/js/pages/ToolLab.tsx
+  → tests/Feature/ToolLabTest.php</pre>
+                    <div class="note">
+                        <b>Navigation tip:</b> search route paths and method
+                        names with ripgrep; follow class imports across
+                        controller, agent, and tool layers.
+                    </div>
+                </section>
+            </main>
+        </div>
+        <footer>
+            <div class="shell">
+                Prepared from the current repository source. Update this guide
+                when the architecture changes.
+            </div>
+        </footer>
+    </body>
+</html>
