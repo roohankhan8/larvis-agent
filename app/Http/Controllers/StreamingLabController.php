@@ -22,7 +22,7 @@ class StreamingLabController extends Controller
 
         return Inertia::render('StreamingLab', [
             'project' => $this->projectPayload($project),
-            'initialPrompt' => $project?->current_draft ?? $project?->source_content,
+            'initialPrompt' => $project->current_draft ?? $project?->source_content,
         ]);
     }
 

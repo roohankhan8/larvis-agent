@@ -60,16 +60,26 @@ class ContentProject extends Model
         ];
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * @return BelongsTo<Device, $this>
+     */
     public function device(): BelongsTo
     {
         return $this->belongsTo(Device::class);
     }
 
+    /**
+     * @param  Builder<ContentProject>  $query
+     * @return Builder<ContentProject>
+     */
     public function scopeVisibleTo(Builder $query, Request $request): Builder
     {
         if ($request->user() instanceof User) {

@@ -41,7 +41,7 @@ trait AnalyzesContent
             }
         }
 
-        foreach (preg_split('/\R/', trim($text)) as $line) {
+        foreach (preg_split('/\R/', trim($text)) ?: [] as $line) {
             $line = trim($line);
 
             if ($line === '') {

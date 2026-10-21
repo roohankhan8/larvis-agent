@@ -4,6 +4,9 @@ namespace App\Data;
 
 class CategorizedContent
 {
+    /**
+     * @param  array<int, string>  $tags
+     */
     public function __construct(
         public string $title,
         public string $category,

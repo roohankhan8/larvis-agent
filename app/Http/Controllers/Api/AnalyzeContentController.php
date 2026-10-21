@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Api;
 use App\Ai\Agents\ContentAnalyzer;
 use App\Ai\Agents\StructuredContentAnalyzer;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Laravel\Ai\Responses\StructuredAgentResponse;
 
 class AnalyzeContentController extends Controller
 {
-    public function analyzeContent(Request $request)
+    public function analyzeContent(Request $request): JsonResponse
     {
         $request->validate([
             'content' => 'required|string|min:20',
@@ -35,7 +36,7 @@ class AnalyzeContentController extends Controller
         ]);
     }
 
-    public function analyzeAndSave(Request $request)
+    public function analyzeAndSave(Request $request): JsonResponse
     {
         $request->validate([
             'content' => 'required|string|min:20',
@@ -53,7 +54,7 @@ class AnalyzeContentController extends Controller
         ]);
     }
 
-    public function analyzeSaveRemember(Request $request)
+    public function analyzeSaveRemember(Request $request): JsonResponse
     {
         $request->validate([
             'content' => 'required|string|min:20',
@@ -71,7 +72,7 @@ class AnalyzeContentController extends Controller
         ]);
     }
 
-    public function analyzeAsync(Request $request)
+    public function analyzeAsync(Request $request): JsonResponse
     {
         $request->validate(['content' => 'required|string']);
 

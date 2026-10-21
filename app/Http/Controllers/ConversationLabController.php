@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Laravel\Ai\Models\Conversation;
+use Laravel\Ai\Models\ConversationMessage;
 
 class ConversationLabController extends Controller
 {
@@ -111,11 +112,12 @@ class ConversationLabController extends Controller
     {
         return [
             'id' => $conversation->id,
-            'title' => $conversation->title,
+            // getAttribute: the SDK's config-driven table names hide these columns from Larastan
+            'title' => $conversation->getAttribute('title'),
             'messages' => $conversation->messages->map(
-                fn ($message): array => [
-                    'role' => $message->role,
-                    'content' => $message->content,
+                fn (ConversationMessage $message): array => [
+                    'role' => $message->getAttribute('role'),
+                    'content' => $message->getAttribute('content'),
                 ],
             )->values()->all(),
         ];

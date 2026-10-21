@@ -60,8 +60,8 @@ class ToolLabController extends Controller
     {
         $project = $this->resolveProject($request);
 
-        $rawAudience = str_replace([' ', '-'], '', strtolower($project?->audience ?? ''));
-        $rawGoal = str_replace([' ', '-'], '', strtolower($project?->goal ?? ''));
+        $rawAudience = str_replace([' ', '-'], '', strtolower($project->audience ?? ''));
+        $rawGoal = str_replace([' ', '-'], '', strtolower($project->goal ?? ''));
 
         return Inertia::render('ToolLab', [
             'defaults' => [
@@ -73,7 +73,7 @@ class ToolLabController extends Controller
                     : 'signup',
             ],
             'project' => $this->projectPayload($project),
-            'initialPrompt' => $project?->current_draft ?? $project?->source_content,
+            'initialPrompt' => $project->current_draft ?? $project?->source_content,
             'audienceOptions' => self::AUDIENCE_OPTIONS,
             'goalOptions' => self::GOAL_OPTIONS,
         ]);

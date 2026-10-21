@@ -16,7 +16,7 @@ class PromptPlaygroundController extends Controller
     use InteractsWithContentProjects;
 
     /**
-     * @var array<int, array{value: string, label: string, description: string, model: ?string}>
+     * @var array<int, array{value: string, label: string, description?: string, model: ?string}>
      */
     private const MODEL_OPTIONS = [
         [
@@ -45,7 +45,7 @@ class PromptPlaygroundController extends Controller
 
         return Inertia::render('PromptPlayground', [
             'defaults' => [
-                'tone' => in_array(strtolower($project?->tone ?? ''), ['neutral', 'concise', 'persuasive', 'playful'])
+                'tone' => in_array(strtolower($project->tone ?? ''), ['neutral', 'concise', 'persuasive', 'playful'])
                     ? strtolower($project->tone)
                     : 'neutral',
                 'length' => 'standard',
@@ -54,7 +54,7 @@ class PromptPlaygroundController extends Controller
                 'model_profile' => $project?->model_settings['model_profile'] ?? 'default',
             ],
             'project' => $this->projectPayload($project),
-            'initialPrompt' => $project?->current_draft ?? $project?->source_content,
+            'initialPrompt' => $project->current_draft ?? $project?->source_content,
             'modelOptions' => self::MODEL_OPTIONS,
         ]);
     }

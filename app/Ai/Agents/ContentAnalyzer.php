@@ -4,15 +4,14 @@ namespace App\Ai\Agents;
 
 use App\Ai\Agents\Concerns\AnalyzesContent;
 use App\Ai\Tools\SavePostTool;
-use Laravel\Ai\Contracts\Agent;
-use Laravel\Ai\Promptable;
-use Stringable;
-
 use Illuminate\Contracts\JsonSchema\JsonSchema;
-use Laravel\Ai\Contracts\HasStructuredOutput;
+use Illuminate\JsonSchema\Types\Type;
+use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\HasTools;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Messages\Message;
+use Laravel\Ai\Promptable;
+use Stringable;
 
 class ContentAnalyzer implements Agent, HasTools
 {
@@ -45,13 +44,15 @@ class ContentAnalyzer implements Agent, HasTools
     public function tools(): iterable
     {
         return [
-            new SavePostTool(),
+            new SavePostTool,
             // new SavePostImageTool(),
         ];
     }
 
     /**
      * Define the structured output schema for the agent.
+     *
+     * @return array<string, Type>
      */
     public function schema(JsonSchema $schema): array
     {
@@ -90,7 +91,7 @@ class ContentAnalyzer implements Agent, HasTools
             }
         }
 
-        foreach (preg_split('/\R/', trim($text)) as $line) {
+        foreach (preg_split('/\R/', trim($text)) ?: [] as $line) {
             $line = trim($line);
 
             if ($line === '') {
