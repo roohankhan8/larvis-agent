@@ -104,9 +104,6 @@ export default function ToolLab({
 
         try {
             const route = generateToolLabAction();
-            const csrfToken = document
-                .querySelector('meta[name="csrf-token"]')
-                ?.getAttribute('content');
             const xsrfToken = document.cookie
                 .split('; ')
                 .find((cookie) => cookie.startsWith('XSRF-TOKEN='))
@@ -118,7 +115,6 @@ export default function ToolLab({
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
-                    ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
                     ...(xsrfToken
                         ? { 'X-XSRF-TOKEN': decodeURIComponent(xsrfToken) }
                         : {}),

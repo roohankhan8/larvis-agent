@@ -48,8 +48,6 @@ export default function StreamingLab({
         const abortController = new AbortController();
         abortControllerRef.current = abortController;
 
-        const csrfToken =
-            document.querySelector<HTMLMetaElement>('meta[name="csrf-token"]')?.content ?? '';
         const xsrfToken = decodeURIComponent(
             document.cookie
                 .split('; ')
@@ -63,7 +61,6 @@ export default function StreamingLab({
                 headers: {
                     Accept: 'text/event-stream',
                     'Content-Type': 'application/json',
-                    ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
                     ...(xsrfToken ? { 'X-XSRF-TOKEN': xsrfToken } : {}),
                 },
                 credentials: 'same-origin',

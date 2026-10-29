@@ -58,16 +58,19 @@ export default function AnalyzeContent({ project }: AnalyzeContentProps) {
 
         try {
             const analyzeContentRoute = analyzeAndSaveAction();
-            const csrfToken = document
-                .querySelector('meta[name="csrf-token"]')
-                ?.getAttribute('content');
+            const xsrfToken = document.cookie
+                .split('; ')
+                .find((cookie) => cookie.startsWith('XSRF-TOKEN='))
+                ?.split('=')[1];
 
             const response = await fetch(analyzeContentRoute.url, {
                 method: analyzeContentRoute.method.toUpperCase(),
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
-                    ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
+                    ...(xsrfToken
+                        ? { 'X-XSRF-TOKEN': decodeURIComponent(xsrfToken) }
+                        : {}),
                 },
                 body: JSON.stringify({
                     content: trimmedContent,

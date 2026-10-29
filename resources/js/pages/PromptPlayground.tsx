@@ -108,9 +108,6 @@ export default function PromptPlayground({
 
         try {
             const route = generatePromptAction();
-            const csrfToken = document
-                .querySelector('meta[name="csrf-token"]')
-                ?.getAttribute('content');
             const xsrfToken = document.cookie
                 .split('; ')
                 .find((cookie) => cookie.startsWith('XSRF-TOKEN='))
@@ -122,7 +119,6 @@ export default function PromptPlayground({
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
-                    ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
                     ...(xsrfToken ? { 'X-XSRF-TOKEN': decodeURIComponent(xsrfToken) } : {}),
                 },
                 body: JSON.stringify({

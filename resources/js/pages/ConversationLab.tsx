@@ -89,9 +89,6 @@ export default function ConversationLab({
 
         try {
             const route = respondConversationAction();
-            const csrfToken = document
-                .querySelector('meta[name="csrf-token"]')
-                ?.getAttribute('content');
             const xsrfToken = document.cookie
                 .split('; ')
                 .find((cookie) => cookie.startsWith('XSRF-TOKEN='))
@@ -103,7 +100,6 @@ export default function ConversationLab({
                 headers: {
                     'Content-Type': 'application/json',
                     Accept: 'application/json',
-                    ...(csrfToken ? { 'X-CSRF-TOKEN': csrfToken } : {}),
                     ...(xsrfToken ? { 'X-XSRF-TOKEN': decodeURIComponent(xsrfToken) } : {}),
                 },
                 body: JSON.stringify({
