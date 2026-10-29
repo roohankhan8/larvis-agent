@@ -3,7 +3,6 @@
 namespace App\Ai\Agents;
 
 use Laravel\Ai\Contracts\Agent;
-use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Messages\Message;
 use Laravel\Ai\Promptable;
 use Stringable;
@@ -31,16 +30,6 @@ class StreamingLabAgent implements Agent
         return [];
     }
 
-    public function provider(): Lab
-    {
-        return Lab::Groq;
-    }
-
-    public function model(): ?string
-    {
-        return 'openai/gpt-oss-120b';
-    }
-
     public function temperature(): float
     {
         return 0.7;
@@ -56,8 +45,4 @@ class StreamingLabAgent implements Agent
         return 700;
     }
 
-    public function resolvedModel(): string
-    {
-        return 'openai/gpt-oss-120b';
-    }
 }

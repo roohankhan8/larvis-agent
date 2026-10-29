@@ -3,7 +3,6 @@
 namespace App\Ai\Agents;
 
 use Laravel\Ai\Contracts\Agent;
-use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Messages\Message;
 use Laravel\Ai\Promptable;
 use Stringable;
@@ -42,11 +41,6 @@ class PromptPlaygroundAgent implements Agent
         return [];
     }
 
-    public function provider(): Lab
-    {
-        return Lab::Groq;
-    }
-
     public function model(): ?string
     {
         return $this->model;
@@ -65,15 +59,6 @@ class PromptPlaygroundAgent implements Agent
     public function maxTokens(): int
     {
         return 4096;
-    }
-
-    public function resolvedModel(): string
-    {
-        if ($this->model !== null) {
-            return $this->model;
-        }
-
-        return (string) config('ai.providers.groq.models.text.default', 'openai/gpt-oss-120b');
     }
 
     protected function toneDescription(): string

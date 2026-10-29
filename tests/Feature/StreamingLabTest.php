@@ -2,6 +2,7 @@
 
 use App\Ai\Agents\StreamingLabAgent;
 use App\Models\StreamingLabEntry;
+use Laravel\Ai\Prompts\AgentPrompt;
 
 test('the streaming lab page loads', function () {
     $this->get(route('streaming-lab'))
@@ -9,6 +10,11 @@ test('the streaming lab page loads', function () {
 });
 
 test('the streaming lab returns a streamed response', function () {
+    config([
+        'ai.default' => 'openai',
+        'ai.providers.openai.models.text.default' => 'test-openai-default',
+    ]);
+
     StreamingLabAgent::fake([
         'Streaming can keep the UI responsive while the model works.',
     ])->preventStrayPrompts();
@@ -28,8 +34,12 @@ test('the streaming lab returns a streamed response', function () {
 
     expect($entry->prompt)->toBe('Explain why streaming responses improve the user experience.');
     expect($entry->response)->toBe('Streaming can keep the UI responsive while the model works.');
-    expect($entry->provider)->toBe('groq');
-    expect($entry->model)->toBe('openai/gpt-oss-120b');
+    expect($entry->provider)->toBe('openai');
+    expect($entry->model)->toBe('test-openai-default');
 
-    StreamingLabAgent::assertPrompted('Explain why streaming responses improve the user experience.');
+    StreamingLabAgent::assertPrompted(function (AgentPrompt $prompt): bool {
+        return $prompt->prompt === 'Explain why streaming responses improve the user experience.'
+            && $prompt->provider()->driver() === 'openai'
+            && $prompt->model === 'test-openai-default';
+    });
 });

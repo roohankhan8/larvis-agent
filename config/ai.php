@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'groq',
+    'default' => env('AI_PROVIDER', 'groq'),
     'default_for_images' => 'gemini',
     'default_for_audio' => 'openai',
     'default_for_transcription' => 'openai',

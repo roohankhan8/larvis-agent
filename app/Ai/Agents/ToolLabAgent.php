@@ -6,7 +6,6 @@ use App\Ai\Tools\AudienceSnapshotTool;
 use App\Ai\Tools\CallToActionTool;
 use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\HasTools;
-use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Promptable;
 use Stringable;
 
@@ -33,16 +32,6 @@ class ToolLabAgent implements Agent, HasTools
         ]);
     }
 
-    public function provider(): Lab
-    {
-        return Lab::Groq;
-    }
-
-    public function model(): ?string
-    {
-        return 'openai/gpt-oss-120b';
-    }
-
     public function maxSteps(): int
     {
         return 4;
@@ -56,8 +45,4 @@ class ToolLabAgent implements Agent, HasTools
         ];
     }
 
-    public function resolvedModel(): string
-    {
-        return (string) ($this->model() ?? config('ai.providers.groq.models.text.default', 'openai/gpt-oss-120b'));
-    }
 }

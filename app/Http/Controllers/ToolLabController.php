@@ -108,8 +108,8 @@ class ToolLabController extends Controller
                 trim($response->text),
                 'tool-lab',
                 [
-                    'provider' => 'groq',
-                    'model' => $agent->resolvedModel(),
+                    'provider' => $response->meta->provider,
+                    'model' => $response->meta->model,
                     'audience' => $validated['audience'],
                     'goal' => $validated['goal'],
                 ],
@@ -123,8 +123,8 @@ class ToolLabController extends Controller
                 'prompt' => $validated['prompt'],
                 'answer' => trim($response->text),
                 'settings' => [
-                    'provider' => 'groq',
-                    'model' => $agent->resolvedModel(),
+                    'provider' => $response->meta->provider,
+                    'model' => $response->meta->model,
                     'audience' => $validated['audience'],
                     'goal' => $validated['goal'],
                 ],

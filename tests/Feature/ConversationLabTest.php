@@ -4,6 +4,7 @@ use App\Ai\Agents\ConversationLabAgent;
 use App\Models\User;
 use Laravel\Ai\Models\Conversation;
 use Laravel\Ai\Models\ConversationMessage;
+use Laravel\Ai\Prompts\AgentPrompt;
 
 test('the conversation lab page loads', function () {
     $this->get(route('conversation-lab'))
@@ -11,6 +12,10 @@ test('the conversation lab page loads', function () {
 });
 
 test('the conversation lab stores and continues conversation history', function () {
+    config([
+        'ai.default' => 'openai',
+        'ai.providers.openai.models.text.default' => 'test-openai-default',
+    ]);
     config(['ai.conversations.generate_title' => false]);
 
     $user = User::factory()->create();
@@ -54,6 +59,14 @@ test('the conversation lab stores and continues conversation history', function 
             ->count(),
     )->toBe(4);
 
-    ConversationLabAgent::assertPrompted('What is the point of this lab?');
-    ConversationLabAgent::assertPrompted('Can you continue the same thread?');
+    ConversationLabAgent::assertPrompted(fn (AgentPrompt $prompt): bool =>
+        $prompt->prompt === 'What is the point of this lab?'
+        && $prompt->provider()->driver() === 'openai'
+        && $prompt->model === 'test-openai-default'
+    );
+    ConversationLabAgent::assertPrompted(fn (AgentPrompt $prompt): bool =>
+        $prompt->prompt === 'Can you continue the same thread?'
+        && $prompt->provider()->driver() === 'openai'
+        && $prompt->model === 'test-openai-default'
+    );
 });

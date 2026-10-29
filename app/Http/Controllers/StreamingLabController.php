@@ -42,8 +42,8 @@ class StreamingLabController extends Controller
                 $entry = StreamingLabEntry::create([
                     'prompt' => $validated['prompt'],
                     'response' => trim($response->text),
-                    'provider' => 'groq',
-                    'model' => $agent->resolvedModel(),
+                    'provider' => $response->meta->provider,
+                    'model' => $response->meta->model,
                 ]);
 
                 if ($project !== null) {

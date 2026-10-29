@@ -10,6 +10,11 @@ test('the tool lab page loads', function () {
 });
 
 test('the tool lab returns the final answer and executed tool diagnostics', function () {
+    config([
+        'ai.default' => 'openai',
+        'ai.providers.openai.models.text.default' => 'test-openai-default',
+    ]);
+
     ToolLabAgent::fake([
         new ToolCall(
             id: 'tool-call-1',
@@ -30,8 +35,8 @@ test('the tool lab returns the final answer and executed tool diagnostics', func
                 'prompt' => 'Write a product blurb for the team dashboard launch.',
                 'answer' => 'Build launch copy that emphasizes technical credibility and fast implementation.',
                 'settings' => [
-                    'provider' => 'groq',
-                    'model' => 'openai/gpt-oss-120b',
+                    'provider' => 'openai',
+                    'model' => 'test-openai-default',
                     'audience' => 'developers',
                     'goal' => 'launch',
                 ],
@@ -58,8 +63,8 @@ test('the tool lab returns the final answer and executed tool diagnostics', func
 
     ToolLabAgent::assertPrompted(function (AgentPrompt $prompt): bool {
         return $prompt->prompt === 'Write a product blurb for the team dashboard launch.'
-            && $prompt->provider()->driver() === 'groq'
-            && $prompt->model === 'openai/gpt-oss-120b'
+            && $prompt->provider()->driver() === 'openai'
+            && $prompt->model === 'test-openai-default'
             && $prompt->agent instanceof ToolLabAgent;
     });
 });

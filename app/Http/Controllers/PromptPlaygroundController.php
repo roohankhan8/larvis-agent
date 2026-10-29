@@ -10,34 +10,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Laravel\Ai\Ai;
 
 class PromptPlaygroundController extends Controller
 {
     use InteractsWithContentProjects;
-
-    /**
-     * @var array<int, array{value: string, label: string, description?: string, model: ?string}>
-     */
-    private const MODEL_OPTIONS = [
-        [
-            'value' => 'default',
-            'label' => 'Default',
-            // 'description' => 'Use the Groq provider default configured for this app.',
-            'model' => null,
-        ],
-        [
-            'value' => 'draft',
-            'label' => 'Draft',
-            'description' => 'A lighter Groq-backed model for quicker exploratory writing.',
-            'model' => 'openai/gpt-oss-20b',
-        ],
-        [
-            'value' => 'deep',
-            'label' => 'Deep',
-            'description' => 'A stronger Groq-backed model for richer responses.',
-            'model' => 'openai/gpt-oss-120b',
-        ],
-    ];
 
     public function index(Request $request): Response
     {
@@ -55,7 +32,7 @@ class PromptPlaygroundController extends Controller
             ],
             'project' => $this->projectPayload($project),
             'initialPrompt' => $project->current_draft ?? $project?->source_content,
-            'modelOptions' => self::MODEL_OPTIONS,
+            'modelOptions' => $this->modelOptions(),
         ]);
     }
 
@@ -71,7 +48,7 @@ class PromptPlaygroundController extends Controller
             'project_id' => ['nullable', 'integer'],
         ]);
 
-        $selectedModel = collect(self::MODEL_OPTIONS)
+        $selectedModel = collect($this->modelOptions())
             ->firstWhere('value', $validated['model_profile']);
 
         $agent = new PromptPlaygroundAgent(
@@ -86,8 +63,8 @@ class PromptPlaygroundController extends Controller
         $entry = PromptPlaygroundEntry::create([
             'prompt' => $validated['prompt'],
             'response' => trim($response->text),
-            'provider' => 'groq',
-            'model' => $agent->resolvedModel(),
+            'provider' => $response->meta->provider,
+            'model' => $response->meta->model,
             'tone' => $validated['tone'],
             'length' => $validated['length'],
             'temperature' => (float) $validated['temperature'],
@@ -131,5 +108,34 @@ class PromptPlaygroundController extends Controller
                 ],
             ],
         ]);
+    }
+
+    /**
+     * @return array<int, array{value: string, label: string, description: string, model: string}>
+     */
+    private function modelOptions(): array
+    {
+        $provider = Ai::textProvider();
+
+        return [
+            [
+                'value' => 'default',
+                'label' => 'Default',
+                'description' => 'The default model configured for this provider.',
+                'model' => $provider->defaultTextModel(),
+            ],
+            [
+                'value' => 'draft',
+                'label' => 'Draft',
+                'description' => 'The provider’s faster, lower-cost text model.',
+                'model' => $provider->cheapestTextModel(),
+            ],
+            [
+                'value' => 'deep',
+                'label' => 'Deep',
+                'description' => 'The provider’s strongest text model.',
+                'model' => $provider->smartestTextModel(),
+            ],
+        ];
     }
 }
