@@ -1,7 +1,7 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import FormattedContent from '@/components/FormattedContent';
 import { generate as generatePromptAction } from '@/actions/App/Http/Controllers/PromptPlaygroundController';
+import FormattedContent from '@/components/FormattedContent';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
 import type { ContentProject } from '@/types/content-project';
@@ -69,6 +69,7 @@ export default function PromptPlayground({
     defaults,
     modelOptions,
 }: PromptPlaygroundProps) {
+    const { aiProvider } = usePage().props;
     const [prompt, setPrompt] = useState(
         initialPrompt ??
             'Write a sharp product announcement for a new AI content workflow that helps small teams ship polished copy faster.',
@@ -323,7 +324,7 @@ export default function PromptPlayground({
                                                 AI provider
                                             </span>
                                             <p className="mt-3 font-mono text-xs font-bold uppercase tracking-wider text-[#1a2620] dark:text-[#e5eae6]">
-                                                Groq
+                                                {aiProvider}
                                             </p>
                                             <p className="mt-3 font-mono text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
                                                 This page uses one provider so it is easier to compare changes in tone, creativity, and model strength.
@@ -343,7 +344,7 @@ export default function PromptPlayground({
                                             <span>/</span>
                                             <span>{characterCount} chars</span>
                                             <span>/</span>
-                                            <span>Provider: Groq</span>
+                                            <span>Provider: {aiProvider}</span>
                                         </div>
 
                                         <button
@@ -364,7 +365,7 @@ export default function PromptPlayground({
                                             Draft result
                                         </h2>
                                         {/* <span className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[9px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
-                                            {result?.settings.provider ?? 'groq'}
+                                            {result?.settings.provider ?? aiProvider}
                                         </span> */}
                                     </div>
 

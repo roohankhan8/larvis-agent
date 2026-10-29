@@ -2,11 +2,49 @@
 
 use App\Ai\Agents\PromptPlaygroundAgent;
 use App\Models\PromptPlaygroundEntry;
+use Illuminate\Support\Env;
+use Inertia\Testing\AssertableInertia;
 use Laravel\Ai\Prompts\AgentPrompt;
 
+test('AI provider and default model can be configured from environment variables', function () {
+    $environment = Env::getRepository();
+    $previousProvider = $environment->get('AI_PROVIDER');
+    $previousModel = $environment->get('AI_MODEL');
+
+    $environment->clear('AI_PROVIDER');
+    $environment->clear('AI_MODEL');
+    $environment->set('AI_PROVIDER', 'openai');
+    $environment->set('AI_MODEL', 'test-openai-model');
+
+    try {
+        $aiConfiguration = require config_path('ai.php');
+
+        expect($aiConfiguration['default'])->toBe('openai')
+            ->and(data_get($aiConfiguration, 'providers.openai.models.text.default'))
+            ->toBe('test-openai-model');
+    } finally {
+        $environment->clear('AI_PROVIDER');
+        $environment->clear('AI_MODEL');
+
+        if ($previousProvider !== null) {
+            $environment->set('AI_PROVIDER', $previousProvider);
+        }
+
+        if ($previousModel !== null) {
+            $environment->set('AI_MODEL', $previousModel);
+        }
+    }
+});
+
 test('the prompt playground page loads', function () {
+    config(['ai.default' => 'openai']);
+
     $this->get(route('prompt-playground'))
-        ->assertSuccessful();
+        ->assertSuccessful()
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('PromptPlayground')
+            ->where('aiProvider', 'OpenAI')
+        );
 });
 
 test('the prompt playground uses the configured provider and its cheaper text model', function () {

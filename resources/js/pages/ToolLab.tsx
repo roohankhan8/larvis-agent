@@ -1,7 +1,7 @@
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import FormattedContent from '@/components/FormattedContent';
 import { generate as generateToolLabAction } from '@/actions/App/Http/Controllers/ToolLabController';
+import FormattedContent from '@/components/FormattedContent';
 import ProjectContextPanel from '@/components/ProjectContextPanel';
 import AppLayout from '@/layouts/AppLayout';
 import type { ContentProject } from '@/types/content-project';
@@ -71,6 +71,7 @@ export default function ToolLab({
     audienceOptions,
     goalOptions,
 }: ToolLabProps) {
+    const { aiProvider } = usePage().props;
     const [prompt, setPrompt] = useState(
         initialPrompt ??
             'Write a homepage hero paragraph for a developer-focused launch of an AI workflow dashboard, and make the close push readers toward trying it today.',
@@ -272,7 +273,7 @@ export default function ToolLab({
                                         <div className="flex flex-wrap gap-4 font-mono text-xs text-[#607267] dark:text-[#7fa08d]">
                                             <span>{trimmedPrompt === '' ? 0 : trimmedPrompt.split(/\s+/).length} words</span>
                                             <span>/</span>
-                                            <span>Provider: Groq</span>
+                                            <span>Provider: {aiProvider}</span>
                                             <span>/</span>
                                             <span>Mode: guided</span>
                                         </div>
@@ -295,7 +296,7 @@ export default function ToolLab({
                                             Improved draft
                                         </h2>
                                         <span className="border border-[#d5dbd7] bg-[#f5e4da] px-2 py-0.5 font-mono text-[9px] uppercase text-[#607267] dark:border-[#222b27] dark:bg-[#151c19] dark:text-[#7fa08d]">
-                                            {result?.settings.provider ?? 'groq'}
+                                            {result?.settings.provider ?? aiProvider}
                                         </span>
                                     </div>
                                     {/* <p className="mt-3 text-sm leading-relaxed text-[#607267] dark:text-[#7fa08d]">
@@ -331,7 +332,7 @@ export default function ToolLab({
                                                 <div className="border border-[#d5dbd7] p-3 font-mono text-xs dark:border-[#222b27] sm:col-span-2">
                                                     <p className="text-[9px] uppercase tracking-wider text-[#607267] dark:text-[#7fa08d]">Model</p>
                                                     {/* <p className="mt-2 text-[10px] leading-relaxed text-[#607267] dark:text-[#7fa08d]">
-                                                        The exact Groq-routed model used for the current run.
+                                                        The exact provider-routed model used for the current run.
                                                     </p> */}
                                                     <p className="mt-1 break-all text-[#1a2620] dark:text-[#e5eae6]">{result.settings.model}</p>
                                                 </div>

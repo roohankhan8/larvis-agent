@@ -1,6 +1,6 @@
 <?php
 
-return [
+$configuration = [
 
     /*
     |--------------------------------------------------------------------------
@@ -141,5 +141,8 @@ return [
             'key' => env('XAI_API_KEY'),
         ],
     ],
-
 ];
+
+$configuration['providers'][$configuration['default']]['models']['text']['default'] = env('AI_MODEL') ?: null;
+
+return $configuration;

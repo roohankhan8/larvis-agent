@@ -38,7 +38,7 @@ class StreamingLabController extends Controller
 
         return $agent
             ->stream($validated['prompt'])
-            ->then(function (StreamedAgentResponse $response) use ($agent, $project, $validated): void {
+            ->then(function (StreamedAgentResponse $response) use ($project, $validated): void {
                 $entry = StreamingLabEntry::create([
                     'prompt' => $validated['prompt'],
                     'response' => trim($response->text),

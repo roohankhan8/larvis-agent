@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Laravel\Ai\Enums\Lab;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -38,6 +39,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'aiProvider' => Lab::from((string) config('ai.default'))->name,
             'auth' => [
                 'user' => $request->user(),
             ],
